@@ -1,0 +1,15 @@
+{
+  "originHash" : "65a72c5f4819fc8f78975b702af31eb3059380b57c40cb450ca2cfda37c60913",
+  "pins" : [
+    {
+      "identity" : "swiftmsgpack",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/malcommac/SwiftMsgPack.git",
+      "state" : {
+        "revision" : "6a9b7d73f78cd0f7e5ad280fde39a347f15baaf7",
+        "version" : "1.2.0"
+      }
+    }
+  ],
+  "version" : 3
+}

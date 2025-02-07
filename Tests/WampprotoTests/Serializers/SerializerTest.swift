@@ -16,7 +16,6 @@ class SerializerTests: XCTestCase {
         do {
             let serializedData = try serializer.serialize(message: hello)
             let deserializedMessage = try serializer.deserialize(data: serializedData)
-
             guard let deserializedHello = deserializedMessage as? Hello else {
                 XCTFail("\(name): Deserialized object should be a Hello message")
                 return
@@ -46,5 +45,6 @@ class SerializerTests: XCTestCase {
 
     func testAllSerializers() {
         testSerializer(serializer: JSONSerializer(), name: "JsonSerializer")
+        testSerializer(serializer: MsgPackSerializer(), name: "MsgPackSerializer")
     }
 }

@@ -43,4 +43,13 @@ class HelloMessageTest: XCTestCase {
             XCTFail("Test failed with error: \(error.localizedDescription)")
         }
     }
+
+    func testMsgPackSerializer() {
+        let serializer = MsgPackSerializer()
+        do {
+            try testHelloMessage(serializerStr: "msgpack", serializer: serializer)
+        } catch {
+            XCTFail("Test failed with error: \(error.localizedDescription)")
+        }
+    }
 }

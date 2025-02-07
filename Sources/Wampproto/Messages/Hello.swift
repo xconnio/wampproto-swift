@@ -27,7 +27,7 @@ class HelloFields: IHelloFields {
 class Hello: Message {
     private var helloFields: IHelloFields
 
-    static let id = 1
+    static let id: Int64 = 1
     static let text = "HELLO"
 
     static let validationSpec = ValidationSpec(
@@ -77,7 +77,7 @@ class Hello: Message {
         return [Hello.id, realm, details]
     }
 
-    var type: Int {
+    var type: Int64 {
         return Hello.id
     }
 }
