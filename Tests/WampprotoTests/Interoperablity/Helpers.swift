@@ -53,7 +53,11 @@ func runCommandAndDeserialize(serializer: Serializer, command: String) -> Messag
             return try jsonSerializer.deserialize(data: jsonString)
         }
 
-        return try serializer.deserialize(data: Data(outputBytes))
+        if let msgPackSerializer = serializer as? MsgPackSerializer {
+            return try msgPackSerializer.deserialize(data: Data(outputBytes))
+        }
+
+        return try serializer.deserialize(data: outputBytes)
     } catch let error as NSError {
         XCTFail("\(error.localizedDescription)")
         return nil

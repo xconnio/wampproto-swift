@@ -1,6 +1,15 @@
 {
-  "originHash" : "65a72c5f4819fc8f78975b702af31eb3059380b57c40cb450ca2cfda37c60913",
+  "originHash" : "ff054452f50e9a7295543f62906a3894279326d48b967d32ffbe5275e7767a8f",
   "pins" : [
+    {
+      "identity" : "swiftcbor",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/myfreeweb/SwiftCBOR.git",
+      "state" : {
+        "revision" : "04ccff117f6549121d5721ec84fdf0162122b90e",
+        "version" : "0.5.0"
+      }
+    },
     {
       "identity" : "swiftmsgpack",
       "kind" : "remoteSourceControl",

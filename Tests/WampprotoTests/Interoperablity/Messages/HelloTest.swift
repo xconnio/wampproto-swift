@@ -52,4 +52,13 @@ class HelloMessageTest: XCTestCase {
             XCTFail("Test failed with error: \(error.localizedDescription)")
         }
     }
+
+    func testCBORSerializer() {
+        let serializer = CBORSerializer()
+        do {
+            try testHelloMessage(serializerStr: "cbor", serializer: serializer)
+        } catch {
+            XCTFail("Test failed with error: \(error.localizedDescription)")
+        }
+    }
 }
