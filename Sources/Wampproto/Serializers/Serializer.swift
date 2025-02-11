@@ -24,6 +24,8 @@ func toMessage(data: [Any]) throws -> Message {
     switch type {
     case Hello.id:
         return try Hello.parse(message: data)
+    case Challenge.id:
+        return try Challenge.parse(message: data)
     default:
         throw MessageParsingError.unsupportedType(type)
     }
