@@ -5,13 +5,13 @@ protocol Serializer {
     func deserialize(data: Any) throws -> Message
 }
 
-enum SerializerError: Error {
+enum SerializerError: Swift.Error {
     case serializationError(String)
     case deserializationError(String)
     case invalidMessageFormat
 }
 
-enum MessageParsingError: Error {
+enum MessageParsingError: Swift.Error {
     case unsupportedType(Int64)
     case parseFailure(String)
 }
@@ -32,6 +32,8 @@ func toMessage(data: [Any]) throws -> Message {
         return try Welcome.parse(message: data)
     case Abort.id:
         return try Abort.parse(message: data)
+    case Error.id:
+        return try Error.parse(message: data)
     default:
         throw MessageParsingError.unsupportedType(type)
     }

@@ -1,6 +1,6 @@
 import Foundation
 
-enum ValidationError: Error {
+enum ValidationError: Swift.Error {
     case invalidType(index: Int, expected: String, actual: String)
     case unexpectedLength(min: Int, max: Int, actual: Int)
     case missingField(String)
