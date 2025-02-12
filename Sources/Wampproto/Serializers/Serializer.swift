@@ -57,6 +57,8 @@ func toMessage(data: [Any]) throws -> Message {
         return try Yield.parse(message: data)
     case Result.id:
         return try Result.parse(message: data)
+    case Subscribe.id:
+        return try Subscribe.parse(message: data)
     default:
         throw MessageParsingError.unsupportedType(type)
     }

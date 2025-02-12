@@ -48,6 +48,7 @@ class Fields {
     var messageType: Int64?
     var signature: String?
     var reason: String?
+    var topic: String?
     var extra: [String: Any]?
     var options: [String: Any]?
     var details: [String: Any]?
@@ -126,6 +127,10 @@ func validateSignature(wampMsg: [Any], index: Int, fields: Fields) throws {
 
 func validateURI(wampMsg: [Any], index: Int, fields: Fields) throws {
     fields.uri = try validateString(wampMsg: wampMsg, index: index)
+}
+
+func validateTopic(wampMsg: [Any], index: Int, fields: Fields) throws {
+    fields.topic = try validateString(wampMsg: wampMsg, index: index)
 }
 
 func validateRealm(wampMsg: [Any], index: Int, fields: Fields) throws {
