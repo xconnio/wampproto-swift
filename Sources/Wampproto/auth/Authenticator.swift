@@ -5,5 +5,9 @@ protocol ClientAuthenticator {
     var authID: String { get }
     var authExtra: [String: Any] { get }
 
-    func authenticate(challenge: Challenge) -> Authenticate
+    func authenticate(challenge: Challenge) throws -> Authenticate
+}
+
+enum AuthenticationError: Swift.Error {
+    case notSupported
 }
