@@ -67,6 +67,8 @@ func toMessage(data: [Any]) throws -> Message {
         return try Unsubscribed.parse(message: data)
     case Publish.id:
         return try Publish.parse(message: data)
+    case Published.id:
+        return try Published.parse(message: data)
     default:
         throw MessageParsingError.unsupportedType(type)
     }
