@@ -16,6 +16,7 @@ enum MessageParsingError: Swift.Error {
     case parseFailure(String)
 }
 
+// swiftlint:disable cyclomatic_complexity
 func toMessage(data: [Any]) throws -> Message {
     guard let type = data.first as? Int64 else {
         throw MessageParsingError.parseFailure("Data is not in the expected format")
@@ -38,7 +39,10 @@ func toMessage(data: [Any]) throws -> Message {
         return try Cancel.parse(message: data)
     case Interrupt.id:
         return try Interrupt.parse(message: data)
+    case Goodbye.id:
+        return try Goodbye.parse(message: data)
     default:
         throw MessageParsingError.unsupportedType(type)
     }
 }
+// swiftlint:enable cyclomatic_complexity
