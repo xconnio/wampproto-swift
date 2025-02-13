@@ -10,4 +10,6 @@ protocol ClientAuthenticator {
 
 enum AuthenticationError: Swift.Error {
     case notSupported
+    case missingChallenge
+    case authenticationFailed
 }
