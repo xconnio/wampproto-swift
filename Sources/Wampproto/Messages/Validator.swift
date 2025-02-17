@@ -94,7 +94,9 @@ func validateMap(wampMsg: [Any], index: Int) throws -> [String: Any] {
 }
 
 func validateArgs(wampMsg: [Any], index: Int, fields: Fields) throws {
-    fields.args = try validateArray(wampMsg: wampMsg, index: index)
+    if wampMsg.count > index {
+        fields.args = try validateArray(wampMsg: wampMsg, index: index)
+    }
 }
 
 func validateSessionID(wampMsg: [Any], index: Int, fields: Fields) throws {
@@ -158,7 +160,9 @@ func validateDetails(wampMsg: [Any], index: Int, fields: Fields) throws {
 }
 
 func validateKWArgs(wampMsg: [Any], index: Int, fields: Fields) throws {
-    fields.kwArgs = try validateMap(wampMsg: wampMsg, index: index)
+    if wampMsg.count > index {
+        fields.kwArgs = try validateMap(wampMsg: wampMsg, index: index)
+    }
 }
 
 func validateMessage(wampMsg: [Any], spec: ValidationSpec) throws -> Fields {
