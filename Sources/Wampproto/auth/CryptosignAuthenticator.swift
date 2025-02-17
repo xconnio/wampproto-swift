@@ -2,14 +2,14 @@ import Foundation
 import Sodium
 
 class CryptoSignAuthenticator: ClientAuthenticator {
-    static let TYPE = "cryptosign"
+    static let type = "cryptosign"
 
     let authID: String
     private let privateKey: String
     var authExtra: [String: Any]
 
     var authMethod: String {
-        return CryptoSignAuthenticator.TYPE
+        return CryptoSignAuthenticator.type
     }
 
     init(authID: String, privateKey: String, authExtra: [String: Any] = [:]) throws {
