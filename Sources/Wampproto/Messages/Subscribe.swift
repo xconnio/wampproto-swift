@@ -35,7 +35,7 @@ class Subscribe: Message {
         spec: [
             1: validateRequestID,
             2: validateOptions,
-            3: validateTopic
+            3: validateURI
         ]
     )
 
@@ -62,7 +62,7 @@ class Subscribe: Message {
     static func parse(message: [Any]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
 
-        return Subscribe(requestID: fields.requestID!, topic: fields.topic!, options: fields.options ?? [:])
+        return Subscribe(requestID: fields.requestID!, topic: fields.uri!, options: fields.options ?? [:])
     }
 
     func marshal() -> [Any] {
