@@ -47,6 +47,7 @@ class SerializerTests: XCTestCase {
     func testAllSerializers() {
         testSerializer(serializer: JSONSerializer(), name: "JsonSerializer")
         testSerializer(serializer: CBORSerializer(), name: "CborSerializer")
+        testSerializer(serializer: MsgPackSerializer(), name: "MsgPackSerializer")
     }
 
 }
