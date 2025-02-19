@@ -23,7 +23,7 @@ func testHelloMessage(serializerStr: String, serializer: Serializer) throws {
     )
 
     let command = "message hello \(realm1) \(authMethod) --authid \(authID) -r callee=true " +
-                  "-e foo:bar --serializer \(serializerStr) --output hex"
+    "-e foo:bar --serializer \(serializerStr) --output hex"
 
     guard let msg = runCommandAndDeserialize(serializer: serializer, command: command) as? Hello else {
         XCTFail("Failed to deserialize the Hello message")
@@ -39,6 +39,15 @@ class HelloMessageTest: XCTestCase {
         let serializer = JSONSerializer()
         do {
             try testHelloMessage(serializerStr: "json", serializer: serializer)
+        } catch {
+            XCTFail("Test failed with error: \(error.localizedDescription)")
+        }
+    }
+
+    func testCBORSerializer() {
+        let serializer = CBORSerializer()
+        do {
+            try testHelloMessage(serializerStr: "cbor", serializer: serializer)
         } catch {
             XCTFail("Test failed with error: \(error.localizedDescription)")
         }
