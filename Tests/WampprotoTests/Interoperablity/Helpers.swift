@@ -39,10 +39,7 @@ func runCommandAndDeserialize(serializer: Serializer, command: String) -> Messag
             return nil
         }
 
-        guard let outputBytes = hexStringToByteArray(hexString: output) else {
-            XCTFail("Invalid hex string")
-            return nil
-        }
+        let outputBytes = try output.hexDecodedBytes()
 
         if let jsonSerializer = serializer as? JSONSerializer {
             guard let jsonString = String(data: Data(outputBytes), encoding: .utf8) else {
@@ -62,24 +59,4 @@ func runCommandAndDeserialize(serializer: Serializer, command: String) -> Messag
         XCTFail("\(error.localizedDescription)")
         return nil
     }
-}
-
-func hexStringToByteArray(hexString: String) -> [UInt8]? {
-    var bytes = [UInt8]()
-    var index = hexString.startIndex
-
-    while index < hexString.endIndex {
-        let nextIndex = hexString.index(index, offsetBy: 2)
-        let byteString = String(hexString[index..<nextIndex])
-
-        if let byte = UInt8(byteString, radix: 16) {
-            bytes.append(byte)
-        } else {
-            return nil
-        }
-
-        index = nextIndex
-    }
-
-    return bytes
 }
