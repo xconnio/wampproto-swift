@@ -36,6 +36,8 @@ func toMessage(data: [Any]) throws -> Message {
         return try Error.parse(message: data)
     case Cancel.id:
         return try Cancel.parse(message: data)
+    case Interrupt.id:
+        return try Interrupt.parse(message: data)
     default:
         throw MessageParsingError.unsupportedType(type)
 
