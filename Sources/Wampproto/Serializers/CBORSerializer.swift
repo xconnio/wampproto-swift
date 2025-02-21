@@ -3,25 +3,31 @@ import SwiftCBOR
 
 class CBORSerializer: Serializer {
     func serialize(message: Message) throws -> Any {
-            let cborData = CBOR.encode(toCBORArray(message.marshal()))
-            return cborData
-        }
+        let cborData = CBOR.encode(toCBORArray(message.marshal()))
+        return Data(cborData)
+    }
 
-        func deserialize(data: Any) throws -> Message {
-            guard let msg = data as? [UInt8],
-                  let decodedCBOR = try? CBOR.decode(msg),
-                  case let .array(unpacked) = decodedCBOR else {
+    func deserialize(data: Any) throws -> Message {
+        let msg: [UInt8] = try {
+            if let data = data as? Data {
+                return [UInt8](data)
+            } else if let bytes = data as? [UInt8] {
+                return bytes
+            } else {
                 throw SerializerError.invalidMessageFormat
             }
+        }()
 
-            let deserializedArray = unpacked.map(fromCBORValue)
-
-            do {
-                return try toMessage(data: deserializedArray)
-            } catch {
-                throw SerializerError.deserializationError("Error decoding CBOR: \(error)")
-            }
+        guard case let .array(unpacked) = try CBOR.decode(msg) else {
+            throw SerializerError.invalidMessageFormat
         }
+
+        do {
+            return try toMessage(data: unpacked.map(fromCBORValue))
+        } catch {
+            throw SerializerError.deserializationError("Error decoding CBOR: \(error)")
+        }
+    }
 }
 
 private func toCBORArray(_ array: [Any]) -> [CBOR] {
