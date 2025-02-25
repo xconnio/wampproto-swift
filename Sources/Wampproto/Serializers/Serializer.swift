@@ -47,6 +47,8 @@ func toMessage(data: [Any]) throws -> Message {
         return try Registered.parse(message: data)
     case Unregister.id:
         return try Unregister.parse(message: data)
+    case Unregistered.id:
+        return try Unregistered.parse(message: data)
     default:
         throw MessageParsingError.unsupportedType(type)
 
