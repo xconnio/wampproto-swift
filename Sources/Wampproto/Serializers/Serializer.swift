@@ -41,6 +41,14 @@ func toMessage(data: [Any]) throws -> Message {
         return try Interrupt.parse(message: data)
     case Goodbye.id:
         return try Goodbye.parse(message: data)
+    case Register.id:
+        return try Register.parse(message: data)
+    case Registered.id:
+        return try Registered.parse(message: data)
+    case Unregister.id:
+        return try Unregister.parse(message: data)
+    case Unregistered.id:
+        return try Unregistered.parse(message: data)
     default:
         throw MessageParsingError.unsupportedType(type)
 
