@@ -51,6 +51,8 @@ func toMessage(data: [Any]) throws -> Message {
         return try Unregistered.parse(message: data)
     case Call.id:
         return try Call.parse(message: data)
+    case Invocation.id:
+        return try Invocation.parse(message: data)
     default:
         throw MessageParsingError.unsupportedType(type)
 
