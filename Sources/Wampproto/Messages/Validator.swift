@@ -8,14 +8,14 @@ enum ValidationError: Swift.Error {
 
     var error: String {
         switch self {
-        case .invalidType(let index, let expected, let actual):
+        case let .invalidType(index, expected, actual):
             return "Item at index \(index) must be of type \(expected) but was \(actual)"
-        case .unexpectedLength(let min, let max, let actual):
+        case let .unexpectedLength(min, max, actual):
             return "Unexpected message length, must be at least \(min) and at most \(max), but was \(actual)"
-        case .missingField(let field):
+        case let .missingField(field):
             return "Missing required field: \(field)"
-        case .multipleErrors(let errors):
-            let errorMessages = errors.map { $0.error }
+        case let .multipleErrors(errors):
+            let errorMessages = errors.map(\.error)
             return "Validation failed: \n" + errorMessages.joined(separator: "\n")
         }
     }

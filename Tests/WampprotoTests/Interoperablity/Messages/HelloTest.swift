@@ -1,12 +1,12 @@
-import XCTest
 @testable import Wampproto
+import XCTest
 
 func isEqual(msg1: Hello, msg2: Hello) -> Bool {
-    return msg1.authID == msg2.authID &&
-    msg1.realm == msg2.realm &&
-    (msg1.roles as NSDictionary).isEqual(to: msg2.roles as NSDictionary) &&
-    msg1.authMethods == msg2.authMethods &&
-    (msg1.authExtra as NSDictionary).isEqual(to: msg2.authExtra as NSDictionary)
+    msg1.authID == msg2.authID &&
+        msg1.realm == msg2.realm &&
+        (msg1.roles as NSDictionary).isEqual(to: msg2.roles as NSDictionary) &&
+        msg1.authMethods == msg2.authMethods &&
+        (msg1.authExtra as NSDictionary).isEqual(to: msg2.authExtra as NSDictionary)
 }
 
 func testHelloMessage(serializerStr: String, serializer: Serializer) throws {
@@ -23,7 +23,7 @@ func testHelloMessage(serializerStr: String, serializer: Serializer) throws {
     )
 
     let command = "message hello \(realm1) \(authMethod) --authid \(authID) -r callee=true " +
-    "-e foo:bar --serializer \(serializerStr) --output hex"
+        "-e foo:bar --serializer \(serializerStr) --output hex"
 
     guard let msg = runCommandAndDeserialize(serializer: serializer, command: command) as? Hello else {
         XCTFail("Failed to deserialize the Hello message")
@@ -34,7 +34,6 @@ func testHelloMessage(serializerStr: String, serializer: Serializer) throws {
 }
 
 class HelloMessageTest: XCTestCase {
-
     func testJSONSerializer() {
         let serializer = JSONSerializer()
         do {

@@ -1,12 +1,12 @@
-import XCTest
 @testable import Wampproto
+import XCTest
 
 func isEqual(msg1: Call, msg2: Call) -> Bool {
-    return msg1.requestID == msg2.requestID &&
-    msg1.uri == msg2.uri &&
-    (msg1.args as NSArray?) == (msg2.args as NSArray?) &&
-    (msg1.kwargs as NSDictionary?) == (msg2.kwargs as NSDictionary?) &&
-    (msg1.options as NSDictionary) == (msg2.options as NSDictionary)
+    msg1.requestID == msg2.requestID &&
+        msg1.uri == msg2.uri &&
+        (msg1.args as NSArray?) == (msg2.args as NSArray?) &&
+        (msg1.kwargs as NSDictionary?) == (msg2.kwargs as NSDictionary?) &&
+        (msg1.options as NSDictionary) == (msg2.options as NSDictionary)
 }
 
 func testCallMessage(serializerStr: String, serializer: Serializer) throws {
@@ -18,8 +18,8 @@ func testCallMessage(serializerStr: String, serializer: Serializer) throws {
 
     let message = Call(requestID: requestID, uri: uri, args: args, kwargs: kwargs, options: options)
 
-    let command = "message call \(requestID) \(uri) 42 hello -k key=value -o option1=true "  +
-    "--serializer \(serializerStr) --output hex"
+    let command = "message call \(requestID) \(uri) 42 hello -k key=value -o option1=true " +
+        "--serializer \(serializerStr) --output hex"
 
     guard let msg = runCommandAndDeserialize(serializer: serializer, command: command) as? Call else {
         XCTFail("Failed to deserialize the Call message")
@@ -30,7 +30,6 @@ func testCallMessage(serializerStr: String, serializer: Serializer) throws {
 }
 
 class CallMessageTest: XCTestCase {
-
     func testJSONSerializer() {
         let serializer = JSONSerializer()
         do {

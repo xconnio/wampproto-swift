@@ -1,10 +1,10 @@
-import XCTest
 @testable import Wampproto
+import XCTest
 
 func isEqual(msg1: Register, msg2: Register) -> Bool {
-    return msg1.requestID == msg2.requestID &&
-    msg1.uri == msg2.uri &&
-    (msg1.options as NSDictionary).isEqual(to: msg2.options as NSDictionary)
+    msg1.requestID == msg2.requestID &&
+        msg1.uri == msg2.uri &&
+        (msg1.options as NSDictionary).isEqual(to: msg2.options as NSDictionary)
 }
 
 func testRegisterMessage(serializerStr: String, serializer: Serializer) throws {
@@ -25,7 +25,6 @@ func testRegisterMessage(serializerStr: String, serializer: Serializer) throws {
 }
 
 class RegisterMessageTest: XCTestCase {
-
     func testJSONSerializer() {
         let serializer = JSONSerializer()
         do {

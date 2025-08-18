@@ -30,7 +30,7 @@ class YieldFields: IYieldFields {
         self.options = options
         self.payload = payload
         self.payloadSerializer = payloadSerializer
-        self.payloadIsBinary = payloadSerializer != 0
+        payloadIsBinary = payloadSerializer != 0
     }
 }
 
@@ -58,7 +58,7 @@ class Yield: Message {
         kwargs: [String: Any]? = nil,
         options: [String: Any] = [:]
     ) {
-        self.yieldFields = YieldFields(
+        yieldFields = YieldFields(
             requestID: requestID,
             args: args,
             kwargs: kwargs,
@@ -70,13 +70,13 @@ class Yield: Message {
         self.yieldFields = yieldFields
     }
 
-    var requestID: Int64 { return yieldFields.requestID }
-    var args: [Any]? { return yieldFields.args }
-    var kwargs: [String: Any]? { return yieldFields.kwargs }
-    var options: [String: Any] { return yieldFields.options }
-    var payload: Data? { return yieldFields.payload }
-    var payloadSerializer: Int { return yieldFields.payloadSerializer }
-    var payloadIsBinary: Bool { return yieldFields.payloadIsBinary }
+    var requestID: Int64 { yieldFields.requestID }
+    var args: [Any]? { yieldFields.args }
+    var kwargs: [String: Any]? { yieldFields.kwargs }
+    var options: [String: Any] { yieldFields.options }
+    var payload: Data? { yieldFields.payload }
+    var payloadSerializer: Int { yieldFields.payloadSerializer }
+    var payloadIsBinary: Bool { yieldFields.payloadIsBinary }
 
     static func parse(message: [Any]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
@@ -88,11 +88,11 @@ class Yield: Message {
     func marshal() -> [Any] {
         var message: [Any] = [Yield.id, requestID, options]
 
-        if let args = args {
+        if let args {
             message.append(args)
         }
 
-        if let kwargs = kwargs {
+        if let kwargs {
             if args == nil {
                 message.append([])
             }
@@ -103,6 +103,6 @@ class Yield: Message {
     }
 
     var type: Int64 {
-        return Yield.id
+        Yield.id
     }
 }

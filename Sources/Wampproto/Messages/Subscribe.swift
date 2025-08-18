@@ -44,7 +44,7 @@ class Subscribe: Message {
         topic: String,
         options: [String: Any] = [:]
     ) {
-        self.subscribeFields = SubscribeFields(
+        subscribeFields = SubscribeFields(
             requestID: requestID,
             topic: topic,
             options: options
@@ -55,9 +55,9 @@ class Subscribe: Message {
         self.subscribeFields = subscribeFields
     }
 
-    var requestID: Int64 { return subscribeFields.requestID }
-    var topic: String { return subscribeFields.topic }
-    var options: [String: Any] { return subscribeFields.options }
+    var requestID: Int64 { subscribeFields.requestID }
+    var topic: String { subscribeFields.topic }
+    var options: [String: Any] { subscribeFields.options }
 
     static func parse(message: [Any]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
@@ -66,10 +66,10 @@ class Subscribe: Message {
     }
 
     func marshal() -> [Any] {
-        return [Subscribe.id, requestID, options, topic]
+        [Subscribe.id, requestID, options, topic]
     }
 
     var type: Int64 {
-        return Subscribe.id
+        Subscribe.id
     }
 }

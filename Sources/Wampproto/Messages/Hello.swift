@@ -41,19 +41,19 @@ class Hello: Message {
     )
 
     init(realm: String, roles: [String: Any], authID: String, authMethods: [String], authExtra: [String: Any]? = nil) {
-        self.helloFields = HelloFields(realm: realm, roles: roles, authID: authID, authMethods: authMethods,
-                                       authExtra: authExtra ?? [:])
+        helloFields = HelloFields(realm: realm, roles: roles, authID: authID, authMethods: authMethods,
+                                  authExtra: authExtra ?? [:])
     }
 
     init(withFields helloFields: IHelloFields) {
         self.helloFields = helloFields
     }
 
-    var realm: String { return helloFields.realm }
-    var roles: [String: Any] { return helloFields.roles }
-    var authID: String { return helloFields.authID }
-    var authMethods: [String] { return helloFields.authMethods }
-    var authExtra: [String: Any] { return helloFields.authExtra }
+    var realm: String { helloFields.realm }
+    var roles: [String: Any] { helloFields.roles }
+    var authID: String { helloFields.authID }
+    var authMethods: [String] { helloFields.authMethods }
+    var authExtra: [String: Any] { helloFields.authExtra }
 
     static func parse(message: [Any]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
@@ -78,6 +78,6 @@ class Hello: Message {
     }
 
     var type: Int64 {
-        return Hello.id
+        Hello.id
     }
 }

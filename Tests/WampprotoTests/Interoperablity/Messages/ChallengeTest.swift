@@ -1,9 +1,9 @@
-import XCTest
 @testable import Wampproto
+import XCTest
 
 func isEqual(msg1: Challenge, msg2: Challenge) -> Bool {
-    return msg1.authMethod == msg2.authMethod &&
-    (msg1.extra as NSDictionary).isEqual(to: msg2.extra as NSDictionary)
+    msg1.authMethod == msg2.authMethod &&
+        (msg1.extra as NSDictionary).isEqual(to: msg2.extra as NSDictionary)
 }
 
 func testChallengeMessage(serializerStr: String, serializer: Serializer) throws {
@@ -23,7 +23,6 @@ func testChallengeMessage(serializerStr: String, serializer: Serializer) throws 
 }
 
 class ChallengeMessageTest: XCTestCase {
-
     func testJSONSerializer() {
         let serializer = JSONSerializer()
         do {

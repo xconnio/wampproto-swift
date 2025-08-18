@@ -34,7 +34,7 @@ class CallFields: ICallFields {
         self.options = options
         self.payload = payload
         self.payloadSerializer = payloadSerializer
-        self.payloadIsBinary = payloadSerializer != 0
+        payloadIsBinary = payloadSerializer != 0
     }
 }
 
@@ -64,7 +64,7 @@ class Call: Message {
         kwargs: [String: Any]? = nil,
         options: [String: Any] = [:]
     ) {
-        self.callFields = CallFields(
+        callFields = CallFields(
             requestID: requestID,
             uri: uri,
             args: args,
@@ -77,14 +77,14 @@ class Call: Message {
         self.callFields = callFields
     }
 
-    var requestID: Int64 { return callFields.requestID }
-    var uri: String { return callFields.uri }
-    var args: [Any]? { return callFields.args }
-    var kwargs: [String: Any]? { return callFields.kwargs }
-    var options: [String: Any] { return callFields.options }
-    var payload: Data? { return callFields.payload }
-    var payloadSerializer: Int { return callFields.payloadSerializer }
-    var payloadIsBinary: Bool { return callFields.payloadIsBinary }
+    var requestID: Int64 { callFields.requestID }
+    var uri: String { callFields.uri }
+    var args: [Any]? { callFields.args }
+    var kwargs: [String: Any]? { callFields.kwargs }
+    var options: [String: Any] { callFields.options }
+    var payload: Data? { callFields.payload }
+    var payloadSerializer: Int { callFields.payloadSerializer }
+    var payloadIsBinary: Bool { callFields.payloadIsBinary }
 
     static func parse(message: [Any]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
@@ -96,11 +96,11 @@ class Call: Message {
     func marshal() -> [Any] {
         var message: [Any] = [Call.id, requestID, options, uri]
 
-        if let args = args {
+        if let args {
             message.append(args)
         }
 
-        if let kwargs = kwargs {
+        if let kwargs {
             if args == nil {
                 message.append([])
             }
@@ -111,6 +111,6 @@ class Call: Message {
     }
 
     var type: Int64 {
-        return Call.id
+        Call.id
     }
 }

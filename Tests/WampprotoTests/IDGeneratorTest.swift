@@ -3,7 +3,6 @@ import XCTest
 @testable import Wampproto
 
 class SessionScopeIDGeneratorTests: XCTestCase {
-
     func testGenerateSessionID() {
         let sessionID = generateSessionID()
         XCTAssertTrue(sessionID >= 0 && sessionID < maxID)

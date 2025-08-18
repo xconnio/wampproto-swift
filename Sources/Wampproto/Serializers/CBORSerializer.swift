@@ -1,24 +1,19 @@
 import Foundation
 import SwiftCBOR
 
-class CBORSerializer: Serializer {
-    func serialize(message: Message) throws -> Any {
+public class CBORSerializer: Serializer {
+    public init() {}
+    public func serialize(message: Message) throws -> SerializedMessage {
         let cborData = CBOR.encode(toCBORArray(message.marshal()))
-        return Data(cborData)
+        return .data(Data(cborData))
     }
 
-    func deserialize(data: Any) throws -> Message {
-        let msg: [UInt8] = try {
-            if let data = data as? Data {
-                return [UInt8](data)
-            } else if let bytes = data as? [UInt8] {
-                return bytes
-            } else {
-                throw SerializerError.invalidMessageFormat
-            }
-        }()
+    public func deserialize(data: SerializedMessage) throws -> Message {
+        guard case let .data(data) = data else {
+            throw SerializerError.invalidMessageFormat
+        }
 
-        guard case let .array(unpacked) = try CBOR.decode(msg) else {
+        guard case let .array(unpacked) = try CBOR.decode([UInt8](data)) else {
             throw SerializerError.invalidMessageFormat
         }
 
@@ -31,7 +26,7 @@ class CBORSerializer: Serializer {
 }
 
 private func toCBORArray(_ array: [Any]) -> [CBOR] {
-    return array.compactMap { toCBORValue($0) }
+    array.compactMap { toCBORValue($0) }
 }
 
 private func toCBORMap(_ dict: [String: Any]) -> [CBOR: CBOR] {
@@ -70,7 +65,7 @@ private func convertToUnsignedInt(_ value: Any) -> CBOR? {
     case let int as Int:
         return int >= 0 ? CBOR.unsignedInt(UInt64(int)) : CBOR.negativeInt(~UInt64(int))
     case let int32 as Int32:
-        return int32 >= 0 ? CBOR.unsignedInt(UInt64(int32)) : CBOR.negativeInt(~UInt64(int32))
+         return int32 >= 0 ? CBOR.unsignedInt(UInt64(int32)) : CBOR.negativeInt(~UInt64(int32))
     case let int64 as Int64:
         return int64 >= 0 ? CBOR.unsignedInt(UInt64(int64)) : CBOR.negativeInt(~UInt64(int64))
     case let uint as UInt:
@@ -85,7 +80,7 @@ private func convertToUnsignedInt(_ value: Any) -> CBOR? {
 }
 
 private func fromCBORArray(_ array: [CBOR]) -> [Any] {
-    return array.map { fromCBORValue($0) }
+    array.map { fromCBORValue($0) }
 }
 
 private func fromCBORMap(_ dict: [CBOR: CBOR]) -> [String: Any] {
@@ -101,20 +96,20 @@ private func fromCBORMap(_ dict: [CBOR: CBOR]) -> [String: Any] {
 private func fromCBORValue(_ value: CBOR) -> Any {
     switch value {
     case let .utf8String(str):
-        return str
+        str
     case let .unsignedInt(int):
-        return Int64(int)
+        Int64(int)
     case let .negativeInt(int):
-        return Int64(int)
+        Int64(int)
     case let .boolean(bool):
-        return bool
+        bool
     case let .double(double):
-        return double
+        double
     case let .array(array):
-        return fromCBORArray(array)
+        fromCBORArray(array)
     case let .map(dict):
-        return fromCBORMap(dict)
+        fromCBORMap(dict)
     default:
-        return NSNull()
+        NSNull()
     }
 }

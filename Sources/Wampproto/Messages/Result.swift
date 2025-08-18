@@ -30,7 +30,7 @@ class ResultFields: IResultFields {
         self.details = details
         self.payload = payload
         self.payloadSerializer = payloadSerializer
-        self.payloadIsBinary = payloadSerializer != 0
+        payloadIsBinary = payloadSerializer != 0
     }
 }
 
@@ -58,7 +58,7 @@ class Result: Message {
         kwargs: [String: Any]? = nil,
         details: [String: Any] = [:]
     ) {
-        self.resultFields = ResultFields(
+        resultFields = ResultFields(
             requestID: requestID,
             args: args,
             kwargs: kwargs,
@@ -70,13 +70,13 @@ class Result: Message {
         self.resultFields = resultFields
     }
 
-    var requestID: Int64 { return resultFields.requestID }
-    var args: [Any]? { return resultFields.args }
-    var kwargs: [String: Any]? { return resultFields.kwargs }
-    var details: [String: Any] { return resultFields.details }
-    var payload: Data? { return resultFields.payload }
-    var payloadSerializer: Int { return resultFields.payloadSerializer }
-    var payloadIsBinary: Bool { return resultFields.payloadIsBinary }
+    var requestID: Int64 { resultFields.requestID }
+    var args: [Any]? { resultFields.args }
+    var kwargs: [String: Any]? { resultFields.kwargs }
+    var details: [String: Any] { resultFields.details }
+    var payload: Data? { resultFields.payload }
+    var payloadSerializer: Int { resultFields.payloadSerializer }
+    var payloadIsBinary: Bool { resultFields.payloadIsBinary }
 
     static func parse(message: [Any]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
@@ -88,11 +88,11 @@ class Result: Message {
     func marshal() -> [Any] {
         var message: [Any] = [Result.id, requestID, details]
 
-        if let args = args {
+        if let args {
             message.append(args)
         }
 
-        if let kwargs = kwargs {
+        if let kwargs {
             if args == nil {
                 message.append([])
             }
@@ -103,6 +103,6 @@ class Result: Message {
     }
 
     var type: Int64 {
-        return Result.id
+        Result.id
     }
 }

@@ -1,10 +1,10 @@
-import XCTest
 @testable import Wampproto
+import XCTest
 
 func isEqual(msg1: Subscribe, msg2: Subscribe) -> Bool {
-    return msg1.requestID == msg2.requestID &&
-    msg1.topic == msg2.topic &&
-    (msg1.options as NSDictionary) == (msg2.options as NSDictionary)
+    msg1.requestID == msg2.requestID &&
+        msg1.topic == msg2.topic &&
+        (msg1.options as NSDictionary) == (msg2.options as NSDictionary)
 }
 
 func testSubscribeMessage(serializerStr: String, serializer: Serializer) throws {
@@ -15,7 +15,7 @@ func testSubscribeMessage(serializerStr: String, serializer: Serializer) throws 
     let message = Subscribe(requestID: requestID, topic: topic, options: options)
 
     let command = "message subscribe \(requestID) \(topic) -o option1=true -o option2=42" +
-    " --serializer \(serializerStr) --output hex"
+        " --serializer \(serializerStr) --output hex"
 
     guard let msg = runCommandAndDeserialize(serializer: serializer, command: command) as? Subscribe else {
         XCTFail("Failed to deserialize the Subscribe message")
@@ -26,7 +26,6 @@ func testSubscribeMessage(serializerStr: String, serializer: Serializer) throws 
 }
 
 class SubscribeMessageTest: XCTestCase {
-
     func testJSONSerializer() {
         let serializer = JSONSerializer()
         do {

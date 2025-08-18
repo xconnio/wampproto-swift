@@ -1,8 +1,8 @@
-import XCTest
 @testable import Wampproto
+import XCTest
 
 func isEqual(msg1: Unsubscribed, msg2: Unsubscribed) -> Bool {
-    return msg1.requestID == msg2.requestID
+    msg1.requestID == msg2.requestID
 }
 
 func testUnsubscribedMessage(serializerStr: String, serializer: Serializer) throws {
@@ -21,7 +21,6 @@ func testUnsubscribedMessage(serializerStr: String, serializer: Serializer) thro
 }
 
 class UnsubscribedMessageTest: XCTestCase {
-
     func testJSONSerializer() {
         let serializer = JSONSerializer()
         do {

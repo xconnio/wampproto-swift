@@ -46,20 +46,20 @@ class Welcome: Message {
 
     init(sessionID: Int64, roles: [String: Any], authID: String, authRole: String, authMethod: String,
          authExtra: [String: Any]? = nil) {
-        self.welcomeFields = WelcomeFields(sessionID: sessionID, roles: roles, authID: authID, authRole: authRole,
-                                           authMethod: authMethod, authExtra: authExtra ?? [:])
+        welcomeFields = WelcomeFields(sessionID: sessionID, roles: roles, authID: authID, authRole: authRole,
+                                      authMethod: authMethod, authExtra: authExtra ?? [:])
     }
 
     init(withFields fields: IWelcomeFields) {
-        self.welcomeFields = fields
+        welcomeFields = fields
     }
 
-    var sessionID: Int64 { return welcomeFields.sessionID }
-    var roles: [String: Any] { return welcomeFields.roles }
-    var authID: String { return welcomeFields.authID }
-    var authRole: String { return welcomeFields.authRole }
-    var authMethod: String { return welcomeFields.authMethod }
-    var authExtra: [String: Any] { return welcomeFields.authExtra }
+    var sessionID: Int64 { welcomeFields.sessionID }
+    var roles: [String: Any] { welcomeFields.roles }
+    var authID: String { welcomeFields.authID }
+    var authRole: String { welcomeFields.authRole }
+    var authMethod: String { welcomeFields.authMethod }
+    var authExtra: [String: Any] { welcomeFields.authExtra }
 
     static func parse(message: [Any]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
@@ -100,6 +100,6 @@ class Welcome: Message {
     }
 
     var type: Int64 {
-        return Welcome.id
+        Welcome.id
     }
 }

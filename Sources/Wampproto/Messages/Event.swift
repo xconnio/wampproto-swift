@@ -34,7 +34,7 @@ class EventFields: IEventFields {
         self.details = details
         self.payload = payload
         self.payloadSerializer = payloadSerializer
-        self.payloadIsBinary = payloadSerializer != 0
+        payloadIsBinary = payloadSerializer != 0
     }
 }
 
@@ -64,7 +64,7 @@ class Event: Message {
         kwargs: [String: Any]? = nil,
         details: [String: Any] = [:]
     ) {
-        self.eventFields = EventFields(
+        eventFields = EventFields(
             subscriptionID: subscriptionID,
             publicationID: publicationID,
             args: args,
@@ -77,14 +77,14 @@ class Event: Message {
         self.eventFields = eventFields
     }
 
-    var subscriptionID: Int64 { return eventFields.subscriptionID }
-    var publicationID: Int64 { return eventFields.publicationID }
-    var args: [Any]? { return eventFields.args }
-    var kwargs: [String: Any]? { return eventFields.kwargs }
-    var details: [String: Any] { return eventFields.details }
-    var payload: Data? { return eventFields.payload }
-    var payloadSerializer: Int { return eventFields.payloadSerializer }
-    var payloadIsBinary: Bool { return eventFields.payloadIsBinary }
+    var subscriptionID: Int64 { eventFields.subscriptionID }
+    var publicationID: Int64 { eventFields.publicationID }
+    var args: [Any]? { eventFields.args }
+    var kwargs: [String: Any]? { eventFields.kwargs }
+    var details: [String: Any] { eventFields.details }
+    var payload: Data? { eventFields.payload }
+    var payloadSerializer: Int { eventFields.payloadSerializer }
+    var payloadIsBinary: Bool { eventFields.payloadIsBinary }
 
     static func parse(message: [Any]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
@@ -96,11 +96,11 @@ class Event: Message {
     func marshal() -> [Any] {
         var message: [Any] = [Event.id, subscriptionID, publicationID, details]
 
-        if let args = args {
+        if let args {
             message.append(args)
         }
 
-        if let kwargs = kwargs {
+        if let kwargs {
             if args == nil {
                 message.append([])
             }
@@ -111,6 +111,6 @@ class Event: Message {
     }
 
     var type: Int64 {
-        return Event.id
+        Event.id
     }
 }

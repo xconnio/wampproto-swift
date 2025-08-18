@@ -1,13 +1,13 @@
-import XCTest
 @testable import Wampproto
+import XCTest
 
 func isEqual(msg1: Interrupt, msg2: Interrupt) -> Bool {
-    return msg1.requestID == msg2.requestID &&
-    (msg1.options as NSDictionary).isEqual(to: msg2.options as NSDictionary)
+    msg1.requestID == msg2.requestID &&
+        (msg1.options as NSDictionary).isEqual(to: msg2.options as NSDictionary)
 }
 
 func testInterruptMessage(serializerStr: String, serializer: Serializer) throws {
-    let requestID: Int64 = 123456789
+    let requestID: Int64 = 123_456_789
     let options: [String: Any] = ["mode": "abort"]
 
     let message = Interrupt(requestID: requestID, options: options)
@@ -23,7 +23,6 @@ func testInterruptMessage(serializerStr: String, serializer: Serializer) throws 
 }
 
 class InterruptMessageTest: XCTestCase {
-
     func testJSONSerializer() {
         let serializer = JSONSerializer()
         do {

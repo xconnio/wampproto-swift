@@ -1,9 +1,9 @@
-import XCTest
 @testable import Wampproto
+import XCTest
 
 func isEqual(msg1: Goodbye, msg2: Goodbye) -> Bool {
-    return (msg1.details as NSDictionary).isEqual(to: msg2.details as NSDictionary) &&
-           msg1.reason == msg2.reason
+    (msg1.details as NSDictionary).isEqual(to: msg2.details as NSDictionary) &&
+        msg1.reason == msg2.reason
 }
 
 func testGoodbyeMessage(serializerStr: String, serializer: Serializer) throws {
@@ -23,7 +23,6 @@ func testGoodbyeMessage(serializerStr: String, serializer: Serializer) throws {
 }
 
 class GoodbyeMessageTest: XCTestCase {
-
     func testJSONSerializer() {
         let serializer = JSONSerializer()
         do {

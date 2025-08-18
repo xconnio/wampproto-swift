@@ -34,7 +34,7 @@ class InvocationFields: IInvocationFields {
         self.details = details
         self.payload = payload
         self.payloadSerializer = payloadSerializer
-        self.payloadIsBinary = payloadSerializer != 0
+        payloadIsBinary = payloadSerializer != 0
     }
 }
 
@@ -64,7 +64,7 @@ class Invocation: Message {
         kwargs: [String: Any]? = nil,
         details: [String: Any] = [:]
     ) {
-        self.invocationFields = InvocationFields(
+        invocationFields = InvocationFields(
             requestID: requestID,
             registrationID: registrationID,
             args: args,
@@ -77,14 +77,14 @@ class Invocation: Message {
         self.invocationFields = invocationFields
     }
 
-    var requestID: Int64 { return invocationFields.requestID }
-    var registrationID: Int64 { return invocationFields.registrationID }
-    var args: [Any]? { return invocationFields.args }
-    var kwargs: [String: Any]? { return invocationFields.kwargs }
-    var details: [String: Any] { return invocationFields.details }
-    var payload: Data? { return invocationFields.payload }
-    var payloadSerializer: Int { return invocationFields.payloadSerializer }
-    var payloadIsBinary: Bool { return invocationFields.payloadIsBinary }
+    var requestID: Int64 { invocationFields.requestID }
+    var registrationID: Int64 { invocationFields.registrationID }
+    var args: [Any]? { invocationFields.args }
+    var kwargs: [String: Any]? { invocationFields.kwargs }
+    var details: [String: Any] { invocationFields.details }
+    var payload: Data? { invocationFields.payload }
+    var payloadSerializer: Int { invocationFields.payloadSerializer }
+    var payloadIsBinary: Bool { invocationFields.payloadIsBinary }
 
     static func parse(message: [Any]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
@@ -96,11 +96,11 @@ class Invocation: Message {
     func marshal() -> [Any] {
         var message: [Any] = [Invocation.id, requestID, registrationID, details]
 
-        if let args = args {
+        if let args {
             message.append(args)
         }
 
-        if let kwargs = kwargs {
+        if let kwargs {
             if args == nil {
                 message.append([])
             }
@@ -111,6 +111,6 @@ class Invocation: Message {
     }
 
     var type: Int64 {
-        return Invocation.id
+        Invocation.id
     }
 }

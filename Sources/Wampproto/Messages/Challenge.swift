@@ -1,21 +1,21 @@
 import Foundation
 
-protocol IChallengeFields {
+public protocol IChallengeFields {
     var authMethod: String { get }
     var extra: [String: Any] { get }
 }
 
-class ChallengeFields: IChallengeFields {
-    let authMethod: String
-    let extra: [String: Any]
+public class ChallengeFields: IChallengeFields {
+    public let authMethod: String
+    public let extra: [String: Any]
 
-    init(authMethod: String, extra: [String: Any]) {
+    public init(authMethod: String, extra: [String: Any]) {
         self.authMethod = authMethod
         self.extra = extra
     }
 }
 
-class Challenge: Message {
+public class Challenge: Message {
     private var challengeFields: IChallengeFields
 
     static let id: Int64 = 4
@@ -31,27 +31,27 @@ class Challenge: Message {
         ]
     )
 
-    init(authMethod: String, extra: [String: Any]) {
-        self.challengeFields = ChallengeFields(authMethod: authMethod, extra: extra)
+    public init(authMethod: String, extra: [String: Any]) {
+        challengeFields = ChallengeFields(authMethod: authMethod, extra: extra)
     }
 
-    init(withFields challengeFields: IChallengeFields) {
+    public init(withFields challengeFields: IChallengeFields) {
         self.challengeFields = challengeFields
     }
 
-    var authMethod: String { return challengeFields.authMethod }
-    var extra: [String: Any] { return challengeFields.extra }
+    var authMethod: String { challengeFields.authMethod }
+    var extra: [String: Any] { challengeFields.extra }
 
-    static func parse(message: [Any]) throws -> Message {
+    public static func parse(message: [Any]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
         return Challenge(authMethod: fields.authMethod!, extra: fields.extra!)
     }
 
-    func marshal() -> [Any] {
-        return [Challenge.id, authMethod, extra]
+    public func marshal() -> [Any] {
+        [Challenge.id, authMethod, extra]
     }
 
-    var type: Int64 {
-        return Challenge.id
+    public var type: Int64 {
+        Challenge.id
     }
 }

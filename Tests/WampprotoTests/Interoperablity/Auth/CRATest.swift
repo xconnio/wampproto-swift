@@ -1,6 +1,6 @@
 import Foundation
-import XCTest
 @testable import Wampproto
+import XCTest
 
 class CRATest: XCTestCase {
     private let sessionID = 123
@@ -11,19 +11,19 @@ class CRATest: XCTestCase {
     private let salt = "salt"
     private let keylength = 32
     private let iterations = 1000
-    private let craChallenge =  """
-{"nonce":"cdcb3b12d56e12825be99f38f55ba43f","authprovider":"provider",\
-"authid":"foo","authrole":"admin","authmethod":"wampcra","session":123,\
-"timestamp":"2024-05-07T09:25:13.307Z"}
-"""
+    private let craChallenge = """
+    {"nonce":"cdcb3b12d56e12825be99f38f55ba43f","authprovider":"provider",\
+    "authid":"foo","authrole":"admin","authmethod":"wampcra","session":123,\
+    "timestamp":"2024-05-07T09:25:13.307Z"}
+    """
     private func authExtra() -> [String: Any] {
-            return [
-                "challenge": craChallenge,
-                "salt": salt,
-                "iterations": iterations,
-                "keylen": keylength
-            ]
-        }
+        [
+            "challenge": craChallenge,
+            "salt": salt,
+            "iterations": iterations,
+            "keylen": keylength
+        ]
+    }
 
     func testGenerateChallenge() {
         let challenge = generateWAMPCRAChallenge(sessionID: sessionID, authID: authID, authRole: authRole,
@@ -32,12 +32,12 @@ class CRATest: XCTestCase {
         let signature = runCommand(command: "auth cra sign-challenge \(challenge!) \(testSecret)")
 
         _ = runCommand(command: "auth cra verify-signature \(challenge!) "
-                       + "\(signature!.trimmingCharacters(in: .whitespacesAndNewlines)) \(testSecret)")
+            + "\(signature!.trimmingCharacters(in: .whitespacesAndNewlines)) \(testSecret)")
     }
 
     func testSignWAMPCRAChallenge() {
         let challenge = runCommand(command: "auth cra generate-challenge \(sessionID) \(authID) " +
-                                   "\(authRole) \(provider)")
+            "\(authRole) \(provider)")
 
         let signature = signWampCRAChallenge(challenge: challenge!.trimmingCharacters(in: .whitespacesAndNewlines),
                                              key: testSecret.data(using: .utf8)!)
@@ -47,10 +47,10 @@ class CRATest: XCTestCase {
 
     func testVerifyWAMPCRASignature() {
         let challenge = runCommand(command: "auth cra generate-challenge \(sessionID) \(authID) " +
-                                   "\(authRole) \(provider)")
+            "\(authRole) \(provider)")
 
         let signature = runCommand(command: "auth cra sign-challenge " +
-                                   "\(challenge!.trimmingCharacters(in: .whitespacesAndNewlines)) \(testSecret)")
+            "\(challenge!.trimmingCharacters(in: .whitespacesAndNewlines)) \(testSecret)")
 
         let isVerified = verifyWampCRASignature(signature: signature!.trimmingCharacters(in: .whitespacesAndNewlines),
                                                 challenge: challenge!.trimmingCharacters(in: .whitespacesAndNewlines),
@@ -64,26 +64,26 @@ class CRATest: XCTestCase {
         let authenticate = try authenticator.authenticate(challenge: challenge)
 
         let saltSecret = runCommand(command: "auth cra derive-key \(salt) \(testSecret)" +
-                                    " -i \(iterations) -l \(keylength)")
+            " -i \(iterations) -l \(keylength)")
 
         _ = runCommand(command: "auth cra verify-signature \(craChallenge) " +
-                       "\(authenticate.signature) \(saltSecret!.trimmingCharacters(in: .whitespacesAndNewlines))")
+            "\(authenticate.signature) \(saltSecret!.trimmingCharacters(in: .whitespacesAndNewlines))")
     }
 
     func testVerifyWAMPCRASignatureWithSalt() {
         let challenge = runCommand(command: "auth cra generate-challenge \(sessionID) " +
-                                   "\(authID) \(authRole) \(provider)")
+            "\(authID) \(authRole) \(provider)")
 
         let saltSecret = runCommand(command: "auth cra derive-key \(salt) \(testSecret)" +
-                                    " -i \(iterations) -l \(keylength)")
+            " -i \(iterations) -l \(keylength)")
         let signature = runCommand(command: "auth cra sign-challenge " +
-                                   "\(challenge!.trimmingCharacters(in: .whitespacesAndNewlines))" +
-                                   " \(saltSecret!.trimmingCharacters(in: .whitespacesAndNewlines))")
+            "\(challenge!.trimmingCharacters(in: .whitespacesAndNewlines))" +
+            " \(saltSecret!.trimmingCharacters(in: .whitespacesAndNewlines))")
 
         let isVerified = verifyWampCRASignature(signature: signature!.trimmingCharacters(in: .whitespacesAndNewlines),
                                                 challenge: challenge!.trimmingCharacters(in: .whitespacesAndNewlines),
                                                 key: saltSecret!.trimmingCharacters(in: .whitespacesAndNewlines)
-            .data(using: .utf8)!)
+                                                    .data(using: .utf8)!)
         XCTAssertTrue(isVerified)
     }
 }

@@ -1,24 +1,24 @@
-import Foundation
 import CommonCrypto
+import Foundation
 
-enum CRAAuthenticatorError: Swift.Error {
+public enum CRAAuthenticatorError: Swift.Error {
     case missingIterations
     case missingKeyLength
     case invalidSecret
     case invalidSalt
 }
 
-class CRAAuthenticator: ClientAuthenticator {
+public class CRAAuthenticator: ClientAuthenticator {
     static let type = "wampcra"
     static let defaultIteration = 1000
     static let defaultKeyLen = 256
 
-    let authID: String
-    let authExtra: [String: Any]
+    public let authID: String
+    public let authExtra: [String: Any]
     private let secret: String
 
-    var authMethod: String {
-        return CRAAuthenticator.type
+    public var authMethod: String {
+        CRAAuthenticator.type
     }
 
     init(authID: String, authExtra: [String: Any] = [:], secret: String) {
@@ -27,7 +27,7 @@ class CRAAuthenticator: ClientAuthenticator {
         self.secret = secret
     }
 
-    func authenticate(challenge: Challenge) throws -> Authenticate {
+    public func authenticate(challenge: Challenge) throws -> Authenticate {
         guard let challengeHex = challenge.extra["challenge"] as? String else {
             throw AuthenticationError.missingChallenge
         }
@@ -38,7 +38,7 @@ class CRAAuthenticator: ClientAuthenticator {
 
         let salt = challenge.extra["salt"] as? String
 
-        if let salt = salt, !salt.isEmpty {
+        if let salt, !salt.isEmpty {
             guard let iterations = challenge.extra["iterations"] as? Int else {
                 throw CRAAuthenticatorError.missingIterations
             }

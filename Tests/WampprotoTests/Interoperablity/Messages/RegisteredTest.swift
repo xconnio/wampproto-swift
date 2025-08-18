@@ -1,9 +1,9 @@
-import XCTest
 @testable import Wampproto
+import XCTest
 
 func isEqual(msg1: Registered, msg2: Registered) -> Bool {
-    return msg1.requestID == msg2.requestID &&
-    msg1.registrationID == msg2.registrationID
+    msg1.requestID == msg2.requestID &&
+        msg1.registrationID == msg2.registrationID
 }
 
 func testRegisteredMessage(serializerStr: String, serializer: Serializer) throws {
@@ -23,7 +23,6 @@ func testRegisteredMessage(serializerStr: String, serializer: Serializer) throws
 }
 
 class RegisteredMessageTest: XCTestCase {
-
     func testJSONSerializer() {
         let serializer = JSONSerializer()
         do {

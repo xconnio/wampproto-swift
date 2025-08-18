@@ -1,8 +1,7 @@
-import XCTest
 @testable import Wampproto
+import XCTest
 
 class SerializerTests: XCTestCase {
-
     func testSerializer(serializer: Serializer, name: String) {
         testSerializeAndDeserialize(serializer: serializer, name: name)
         testInvalidMessage(serializer: serializer, name: name)
@@ -33,13 +32,13 @@ class SerializerTests: XCTestCase {
     }
 
     func testInvalidMessage(serializer: Serializer, name: String) {
-        let invalidMessage: Any = 123
+        let invalidMessage  = SerializedMessage.string("23")
         XCTAssertThrowsError(try serializer.deserialize(data: invalidMessage),
                              "\(name): Should throw error on invalid message")
     }
 
     func testInvalidData(serializer: Serializer, name: String) {
-        let invalidData: Any = "invalid"
+        let invalidData = SerializedMessage.data(Data())
         XCTAssertThrowsError(try serializer.deserialize(data: invalidData),
                              "\(name): Should throw error on invalid data")
     }
@@ -49,5 +48,4 @@ class SerializerTests: XCTestCase {
         testSerializer(serializer: CBORSerializer(), name: "CborSerializer")
         testSerializer(serializer: MsgPackSerializer(), name: "MsgPackSerializer")
     }
-
 }

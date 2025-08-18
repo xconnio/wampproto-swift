@@ -1,13 +1,13 @@
-import XCTest
 @testable import Wampproto
+import XCTest
 
 func isEqual(msg1: Welcome, msg2: Welcome) -> Bool {
-    return msg1.sessionID == msg2.sessionID &&
-    (msg1.roles as NSDictionary).isEqual(to: msg2.roles as NSDictionary) &&
-    msg1.authID == msg2.authID &&
-    msg1.authRole == msg2.authRole &&
-    msg1.authMethod == msg2.authMethod &&
-    (msg1.authExtra as NSDictionary).isEqual(to: msg2.authExtra as NSDictionary)
+    msg1.sessionID == msg2.sessionID &&
+        (msg1.roles as NSDictionary).isEqual(to: msg2.roles as NSDictionary) &&
+        msg1.authID == msg2.authID &&
+        msg1.authRole == msg2.authRole &&
+        msg1.authMethod == msg2.authMethod &&
+        (msg1.authExtra as NSDictionary).isEqual(to: msg2.authExtra as NSDictionary)
 }
 
 func testWelcomeMessage(serializerStr: String, serializer: Serializer) throws {
@@ -28,8 +28,8 @@ func testWelcomeMessage(serializerStr: String, serializer: Serializer) throws {
     )
 
     let command = "message welcome \(sessionID) --authid \(authID) --authrole \(authRole) " +
-                  "--authmethod \(authMethod) --roles callee=true -e token:xyz " +
-                  "--serializer \(serializerStr) --output hex"
+        "--authmethod \(authMethod) --roles callee=true -e token:xyz " +
+        "--serializer \(serializerStr) --output hex"
 
     guard let msg = runCommandAndDeserialize(serializer: serializer, command: command) as? Welcome else {
         XCTFail("Failed to deserialize the Welcome message")
@@ -40,7 +40,6 @@ func testWelcomeMessage(serializerStr: String, serializer: Serializer) throws {
 }
 
 class WelcomeMessageTest: XCTestCase {
-
     func testJSONSerializer() {
         let serializer = JSONSerializer()
         do {

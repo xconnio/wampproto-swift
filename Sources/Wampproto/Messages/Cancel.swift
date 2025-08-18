@@ -32,15 +32,15 @@ class Cancel: Message {
     )
 
     init(requestID: Int64, options: [String: Any] = [:]) {
-        self.cancelFields = CancelFields(requestID: requestID, options: options)
+        cancelFields = CancelFields(requestID: requestID, options: options)
     }
 
     init(withFields cancelFields: ICancelFields) {
         self.cancelFields = cancelFields
     }
 
-    var requestID: Int64 { return cancelFields.requestID }
-    var options: [String: Any] { return cancelFields.options }
+    var requestID: Int64 { cancelFields.requestID }
+    var options: [String: Any] { cancelFields.options }
 
     static func parse(message: [Any]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
@@ -49,10 +49,10 @@ class Cancel: Message {
     }
 
     func marshal() -> [Any] {
-        return [Cancel.id, requestID, options]
+        [Cancel.id, requestID, options]
     }
 
     var type: Int64 {
-        return Cancel.id
+        Cancel.id
     }
 }

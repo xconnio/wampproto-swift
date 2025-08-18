@@ -1,5 +1,5 @@
-import XCTest
 @testable import Wampproto
+import XCTest
 
 final class CRAAuthenticatorTest: XCTestCase {
     private let sessionID = 123
@@ -12,11 +12,11 @@ final class CRAAuthenticatorTest: XCTestCase {
     private lazy var authenticator = CRAAuthenticator(authID: authID, authExtra: authExtra, secret: key)
 
     private let validSignature = "DIVL3bKs/Ei91eQyYznzUqEsiTmX705BNEXuicNpi8A="
-    private let craChallenge =  """
-{"nonce":"cdcb3b12d56e12825be99f38f55ba43f","authprovider":"provider",\
-"authid":"foo","authrole":"admin","authmethod":"wampcra","session":123,\
-"timestamp":"2024-05-07T09:25:13.307Z"}
-"""
+    private let craChallenge = """
+    {"nonce":"cdcb3b12d56e12825be99f38f55ba43f","authprovider":"provider",\
+    "authid":"foo","authrole":"admin","authmethod":"wampcra","session":123,\
+    "timestamp":"2024-05-07T09:25:13.307Z"}
+    """
 
     func testConstructor() {
         XCTAssertNotNil(authenticator)

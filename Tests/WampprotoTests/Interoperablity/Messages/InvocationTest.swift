@@ -1,12 +1,12 @@
-import XCTest
 @testable import Wampproto
+import XCTest
 
 func isEqual(msg1: Invocation, msg2: Invocation) -> Bool {
-    return msg1.requestID == msg2.requestID &&
-    msg1.registrationID == msg2.registrationID &&
-    (msg1.args as NSArray?) == (msg2.args as NSArray?) &&
-    (msg1.kwargs as NSDictionary?) == (msg2.kwargs as NSDictionary?) &&
-    (msg1.details as NSDictionary) == (msg2.details as NSDictionary)
+    msg1.requestID == msg2.requestID &&
+        msg1.registrationID == msg2.registrationID &&
+        (msg1.args as NSArray?) == (msg2.args as NSArray?) &&
+        (msg1.kwargs as NSDictionary?) == (msg2.kwargs as NSDictionary?) &&
+        (msg1.details as NSDictionary) == (msg2.details as NSDictionary)
 }
 
 func testInvocationMessage(serializerStr: String, serializer: Serializer) throws {
@@ -20,7 +20,7 @@ func testInvocationMessage(serializerStr: String, serializer: Serializer) throws
                              args: args, kwargs: kwargs, details: details)
 
     let command = "message invocation \(requestID) \(registrationID) 100 test" +
-    " -k param=value -d info=true --serializer \(serializerStr) --output hex"
+        " -k param=value -d info=true --serializer \(serializerStr) --output hex"
 
     guard let msg = runCommandAndDeserialize(serializer: serializer, command: command) as? Invocation else {
         XCTFail("Failed to deserialize the Invocation message")
@@ -31,7 +31,6 @@ func testInvocationMessage(serializerStr: String, serializer: Serializer) throws
 }
 
 class InvocationMessageTest: XCTestCase {
-
     func testJSONSerializer() {
         let serializer = JSONSerializer()
         do {

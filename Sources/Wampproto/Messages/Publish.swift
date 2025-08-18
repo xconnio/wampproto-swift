@@ -34,7 +34,7 @@ class PublishFields: IPublishFields {
         self.options = options
         self.payload = payload
         self.payloadSerializer = payloadSerializer
-        self.payloadIsBinary = payloadSerializer != 0
+        payloadIsBinary = payloadSerializer != 0
     }
 }
 
@@ -64,7 +64,7 @@ class Publish: Message {
         kwargs: [String: Any]? = nil,
         options: [String: Any] = [:]
     ) {
-        self.publishFields = PublishFields(
+        publishFields = PublishFields(
             requestID: requestID,
             uri: uri,
             args: args,
@@ -77,14 +77,14 @@ class Publish: Message {
         self.publishFields = publishFields
     }
 
-    var requestID: Int64 { return publishFields.requestID }
-    var uri: String { return publishFields.uri }
-    var args: [Any]? { return publishFields.args }
-    var kwargs: [String: Any]? { return publishFields.kwargs }
-    var options: [String: Any] { return publishFields.options }
-    var payload: Data? { return publishFields.payload }
-    var payloadSerializer: Int { return publishFields.payloadSerializer }
-    var payloadIsBinary: Bool { return publishFields.payloadIsBinary }
+    var requestID: Int64 { publishFields.requestID }
+    var uri: String { publishFields.uri }
+    var args: [Any]? { publishFields.args }
+    var kwargs: [String: Any]? { publishFields.kwargs }
+    var options: [String: Any] { publishFields.options }
+    var payload: Data? { publishFields.payload }
+    var payloadSerializer: Int { publishFields.payloadSerializer }
+    var payloadIsBinary: Bool { publishFields.payloadIsBinary }
 
     static func parse(message: [Any]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
@@ -96,10 +96,10 @@ class Publish: Message {
     func marshal() -> [Any] {
         var message: [Any] = [Publish.id, requestID, options, uri]
 
-        if let args = args {
+        if let args {
             message.append(args)
         }
-        if let kwargs = kwargs {
+        if let kwargs {
             if args == nil {
                 message.append([])
             }
@@ -110,6 +110,6 @@ class Publish: Message {
     }
 
     var type: Int64 {
-        return Publish.id
+        Publish.id
     }
 }

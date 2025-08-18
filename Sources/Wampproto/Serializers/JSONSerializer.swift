@@ -1,7 +1,8 @@
 import Foundation
 
-class JSONSerializer: Serializer {
-    func serialize(message: Message) throws -> Any {
+public class JSONSerializer: Serializer {
+    public init() {}
+    public func serialize(message: Message) throws -> SerializedMessage {
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: message.marshal())
 
@@ -9,20 +10,23 @@ class JSONSerializer: Serializer {
                 throw SerializerError.serializationError("Failed to convert JSON data to string.")
             }
 
-            return jsonString
+            return .string(jsonString)
         } catch {
             throw SerializerError.serializationError("Error serializing message: \(error)")
         }
     }
 
-    func deserialize(data: Any) throws -> Message {
-        guard let msg = data as? String else {
+    public func deserialize(data: SerializedMessage) throws -> Message {
+        guard case let .string(jsonString) = data else {
             throw SerializerError.invalidMessageFormat
         }
 
-        let data = Data(msg.utf8)
+        guard let jsonString = jsonString.data(using: .utf8) else {
+            throw SerializerError.invalidMessageFormat
+        }
+
         do {
-            guard let wampMessage = try JSONSerialization.jsonObject(with: data) as? [Any] else {
+            guard let wampMessage = try JSONSerialization.jsonObject(with: jsonString) as? [Any] else {
                 throw SerializerError.deserializationError("Failed to deserialize JSON to Message")
             }
             return try toMessage(data: wampMessage)
@@ -30,5 +34,4 @@ class JSONSerializer: Serializer {
             throw SerializerError.deserializationError("Error decoding JSON: \(error)")
         }
     }
-
 }
