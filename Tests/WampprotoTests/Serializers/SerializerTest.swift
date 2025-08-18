@@ -32,7 +32,7 @@ class SerializerTests: XCTestCase {
     }
 
     func testInvalidMessage(serializer: Serializer, name: String) {
-        let invalidMessage  = SerializedMessage.string("23")
+        let invalidMessage = SerializedMessage.string("23")
         XCTAssertThrowsError(try serializer.deserialize(data: invalidMessage),
                              "\(name): Should throw error on invalid message")
     }

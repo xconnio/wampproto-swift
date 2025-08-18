@@ -118,9 +118,9 @@ class JoinerTest: XCTestCase {
 
     private func send(data: URLSessionWebSocketTask.Message, webSocketTask: URLSessionWebSocketTask) async throws {
         switch data {
-        case .string(let text):
+        case let .string(text):
             try await webSocketTask.send(.string(text))
-        case .data(let binary):
+        case let .data(binary):
             try await webSocketTask.send(.data(binary))
         default:
             throw URLError(.badServerResponse)
