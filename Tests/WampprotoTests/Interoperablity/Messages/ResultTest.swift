@@ -1,11 +1,11 @@
-import XCTest
 @testable import Wampproto
+import XCTest
 
 func isEqual(msg1: Result, msg2: Result) -> Bool {
-    return msg1.requestID == msg2.requestID &&
-    (msg1.args as NSArray?) == (msg2.args as NSArray?) &&
-    (msg1.kwargs as NSDictionary?) == (msg2.kwargs as NSDictionary?) &&
-    (msg1.details as NSDictionary) == (msg2.details as NSDictionary)
+    msg1.requestID == msg2.requestID &&
+        (msg1.args as NSArray?) == (msg2.args as NSArray?) &&
+        (msg1.kwargs as NSDictionary?) == (msg2.kwargs as NSDictionary?) &&
+        (msg1.details as NSDictionary) == (msg2.details as NSDictionary)
 }
 
 func testResultMessage(serializerStr: String, serializer: Serializer) throws {
@@ -17,7 +17,7 @@ func testResultMessage(serializerStr: String, serializer: Serializer) throws {
     let message = Result(requestID: requestID, args: args, kwargs: kwargs, details: details)
 
     let command = "message result \(requestID) 100 data -k status=ok -d cache=true " +
-    "--serializer \(serializerStr) --output hex"
+        "--serializer \(serializerStr) --output hex"
 
     guard let msg = runCommandAndDeserialize(serializer: serializer, command: command) as? Result else {
         XCTFail("Failed to deserialize the Result message")
@@ -28,7 +28,6 @@ func testResultMessage(serializerStr: String, serializer: Serializer) throws {
 }
 
 class ResultMessageTest: XCTestCase {
-
     func testJSONSerializer() {
         let serializer = JSONSerializer()
         do {

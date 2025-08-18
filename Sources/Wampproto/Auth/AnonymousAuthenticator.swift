@@ -1,18 +1,18 @@
 import Foundation
 
-class AnonymousAuthenticator: ClientAuthenticator {
+public class AnonymousAuthenticator: ClientAuthenticator {
     static let type = "anonymous"
 
-    let authID: String
-    let authExtra: [String: Any]
-    let authMethod: String = AnonymousAuthenticator.type
+    public let authID: String
+    public let authExtra: [String: Any]
+    public let authMethod: String = AnonymousAuthenticator.type
 
-    init(authID: String, authExtra: [String: Any] = [:]) {
+    public init(authID: String, authExtra: [String: Any] = [:]) {
         self.authID = authID
         self.authExtra = authExtra
     }
 
-    func authenticate(challenge: Challenge) throws -> Authenticate {
+    public func authenticate(challenge _: Challenge) throws -> Authenticate {
         throw AuthenticationError.notSupported
     }
 }

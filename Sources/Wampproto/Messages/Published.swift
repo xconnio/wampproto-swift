@@ -32,15 +32,15 @@ class Published: Message {
     )
 
     init(requestID: Int64, publicationID: Int64) {
-        self.publishedFields = PublishedFields(requestID: requestID, publicationID: publicationID)
+        publishedFields = PublishedFields(requestID: requestID, publicationID: publicationID)
     }
 
     init(withFields publishedFields: IPublishedFields) {
         self.publishedFields = publishedFields
     }
 
-    var requestID: Int64 { return publishedFields.requestID }
-    var publicationID: Int64 { return publishedFields.publicationID }
+    var requestID: Int64 { publishedFields.requestID }
+    var publicationID: Int64 { publishedFields.publicationID }
 
     static func parse(message: [Any]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
@@ -49,10 +49,10 @@ class Published: Message {
     }
 
     func marshal() -> [Any] {
-        return [Published.id, requestID, publicationID]
+        [Published.id, requestID, publicationID]
     }
 
     var type: Int64 {
-        return Published.id
+        Published.id
     }
 }

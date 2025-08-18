@@ -1,13 +1,13 @@
-import XCTest
 @testable import Wampproto
+import XCTest
 
 func isEqual(msg1: Cancel, msg2: Cancel) -> Bool {
-    return msg1.requestID == msg2.requestID &&
-    (msg1.options as NSDictionary).isEqual(to: msg2.options as NSDictionary)
+    msg1.requestID == msg2.requestID &&
+        (msg1.options as NSDictionary).isEqual(to: msg2.options as NSDictionary)
 }
 
 func testCancelMessage(serializerStr: String, serializer: Serializer) throws {
-    let requestID: Int64 = 987654321
+    let requestID: Int64 = 987_654_321
     let options: [String: Any] = ["mode": "kill"]
 
     let message = Cancel(requestID: requestID, options: options)
@@ -23,7 +23,6 @@ func testCancelMessage(serializerStr: String, serializer: Serializer) throws {
 }
 
 class CancelMessageTest: XCTestCase {
-
     func testJSONSerializer() {
         let serializer = JSONSerializer()
         do {

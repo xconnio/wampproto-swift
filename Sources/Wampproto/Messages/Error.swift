@@ -30,7 +30,7 @@ class ErrorFields: IErrorFields {
         self.details = details
         self.payload = payload
         self.payloadSerializer = payloadSerializer
-        self.payloadIsBinary = payloadSerializer != 0
+        payloadIsBinary = payloadSerializer != 0
     }
 }
 
@@ -56,23 +56,23 @@ class Error: Message {
 
     init(messageType: Int64, requestID: Int64, uri: String, args: [Any]? = nil, kwargs: [String: Any]? = nil,
          details: [String: Any] = [:]) {
-        self.errorFields = ErrorFields(messageType: messageType, requestID: requestID, uri: uri,
-                                       args: args, kwargs: kwargs, details: details)
+        errorFields = ErrorFields(messageType: messageType, requestID: requestID, uri: uri,
+                                  args: args, kwargs: kwargs, details: details)
     }
 
     init(withFields errorFields: IErrorFields) {
         self.errorFields = errorFields
     }
 
-    var messageType: Int64 { return errorFields.messageType }
-    var requestID: Int64 { return errorFields.requestID }
-    var uri: String { return errorFields.uri }
-    var args: [Any]? { return errorFields.args }
-    var kwargs: [String: Any]? { return errorFields.kwargs }
-    var details: [String: Any] { return errorFields.details }
-    var payload: Data? { return errorFields.payload }
-    var payloadSerializer: Int { return errorFields.payloadSerializer }
-    var payloadIsBinary: Bool { return errorFields.payloadIsBinary }
+    var messageType: Int64 { errorFields.messageType }
+    var requestID: Int64 { errorFields.requestID }
+    var uri: String { errorFields.uri }
+    var args: [Any]? { errorFields.args }
+    var kwargs: [String: Any]? { errorFields.kwargs }
+    var details: [String: Any] { errorFields.details }
+    var payload: Data? { errorFields.payload }
+    var payloadSerializer: Int { errorFields.payloadSerializer }
+    var payloadIsBinary: Bool { errorFields.payloadIsBinary }
 
     static func parse(message: [Any]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
@@ -84,11 +84,11 @@ class Error: Message {
     func marshal() -> [Any] {
         var message: [Any] = [Error.id, messageType, requestID, details, uri]
 
-        if let args = args {
+        if let args {
             message.append(args)
         }
 
-        if let kwargs = kwargs {
+        if let kwargs {
             if args == nil {
                 message.append([])
             }
@@ -99,6 +99,6 @@ class Error: Message {
     }
 
     var type: Int64 {
-        return Error.id
+        Error.id
     }
 }

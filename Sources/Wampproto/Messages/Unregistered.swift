@@ -28,14 +28,14 @@ class Unregistered: Message {
     )
 
     init(requestID: Int64) {
-        self.unregisteredFields = UnregisteredFields(requestID: requestID)
+        unregisteredFields = UnregisteredFields(requestID: requestID)
     }
 
     init(withFields unregisteredFields: IUnregisteredFields) {
         self.unregisteredFields = unregisteredFields
     }
 
-    var requestID: Int64 { return unregisteredFields.requestID }
+    var requestID: Int64 { unregisteredFields.requestID }
 
     static func parse(message: [Any]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
@@ -44,10 +44,10 @@ class Unregistered: Message {
     }
 
     func marshal() -> [Any] {
-        return [Unregistered.id, requestID]
+        [Unregistered.id, requestID]
     }
 
     var type: Int64 {
-        return Unregistered.id
+        Unregistered.id
     }
 }

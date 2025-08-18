@@ -32,7 +32,7 @@ class Unsubscribe: Message {
     )
 
     init(requestID: Int64, subscriptionID: Int64) {
-        self.unsubscribeFields = UnsubscribeFields(
+        unsubscribeFields = UnsubscribeFields(
             requestID: requestID,
             subscriptionID: subscriptionID
         )
@@ -42,8 +42,8 @@ class Unsubscribe: Message {
         self.unsubscribeFields = unsubscribeFields
     }
 
-    var requestID: Int64 { return unsubscribeFields.requestID }
-    var subscriptionID: Int64 { return unsubscribeFields.subscriptionID }
+    var requestID: Int64 { unsubscribeFields.requestID }
+    var subscriptionID: Int64 { unsubscribeFields.subscriptionID }
 
     static func parse(message: [Any]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
@@ -52,10 +52,10 @@ class Unsubscribe: Message {
     }
 
     func marshal() -> [Any] {
-        return [Unsubscribe.id, requestID, subscriptionID]
+        [Unsubscribe.id, requestID, subscriptionID]
     }
 
     var type: Int64 {
-        return Unsubscribe.id
+        Unsubscribe.id
     }
 }

@@ -13,4 +13,9 @@ build-wampproto:
 
 run-xconn:
 	git clone https://github.com/xconnio/xconn-aat-setup.git
-	cd xconn-aat-setup/xconn && make run
+	cd xconn-aat-setup/nxt && make run
+	
+format:
+	swiftformat . --swift-version 5.10
+	swiftlint --fix
+

@@ -1,15 +1,15 @@
 import Foundation
 import Sodium
 
-class CryptoSignAuthenticator: ClientAuthenticator {
+public class CryptoSignAuthenticator: ClientAuthenticator {
     static let type = "cryptosign"
 
-    let authID: String
+    public let authID: String
     private let privateKey: String
-    var authExtra: [String: Any]
+    public var authExtra: [String: Any]
 
-    var authMethod: String {
-        return CryptoSignAuthenticator.type
+    public var authMethod: String {
+        CryptoSignAuthenticator.type
     }
 
     init(authID: String, privateKey: String, authExtra: [String: Any] = [:]) throws {
@@ -25,7 +25,7 @@ class CryptoSignAuthenticator: ClientAuthenticator {
         self.authExtra = extra
     }
 
-    func authenticate(challenge: Challenge) throws -> Authenticate {
+    public func authenticate(challenge: Challenge) throws -> Authenticate {
         guard let challengeHex = challenge.extra["challenge"] as? String else {
             throw AuthenticationError.missingChallenge
         }
@@ -101,9 +101,9 @@ func verifyCryptoSignSignature(signature: String, publicKey: [UInt8]) throws -> 
     return sodium.sign.verify(message: challengeData, publicKey: publicKey, signature: sigData)
 }
 
-extension Array where Element == UInt8 {
+extension [UInt8] {
     func hexEncodedString() -> String {
-        return self.map { String(format: "%02x", $0) }.joined()
+        map { String(format: "%02x", $0) }.joined()
     }
 }
 
@@ -114,7 +114,7 @@ extension String {
         return stride(from: 0, to: count, by: 2).compactMap { hexIndex in
             let start = index(startIndex, offsetBy: hexIndex)
             let end = index(start, offsetBy: 2)
-            return UInt8(self[start..<end], radix: 16)
+            return UInt8(self[start ..< end], radix: 16)
         }
     }
 }

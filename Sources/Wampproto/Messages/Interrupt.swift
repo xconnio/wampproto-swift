@@ -32,15 +32,15 @@ class Interrupt: Message {
     )
 
     init(requestID: Int64, options: [String: Any] = [:]) {
-        self.interruptFields = InterruptFields(requestID: requestID, options: options)
+        interruptFields = InterruptFields(requestID: requestID, options: options)
     }
 
     init(withFields interruptFields: IInterruptFields) {
         self.interruptFields = interruptFields
     }
 
-    var requestID: Int64 { return interruptFields.requestID }
-    var options: [String: Any] { return interruptFields.options }
+    var requestID: Int64 { interruptFields.requestID }
+    var options: [String: Any] { interruptFields.options }
 
     static func parse(message: [Any]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
@@ -49,10 +49,10 @@ class Interrupt: Message {
     }
 
     func marshal() -> [Any] {
-        return [Interrupt.id, requestID, options]
+        [Interrupt.id, requestID, options]
     }
 
     var type: Int64 {
-        return Interrupt.id
+        Interrupt.id
     }
 }

@@ -1,5 +1,5 @@
-import XCTest
 @testable import Wampproto
+import XCTest
 
 class ValidationTests: XCTestCase {
     func testSanityCheck_valid() throws {

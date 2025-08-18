@@ -32,15 +32,15 @@ class Goodbye: Message {
     )
 
     init(details: [String: Any], reason: String) {
-        self.goodbyeFields = GoodbyeFields(details: details, reason: reason)
+        goodbyeFields = GoodbyeFields(details: details, reason: reason)
     }
 
     init(withFields goodbyeFields: IGoodbyeFields) {
         self.goodbyeFields = goodbyeFields
     }
 
-    var details: [String: Any] { return goodbyeFields.details }
-    var reason: String { return goodbyeFields.reason }
+    var details: [String: Any] { goodbyeFields.details }
+    var reason: String { goodbyeFields.reason }
 
     static func parse(message: [Any]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
@@ -49,10 +49,10 @@ class Goodbye: Message {
     }
 
     func marshal() -> [Any] {
-        return [Goodbye.id, details, reason]
+        [Goodbye.id, details, reason]
     }
 
     var type: Int64 {
-        return Goodbye.id
+        Goodbye.id
     }
 }

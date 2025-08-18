@@ -32,15 +32,15 @@ class Registered: Message {
     )
 
     init(requestID: Int64, registrationID: Int64) {
-        self.registeredFields = RegisteredFields(requestID: requestID, registrationID: registrationID)
+        registeredFields = RegisteredFields(requestID: requestID, registrationID: registrationID)
     }
 
     init(withFields registeredFields: IRegisteredFields) {
         self.registeredFields = registeredFields
     }
 
-    var requestID: Int64 { return registeredFields.requestID }
-    var registrationID: Int64 { return registeredFields.registrationID }
+    var requestID: Int64 { registeredFields.requestID }
+    var registrationID: Int64 { registeredFields.registrationID }
 
     static func parse(message: [Any]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
@@ -49,10 +49,10 @@ class Registered: Message {
     }
 
     func marshal() -> [Any] {
-        return [Registered.id, requestID, registrationID]
+        [Registered.id, requestID, registrationID]
     }
 
     var type: Int64 {
-        return Registered.id
+        Registered.id
     }
 }

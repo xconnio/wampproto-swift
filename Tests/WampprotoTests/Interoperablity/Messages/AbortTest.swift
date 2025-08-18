@@ -1,12 +1,12 @@
-import XCTest
 @testable import Wampproto
+import XCTest
 
 func isEqual(msg1: Abort, msg2: Abort) -> Bool {
-    return (msg1.details as NSDictionary).isEqual(to: msg2.details as NSDictionary) &&
-    msg1.reason == msg2.reason &&
-    (msg1.args as? NSArray)?.isEqual(to: msg2.args as? NSArray) ?? (msg1.args == nil && msg2.args == nil) &&
-    (msg1.kwargs as NSDictionary?)?.isEqual(to: msg2.kwargs as NSDictionary?) ?? (msg1.kwargs == nil
-                                                                                  && msg2.kwargs == nil)
+    (msg1.details as NSDictionary).isEqual(to: msg2.details as NSDictionary) &&
+        msg1.reason == msg2.reason &&
+        (msg1.args as? NSArray)?.isEqual(to: msg2.args as? NSArray) ?? (msg1.args == nil && msg2.args == nil) &&
+        (msg1.kwargs as NSDictionary?)?.isEqual(to: msg2.kwargs as NSDictionary?) ?? (msg1.kwargs == nil
+            && msg2.kwargs == nil)
 }
 
 func testAbortMessage(serializerStr: String, serializer: Serializer) throws {
@@ -18,7 +18,7 @@ func testAbortMessage(serializerStr: String, serializer: Serializer) throws {
     let message = Abort(details: details, reason: reason, args: args, kwargs: kwargs)
 
     let command = "message abort \(reason) -d message=unauthorized arg1 arg2 -k key1:value1 " +
-                  "--serializer \(serializerStr) --output hex"
+        "--serializer \(serializerStr) --output hex"
 
     guard let msg = runCommandAndDeserialize(serializer: serializer, command: command) as? Abort else {
         XCTFail("Failed to deserialize the Abort message")
@@ -29,7 +29,6 @@ func testAbortMessage(serializerStr: String, serializer: Serializer) throws {
 }
 
 class AbortMessageTest: XCTestCase {
-
     func testJSONSerializer() {
         let serializer = JSONSerializer()
         do {

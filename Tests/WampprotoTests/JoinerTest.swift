@@ -1,5 +1,29 @@
-import XCTest
 @testable import Wampproto
+import XCTest
+
+extension SerializedMessage {
+    func webSocketMessage() -> URLSessionWebSocketTask.Message {
+        switch self {
+        case let .string(string):
+            .string(string)
+        case let .data(data):
+            .data(data)
+        }
+    }
+}
+
+extension URLSessionWebSocketTask.Message {
+    func serializedMessage() -> SerializedMessage {
+        switch self {
+        case let .string(string):
+            return .string(string)
+        case let .data(data):
+            return .data(data)
+        @unknown default:
+            fatalError()
+        }
+    }
+}
 
 class JoinerTest: XCTestCase {
     private let testRealm = "test.realm"
@@ -10,9 +34,9 @@ class JoinerTest: XCTestCase {
 
     func testSendHello() throws {
         let joiner = Joiner(realm: testRealm)
-        let serializedHello = try joiner.sendHello() as? String
+        let serializedHello = try joiner.sendHello()
 
-        let deserializedHello = try JSONSerializer().deserialize(data: serializedHello!)
+        let deserializedHello = try JSONSerializer().deserialize(data: serializedHello)
         XCTAssertTrue(deserializedHello is Hello)
 
         let helloMessage = deserializedHello as? Hello
@@ -20,7 +44,6 @@ class JoinerTest: XCTestCase {
         XCTAssertEqual(helloMessage!.authMethods.first, testAuthMethod)
         XCTAssertEqual(helloMessage!.authID, "")
         XCTAssertEqual(helloMessage!.roles as NSDictionary, clientRoles as NSDictionary)
-
     }
 
     func testReceiveWelcomeMessage() throws {
@@ -48,7 +71,7 @@ class JoinerTest: XCTestCase {
         let challengeMessage = Challenge(authMethod: "cryptosign", extra: ["challenge": "123456"])
         let serializedChallenge = try JSONSerializer().serialize(message: challengeMessage)
 
-        let result = try joiner.receive(data: serializedChallenge) as? String
+        let result = try joiner.receive(data: serializedChallenge)
         XCTAssertNotNil(result) // Authenticate message expected after Challenge
 
         let deserializedResult = try JSONSerializer().deserialize(data: result!)
@@ -93,23 +116,23 @@ class JoinerTest: XCTestCase {
         }
     }
 
-    private func send(data: Any, webSocketTask: URLSessionWebSocketTask) async throws {
+    private func send(data: URLSessionWebSocketTask.Message, webSocketTask: URLSessionWebSocketTask) async throws {
         switch data {
-        case let text as String:
+        case .string(let text):
             try await webSocketTask.send(.string(text))
-        case let binary as Data:
+        case .data(let binary):
             try await webSocketTask.send(.data(binary))
         default:
             throw URLError(.badServerResponse)
         }
     }
 
-    private func receive(webSocketTask: URLSessionWebSocketTask) async throws -> Any {
+    private func receive(webSocketTask: URLSessionWebSocketTask) async throws -> URLSessionWebSocketTask.Message {
         switch try await webSocketTask.receive() {
-        case .string(let text):
-            return text
-        case .data(let data):
-            return data
+        case let .string(text):
+            return .string(text)
+        case let .data(data):
+            return .data(data)
         @unknown default:
             throw URLError(.badServerResponse)
         }
@@ -122,16 +145,16 @@ class JoinerTest: XCTestCase {
         let webSocketTask = URLSession.shared.webSocketTask(with: url, protocols: protocols)
         webSocketTask.resume()
 
-        try await send(data: try joiner.sendHello(), webSocketTask: webSocketTask)
+        try await send(data: joiner.sendHello().webSocketMessage(), webSocketTask: webSocketTask)
 
         let receivedData = try await receive(webSocketTask: webSocketTask)
-        guard let authenticate = try joiner.receive(data: receivedData) else {
-            return try serializer.deserialize(data: receivedData)
+        guard let authenticate = try joiner.receive(data: receivedData.serializedMessage()) else {
+            return try serializer.deserialize(data: receivedData.serializedMessage())
         }
 
-        try await send(data: authenticate, webSocketTask: webSocketTask)
+        try await send(data: authenticate.webSocketMessage(), webSocketTask: webSocketTask)
 
-        return try serializer.deserialize(data: try await receive(webSocketTask: webSocketTask))
+        return try await serializer.deserialize(data: receive(webSocketTask: webSocketTask).serializedMessage())
     }
 
     func testAnonymous() async throws {
@@ -159,8 +182,10 @@ class JoinerTest: XCTestCase {
 
     func testCryptosign() async throws {
         let jsonSerializer = JSONSerializer()
-        let cryptosignAuthenticator = try CryptoSignAuthenticator(authID: "cryptosign-user",
-                                        privateKey: "150085398329d255ad69e82bf47ced397bcec5b8fbeecd28a80edbbd85b49081")
+        let cryptosignAuthenticator = try CryptoSignAuthenticator(
+            authID: "cryptosign-user",
+            privateKey: "150085398329d255ad69e82bf47ced397bcec5b8fbeecd28a80edbbd85b49081"
+        )
         let joiner = Joiner(realm: "realm1", serializer: jsonSerializer, authenticator: cryptosignAuthenticator)
         let welcome = try await join(joiner: joiner, serializer: jsonSerializer)
         XCTAssertTrue(welcome is Welcome)

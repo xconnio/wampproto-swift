@@ -13,11 +13,11 @@ class ApplicationError: Swift.Error, CustomStringConvertible {
 
     var description: String {
         var errStr = message
-        if let args = args, !args.isEmpty {
+        if let args, !args.isEmpty {
             let argsStr = args.map { "\($0)" }.joined(separator: ", ")
             errStr += ": \(argsStr)"
         }
-        if let kwargs = kwargs, !kwargs.isEmpty {
+        if let kwargs, !kwargs.isEmpty {
             let kwargsStr = kwargs.map { "\($0.key)=\($0.value)" }.joined(separator: ", ")
             errStr += ": \(kwargsStr)"
         }

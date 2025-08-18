@@ -1,6 +1,6 @@
 import Foundation
 
-protocol ClientAuthenticator {
+public protocol ClientAuthenticator {
     var authMethod: String { get }
     var authID: String { get }
     var authExtra: [String: Any] { get }
@@ -8,7 +8,7 @@ protocol ClientAuthenticator {
     func authenticate(challenge: Challenge) throws -> Authenticate
 }
 
-enum AuthenticationError: Swift.Error {
+public enum AuthenticationError: Swift.Error {
     case notSupported
     case missingChallenge
     case authenticationFailed

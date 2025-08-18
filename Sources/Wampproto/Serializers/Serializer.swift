@@ -1,11 +1,16 @@
 import Foundation
 
-protocol Serializer {
-    func serialize(message: Message) throws -> Any
-    func deserialize(data: Any) throws -> Message
+public enum SerializedMessage: Sendable {
+    case string(String)
+    case data(Data)
 }
 
-enum SerializerError: Swift.Error {
+public protocol Serializer {
+    func serialize(message: Message) throws -> SerializedMessage
+    func deserialize(data: SerializedMessage) throws -> Message
+}
+
+public enum SerializerError: Swift.Error {
     case serializationError(String)
     case deserializationError(String)
     case invalidMessageFormat
@@ -72,6 +77,5 @@ func toMessage(data: [Any]) throws -> Message {
         return try Event.parse(message: data)
     default:
         throw MessageParsingError.unsupportedType(type)
-
     }
 }

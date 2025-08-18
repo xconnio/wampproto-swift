@@ -24,7 +24,7 @@ class AbortFields: IAbortFields {
         self.kwargs = kwargs
         self.payload = payload
         self.payloadSerializer = payloadSerializer
-        self.payloadIsBinary = payloadSerializer != 0
+        payloadIsBinary = payloadSerializer != 0
     }
 }
 
@@ -47,20 +47,20 @@ class Abort: Message {
     )
 
     init(details: [String: Any], reason: String, args: [Any]? = nil, kwargs: [String: Any]? = nil) {
-        self.abortFields = AbortFields(details: details, reason: reason, args: args, kwargs: kwargs)
+        abortFields = AbortFields(details: details, reason: reason, args: args, kwargs: kwargs)
     }
 
     init(withFields abortFields: IAbortFields) {
         self.abortFields = abortFields
     }
 
-    var details: [String: Any] { return abortFields.details }
-    var reason: String { return abortFields.reason }
-    var args: [Any]? { return abortFields.args }
-    var kwargs: [String: Any]? { return abortFields.kwargs }
-    var payload: Data? { return abortFields.payload }
-    var payloadSerializer: Int { return abortFields.payloadSerializer }
-    var payloadIsBinary: Bool { return abortFields.payloadIsBinary }
+    var details: [String: Any] { abortFields.details }
+    var reason: String { abortFields.reason }
+    var args: [Any]? { abortFields.args }
+    var kwargs: [String: Any]? { abortFields.kwargs }
+    var payload: Data? { abortFields.payload }
+    var payloadSerializer: Int { abortFields.payloadSerializer }
+    var payloadIsBinary: Bool { abortFields.payloadIsBinary }
 
     static func parse(message: [Any]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
@@ -71,11 +71,11 @@ class Abort: Message {
     func marshal() -> [Any] {
         var message: [Any] = [Abort.id, details, reason]
 
-        if let args = args {
+        if let args {
             message.append(args)
         }
 
-        if let kwargs = kwargs {
+        if let kwargs {
             if args == nil {
                 message.append([])
             }
@@ -86,6 +86,6 @@ class Abort: Message {
     }
 
     var type: Int64 {
-        return Abort.id
+        Abort.id
     }
 }

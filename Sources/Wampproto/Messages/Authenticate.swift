@@ -1,21 +1,21 @@
 import Foundation
 
-protocol IAuthenticateFields {
+public protocol IAuthenticateFields {
     var signature: String { get }
     var extra: [String: Any] { get }
 }
 
-class AuthenticateFields: IAuthenticateFields {
-    let signature: String
-    let extra: [String: Any]
+public class AuthenticateFields: IAuthenticateFields {
+    public let signature: String
+    public let extra: [String: Any]
 
-    init(signature: String, extra: [String: Any]) {
+    public init(signature: String, extra: [String: Any]) {
         self.signature = signature
         self.extra = extra
     }
 }
 
-class Authenticate: Message {
+public class Authenticate: Message {
     private var authenticateFields: IAuthenticateFields
 
     static let id: Int64 = 5
@@ -32,27 +32,27 @@ class Authenticate: Message {
     )
 
     init(signature: String, extra: [String: Any]) {
-        self.authenticateFields = AuthenticateFields(signature: signature, extra: extra)
+        authenticateFields = AuthenticateFields(signature: signature, extra: extra)
     }
 
     init(withFields authenticateFields: IAuthenticateFields) {
         self.authenticateFields = authenticateFields
     }
 
-    var signature: String { return authenticateFields.signature }
-    var extra: [String: Any] { return authenticateFields.extra }
+    var signature: String { authenticateFields.signature }
+    var extra: [String: Any] { authenticateFields.extra }
 
-    static func parse(message: [Any]) throws -> Message {
+    public static func parse(message: [Any]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
 
         return Authenticate(signature: fields.signature!, extra: fields.extra!)
     }
 
-    func marshal() -> [Any] {
-        return [Authenticate.id, signature, extra]
+    public func marshal() -> [Any] {
+        [Authenticate.id, signature, extra]
     }
 
-    var type: Int64 {
-        return Authenticate.id
+    public var type: Int64 {
+        Authenticate.id
     }
 }

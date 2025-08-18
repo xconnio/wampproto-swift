@@ -1,5 +1,5 @@
-import XCTest
 @testable import Wampproto
+import XCTest
 
 class AnonymousAuthenticatorTest: XCTestCase {
     let authID = "authID"

@@ -1,6 +1,6 @@
 import Foundation
-import XCTest
 @testable import Wampproto
+import XCTest
 
 func runCommand(command: String) -> String? {
     let process = Process()
@@ -47,10 +47,10 @@ func runCommandAndDeserialize(serializer: Serializer, command: String) -> Messag
                 return nil
             }
 
-            return try jsonSerializer.deserialize(data: jsonString)
+            return try jsonSerializer.deserialize(data: SerializedMessage.string(jsonString))
         }
 
-        return try serializer.deserialize(data: Data(outputBytes))
+        return try serializer.deserialize(data: SerializedMessage.data(Data(outputBytes)))
     } catch let error as NSError {
         XCTFail("\(error.localizedDescription)")
         return nil

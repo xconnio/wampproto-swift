@@ -1,5 +1,5 @@
-import XCTest
 @testable import Wampproto
+import XCTest
 
 class CryptosignTest: XCTestCase {
     private let testPublicKey = "2b7ec216daa877c7f4c9439db8a722ea2340eacad506988db2564e258284f895"
@@ -11,15 +11,15 @@ class CryptosignTest: XCTestCase {
         let signature = runCommand(command: "auth cryptosign sign-challenge \(challenge) \(testPrivateKey)")
 
         _ = runCommand(command: "auth cryptosign verify-signature " +
-                       "\(signature!.trimmingCharacters(in: .whitespacesAndNewlines)) \(testPublicKey)")
+            "\(signature!.trimmingCharacters(in: .whitespacesAndNewlines)) \(testPublicKey)")
     }
 
     func testSignCrytosignChallenge() throws {
         let challenge = runCommand(command: "auth cryptosign generate-challenge")
 
         var signature = try signCryptoSignChallenge(challenge:
-                                                        challenge!.trimmingCharacters(in: .whitespacesAndNewlines),
-                                                    privateKey: testPrivateKey)
+            challenge!.trimmingCharacters(in: .whitespacesAndNewlines),
+            privateKey: testPrivateKey)
 
         if try signature.hexDecodedBytes().count == 64 {
             signature += challenge!.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -32,11 +32,12 @@ class CryptosignTest: XCTestCase {
         let challenge = runCommand(command: "auth cryptosign generate-challenge")
 
         let signature = runCommand(command: "auth cryptosign sign-challenge" +
-                                   " \(challenge!.trimmingCharacters(in: .whitespacesAndNewlines)) \(testPrivateKey)")
+            " \(challenge!.trimmingCharacters(in: .whitespacesAndNewlines)) \(testPrivateKey)")
 
         let isVerified = try verifyCryptoSignSignature(
             signature: signature!.trimmingCharacters(in: .whitespacesAndNewlines),
-            publicKey: testPublicKey.hexDecodedBytes())
+            publicKey: testPublicKey.hexDecodedBytes()
+        )
         XCTAssertTrue(isVerified)
     }
 }

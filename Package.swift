@@ -7,7 +7,8 @@ let package = Package(
     products: [
         .library(
             name: "Wampproto",
-            targets: ["Wampproto"])
+            targets: ["Wampproto"]
+        )
     ],
     dependencies: [
         .package(url: "https://github.com/malcommac/SwiftMsgPack.git", from: "1.2.0"),
@@ -21,9 +22,11 @@ let package = Package(
                 "SwiftMsgPack",
                 "SwiftCBOR",
                 .product(name: "Sodium", package: "swift-sodium")
-            ]),
+            ]
+        ),
         .testTarget(
             name: "WampprotoTests",
-            dependencies: ["Wampproto"])
+            dependencies: ["Wampproto"]
+        )
     ]
 )

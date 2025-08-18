@@ -3,7 +3,7 @@ import Foundation
 let maxID: Int64 = 1 << 53
 
 func generateSessionID() -> Int64 {
-    return Int64.random(in: 0..<maxID)
+    Int64.random(in: 0 ..< maxID)
 }
 
 class SessionScopeIDGenerator {
