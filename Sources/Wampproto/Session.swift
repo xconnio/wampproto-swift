@@ -19,7 +19,7 @@ class Session {
         self.serializer = serializer
     }
 
-    func sendMessage(msg: Message) throws -> Any {
+    func sendMessage(msg: Message) throws -> SerializedMessage {
         switch msg {
         case let msg as Call:
             callRequests[msg.requestID] = msg.requestID
@@ -72,7 +72,7 @@ class Session {
         }
     }
 
-    func receive(data: Any) throws -> Message {
+    func receive(data: SerializedMessage) throws -> Message {
         let msg = try serializer.deserialize(data: data)
         return try receiveMessage(msg: msg)
     }

@@ -1,15 +1,15 @@
-import XCTest
 @testable import Wampproto
+import XCTest
 
 class SessionTests: XCTestCase {
-
     private var serializer: Serializer = JSONSerializer()
-    private lazy var session: Session = Session(serializer: serializer)
+    private lazy var session: Session = .init(serializer: serializer)
 
     func testSendRegister() throws {
         let register = Register(requestID: 2, uri: "io.xconn.test")
         let toSend = try session.sendMessage(msg: register)
-        XCTAssertEqual(toSend as? String, "[\(Register.id),\(register.requestID),{},\"\(register.uri)\"]")
+
+        XCTAssertEqual(toSend.asString, "[\(Register.id),\(register.requestID),{},\"\(register.uri)\"]")
 
         let registered = Registered(requestID: 2, registrationID: 3)
         let received = try session.receive(data: serializer.serialize(message: registered)) as? Registered
@@ -20,48 +20,48 @@ class SessionTests: XCTestCase {
     func testSendCall() throws {
         let call = Call(requestID: 10, uri: "io.xconn.test")
         let toSend = try session.sendMessage(msg: call)
-        XCTAssertEqual(toSend as? String, "[\(Call.id),\(call.requestID),{},\"\(call.uri)\"]")
+        XCTAssertEqual(toSend.asString, "[\(Call.id),\(call.requestID),{},\"\(call.uri)\"]")
 
         let result = Result(requestID: 10)
-        let received = try session.receive(data: try serializer.serialize(message: result)) as? Result
+        let received = try session.receive(data: serializer.serialize(message: result)) as? Result
         XCTAssertEqual(result.requestID, received!.requestID)
     }
 
     func testReceiveInvocation() throws {
         _ = try session.sendMessage(msg: Register(requestID: 2, uri: "io.xconn.test"))
-        _ = try session.receive(data: try serializer.serialize(message: Registered(requestID: 2, registrationID: 3)))
+        _ = try session.receive(data: serializer.serialize(message: Registered(requestID: 2, registrationID: 3)))
 
         let invocation = Invocation(requestID: 4, registrationID: 3)
-        let toSend = try session.receive(data: try serializer.serialize(message: invocation)) as? Invocation
+        let toSend = try session.receive(data: serializer.serialize(message: invocation)) as? Invocation
         XCTAssertEqual(invocation.requestID, toSend?.requestID)
         XCTAssertEqual(invocation.registrationID, toSend?.registrationID)
 
         let yield = Yield(requestID: 4)
         let received = try session.sendMessage(msg: yield)
-        XCTAssertEqual(received as? String, "[70,4,{}]")
+        XCTAssertEqual(received.asString, "[70,4,{}]")
     }
 
     func testSendUnregister() throws {
         _ = try session.sendMessage(msg: Register(requestID: 2, uri: "io.xconn.test"))
-        _ = try session.receive(data: try serializer.serialize(message: Registered(requestID: 2, registrationID: 3)))
+        _ = try session.receive(data: serializer.serialize(message: Registered(requestID: 2, registrationID: 3)))
 
         let unregister = Unregister(requestID: 3, registrationID: 3)
         let toSend = try session.sendMessage(msg: unregister)
-        XCTAssertEqual(toSend as? String, "[\(Unregister.id),\(unregister.requestID),\(unregister.registrationID)]")
+        XCTAssertEqual(toSend.asString, "[\(Unregister.id),\(unregister.requestID),\(unregister.registrationID)]")
 
         let unregistered = Unregistered(requestID: 3)
-        let received = try session.receive(data: try serializer.serialize(message: unregistered)) as? Unregistered
+        let received = try session.receive(data: serializer.serialize(message: unregistered)) as? Unregistered
         XCTAssertEqual(unregistered.requestID, received?.requestID)
     }
 
     func testSendPublishWithAcknowledge() throws {
         let publish = Publish(requestID: 6, uri: "topic", options: ["acknowledge": true])
         let toSend = try session.sendMessage(msg: publish)
-        XCTAssertEqual(toSend as? String,
+        XCTAssertEqual(toSend.asString,
                        "[\(Publish.id),\(publish.requestID),{\"acknowledge\":true},\"\(publish.uri)\"]")
 
         let published = Published(requestID: 6, publicationID: 6)
-        let received = try session.receive(data: try serializer.serialize(message: published)) as? Wampproto.Published
+        let received = try session.receive(data: serializer.serialize(message: published)) as? Wampproto.Published
         XCTAssertEqual(published.requestID, received?.requestID)
         XCTAssertEqual(published.publicationID, received?.publicationID)
     }
@@ -69,36 +69,36 @@ class SessionTests: XCTestCase {
     func testSendSubscribe() throws {
         let subscribe = Subscribe(requestID: 7, topic: "topic")
         let toSend = try session.sendMessage(msg: subscribe)
-        XCTAssertEqual(toSend as? String, "[\(Subscribe.id),\(subscribe.requestID),{},\"\(subscribe.topic)\"]")
+        XCTAssertEqual(toSend.asString, "[\(Subscribe.id),\(subscribe.requestID),{},\"\(subscribe.topic)\"]")
 
         let subscribed = Subscribed(requestID: 7, subscriptionID: 8)
-        let received = try session.receive(data: try serializer.serialize(message: subscribed)) as? Subscribed
+        let received = try session.receive(data: serializer.serialize(message: subscribed)) as? Subscribed
         XCTAssertEqual(subscribed.requestID, received?.requestID)
         XCTAssertEqual(subscribed.subscriptionID, received?.subscriptionID)
 
         let event = Event(subscriptionID: 8, publicationID: 6)
-        let receivedEvent = try session.receive(data: try serializer.serialize(message: event)) as? Event
+        let receivedEvent = try session.receive(data: serializer.serialize(message: event)) as? Event
         XCTAssertEqual(event.publicationID, receivedEvent?.publicationID)
         XCTAssertEqual(event.subscriptionID, receivedEvent?.subscriptionID)
     }
 
-    func testSendUnsubscribe()throws {
+    func testSendUnsubscribe() throws {
         _ = try session.sendMessage(msg: Subscribe(requestID: 7, topic: "topic"))
-        _ = try session.receive(data: try serializer.serialize(message: Subscribed(requestID: 7, subscriptionID: 8)))
+        _ = try session.receive(data: serializer.serialize(message: Subscribed(requestID: 7, subscriptionID: 8)))
 
         let unsubscribe = Unsubscribe(requestID: 8, subscriptionID: 8)
         let toSend = try session.sendMessage(msg: unsubscribe)
-        XCTAssertEqual(toSend as? String, "[\(Unsubscribe.id),\(unsubscribe.requestID),\(unsubscribe.subscriptionID)]")
+        XCTAssertEqual(toSend.asString, "[\(Unsubscribe.id),\(unsubscribe.requestID),\(unsubscribe.subscriptionID)]")
 
         let unsubscribed = Unsubscribed(requestID: 8)
-        let received = try session.receive(data: try  serializer.serialize(message: unsubscribed)) as? Unsubscribed
+        let received = try session.receive(data: serializer.serialize(message: unsubscribed)) as? Unsubscribed
         XCTAssertEqual(unsubscribed.requestID, received?.requestID)
     }
 
     func testSendError() throws {
         let error = Error(messageType: Invocation.id, requestID: 10, uri: "io.xconn.failed")
         let toSend = try session.sendMessage(msg: error)
-        XCTAssertEqual(toSend as? String, "[\(Error.id),\(Invocation.id),\(error.requestID),{},\"\(error.uri)\"]")
+        XCTAssertEqual(toSend.asString, "[\(Error.id),\(Invocation.id),\(error.requestID),{},\"\(error.uri)\"]")
     }
 
     func testReceiveError() throws {
@@ -167,7 +167,6 @@ class SessionTests: XCTestCase {
         XCTAssertEqual(publishErr.messageType, receivedPublishErr?.messageType)
         XCTAssertEqual(publishErr.requestID, receivedPublishErr?.requestID)
         XCTAssertEqual(publishErr.uri, receivedPublishErr?.uri)
-
     }
 
     func testExceptions() throws {

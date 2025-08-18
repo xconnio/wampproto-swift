@@ -3,6 +3,14 @@ import Foundation
 public enum SerializedMessage: Sendable {
     case string(String)
     case data(Data)
+
+    var asString: String? {
+        if case let .string(text) = self { text } else { nil }
+    }
+
+    var asData: Data? {
+        if case let .data(data) = self { data } else { nil }
+    }
 }
 
 public protocol Serializer {

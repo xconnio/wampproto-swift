@@ -65,7 +65,7 @@ private func convertToUnsignedInt(_ value: Any) -> CBOR? {
     case let int as Int:
         return int >= 0 ? CBOR.unsignedInt(UInt64(int)) : CBOR.negativeInt(~UInt64(int))
     case let int32 as Int32:
-         return int32 >= 0 ? CBOR.unsignedInt(UInt64(int32)) : CBOR.negativeInt(~UInt64(int32))
+        return int32 >= 0 ? CBOR.unsignedInt(UInt64(int32)) : CBOR.negativeInt(~UInt64(int32))
     case let int64 as Int64:
         return int64 >= 0 ? CBOR.unsignedInt(UInt64(int64)) : CBOR.negativeInt(~UInt64(int64))
     case let uint as UInt:
