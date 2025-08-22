@@ -1,29 +1,29 @@
 import Foundation
 
-protocol ICallFields: BinaryPayload {
+public protocol ICallFields: BinaryPayload, Sendable {
     var requestID: Int64 { get }
     var uri: String { get }
-    var args: [Any]? { get }
-    var kwargs: [String: Any]? { get }
-    var options: [String: Any] { get }
+    var args: [any Sendable]? { get }
+    var kwargs: [String: any Sendable]? { get }
+    var options: [String: any Sendable] { get }
 }
 
-class CallFields: ICallFields {
-    let requestID: Int64
-    let uri: String
-    let args: [Any]?
-    let kwargs: [String: Any]?
-    let options: [String: Any]
-    let payload: Data?
-    let payloadSerializer: Int
-    let payloadIsBinary: Bool
+public struct CallFields: ICallFields {
+    public let requestID: Int64
+    public let uri: String
+    public let args: [any Sendable]?
+    public let kwargs: [String: any Sendable]?
+    public let options: [String: any Sendable]
+    public let payload: Data?
+    public let payloadSerializer: Int
+    public let payloadIsBinary: Bool
 
-    init(
+    public init(
         requestID: Int64,
         uri: String,
-        args: [Any]? = nil,
-        kwargs: [String: Any]? = nil,
-        options: [String: Any] = [:],
+        args: [any Sendable]? = nil,
+        kwargs: [String: any Sendable]? = nil,
+        options: [String: any Sendable] = [:],
         payload: Data? = nil,
         payloadSerializer: Int = 0
     ) {
@@ -38,7 +38,7 @@ class CallFields: ICallFields {
     }
 }
 
-class Call: Message {
+public struct Call: Message {
     private var callFields: ICallFields
 
     static let id: Int64 = 48
@@ -57,12 +57,12 @@ class Call: Message {
         ]
     )
 
-    init(
+    public init(
         requestID: Int64,
         uri: String,
-        args: [Any]? = nil,
-        kwargs: [String: Any]? = nil,
-        options: [String: Any] = [:]
+        args: [any Sendable]? = nil,
+        kwargs: [String: any Sendable]? = nil,
+        options: [String: any Sendable] = [:]
     ) {
         callFields = CallFields(
             requestID: requestID,
@@ -73,28 +73,28 @@ class Call: Message {
         )
     }
 
-    init(withFields callFields: ICallFields) {
+    public init(withFields callFields: ICallFields) {
         self.callFields = callFields
     }
 
-    var requestID: Int64 { callFields.requestID }
-    var uri: String { callFields.uri }
-    var args: [Any]? { callFields.args }
-    var kwargs: [String: Any]? { callFields.kwargs }
-    var options: [String: Any] { callFields.options }
-    var payload: Data? { callFields.payload }
-    var payloadSerializer: Int { callFields.payloadSerializer }
-    var payloadIsBinary: Bool { callFields.payloadIsBinary }
+    public var requestID: Int64 { callFields.requestID }
+    public var uri: String { callFields.uri }
+    public var args: [any Sendable]? { callFields.args }
+    public var kwargs: [String: any Sendable]? { callFields.kwargs }
+    public var options: [String: any Sendable] { callFields.options }
+    public var payload: Data? { callFields.payload }
+    public var payloadSerializer: Int { callFields.payloadSerializer }
+    public var payloadIsBinary: Bool { callFields.payloadIsBinary }
 
-    static func parse(message: [Any]) throws -> Message {
+    public static func parse(message: [any Sendable]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
 
         return Call(requestID: fields.requestID!, uri: fields.uri!, args: fields.args,
                     kwargs: fields.kwArgs, options: fields.options ?? [:])
     }
 
-    func marshal() -> [Any] {
-        var message: [Any] = [Call.id, requestID, options, uri]
+    public func marshal() -> [any Sendable] {
+        var message: [any Sendable] = [Call.id, requestID, options, uri]
 
         if let args {
             message.append(args)
@@ -110,7 +110,7 @@ class Call: Message {
         return message
     }
 
-    var type: Int64 {
+    public var type: Int64 {
         Call.id
     }
 }

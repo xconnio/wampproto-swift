@@ -1,20 +1,20 @@
 import Foundation
 
-protocol ISubscribeFields {
+public protocol ISubscribeFields: Sendable {
     var requestID: Int64 { get }
     var topic: String { get }
-    var options: [String: Any] { get }
+    var options: [String: any Sendable] { get }
 }
 
-class SubscribeFields: ISubscribeFields {
-    let requestID: Int64
-    let topic: String
-    let options: [String: Any]
+public struct SubscribeFields: ISubscribeFields {
+    public let requestID: Int64
+    public let topic: String
+    public let options: [String: any Sendable]
 
-    init(
+    public init(
         requestID: Int64,
         topic: String,
-        options: [String: Any] = [:]
+        options: [String: any Sendable] = [:]
     ) {
         self.requestID = requestID
         self.topic = topic
@@ -22,7 +22,7 @@ class SubscribeFields: ISubscribeFields {
     }
 }
 
-class Subscribe: Message {
+public struct Subscribe: Message {
     private var subscribeFields: ISubscribeFields
 
     static let id: Int64 = 32
@@ -39,10 +39,10 @@ class Subscribe: Message {
         ]
     )
 
-    init(
+    public init(
         requestID: Int64,
         topic: String,
-        options: [String: Any] = [:]
+        options: [String: any Sendable] = [:]
     ) {
         subscribeFields = SubscribeFields(
             requestID: requestID,
@@ -51,25 +51,25 @@ class Subscribe: Message {
         )
     }
 
-    init(withFields subscribeFields: ISubscribeFields) {
+    public init(withFields subscribeFields: ISubscribeFields) {
         self.subscribeFields = subscribeFields
     }
 
-    var requestID: Int64 { subscribeFields.requestID }
-    var topic: String { subscribeFields.topic }
-    var options: [String: Any] { subscribeFields.options }
+    public var requestID: Int64 { subscribeFields.requestID }
+    public var topic: String { subscribeFields.topic }
+    public var options: [String: any Sendable] { subscribeFields.options }
 
-    static func parse(message: [Any]) throws -> Message {
+    public static func parse(message: [any Sendable]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
 
         return Subscribe(requestID: fields.requestID!, topic: fields.uri!, options: fields.options ?? [:])
     }
 
-    func marshal() -> [Any] {
+    public func marshal() -> [any Sendable] {
         [Subscribe.id, requestID, options, topic]
     }
 
-    var type: Int64 {
+    public var type: Int64 {
         Subscribe.id
     }
 }

@@ -1,18 +1,14 @@
 import Foundation
 
-protocol IUnsubscribedFields {
+public protocol IUnsubscribedFields: Sendable {
     var requestID: Int64 { get }
 }
 
-class UnsubscribedFields: IUnsubscribedFields {
-    let requestID: Int64
-
-    init(requestID: Int64) {
-        self.requestID = requestID
-    }
+public struct UnsubscribedFields: IUnsubscribedFields {
+    public let requestID: Int64
 }
 
-class Unsubscribed: Message {
+public struct Unsubscribed: Message {
     private var unsubscribedFields: IUnsubscribedFields
 
     static let id: Int64 = 35
@@ -27,27 +23,27 @@ class Unsubscribed: Message {
         ]
     )
 
-    init(requestID: Int64) {
+    public init(requestID: Int64) {
         unsubscribedFields = UnsubscribedFields(requestID: requestID)
     }
 
-    init(withFields unsubscribedFields: IUnsubscribedFields) {
+    public init(withFields unsubscribedFields: IUnsubscribedFields) {
         self.unsubscribedFields = unsubscribedFields
     }
 
-    var requestID: Int64 { unsubscribedFields.requestID }
+    public var requestID: Int64 { unsubscribedFields.requestID }
 
-    static func parse(message: [Any]) throws -> Message {
+    public static func parse(message: [any Sendable]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
 
         return Unsubscribed(requestID: fields.requestID!)
     }
 
-    func marshal() -> [Any] {
+    public func marshal() -> [any Sendable] {
         [Unsubscribed.id, requestID]
     }
 
-    var type: Int64 {
+    public var type: Int64 {
         Unsubscribed.id
     }
 }

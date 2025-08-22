@@ -33,7 +33,7 @@ class JoinerTest: XCTestCase {
     private let testAuthMethod = "anonymous"
 
     func testSendHello() throws {
-        let joiner = Joiner(realm: testRealm)
+        var joiner = Joiner(realm: testRealm)
         let serializedHello = try joiner.sendHello()
 
         let deserializedHello = try JSONSerializer().deserialize(data: serializedHello)
@@ -47,7 +47,7 @@ class JoinerTest: XCTestCase {
     }
 
     func testReceiveWelcomeMessage() throws {
-        let joiner = Joiner(realm: testRealm)
+        var joiner = Joiner(realm: testRealm)
         _ = try joiner.sendHello()
 
         let welcomeMessage = Welcome(sessionID: testSessionID, roles: clientRoles, authID: testAuthID,
@@ -65,7 +65,7 @@ class JoinerTest: XCTestCase {
     }
 
     func testReceiveChallengeMessage() throws {
-        let joiner = Joiner(realm: testRealm, authenticator: TicketAuthenticator(authID: testAuthID, ticket: "test"))
+        var joiner = Joiner(realm: testRealm, authenticator: TicketAuthenticator(authID: testAuthID, ticket: "test"))
         _ = try joiner.sendHello()
 
         let challengeMessage = Challenge(authMethod: "cryptosign", extra: ["challenge": "123456"])
@@ -96,7 +96,7 @@ class JoinerTest: XCTestCase {
     }
 
     func testReceiveAbortMessage() throws {
-        let joiner = Joiner(realm: testRealm)
+        var joiner = Joiner(realm: testRealm)
         _ = try joiner.sendHello()
 
         let abortMessage = Abort(details: [:], reason: "some.message")
@@ -138,7 +138,7 @@ class JoinerTest: XCTestCase {
         }
     }
 
-    func join(joiner: Joiner, serializer: Serializer) async throws -> Message {
+    func join(joiner: inout Joiner, serializer: Serializer) async throws -> Message {
         let url = URL(string: "ws://localhost:8080/ws")!
         let protocols = try getSubProtocol(serializer: serializer)
 
@@ -159,24 +159,24 @@ class JoinerTest: XCTestCase {
 
     func testAnonymous() async throws {
         let jsonSerializer = JSONSerializer()
-        let joiner = Joiner(realm: "realm1", serializer: jsonSerializer)
-        let welcome = try await join(joiner: joiner, serializer: jsonSerializer)
+        var joiner = Joiner(realm: "realm1", serializer: jsonSerializer)
+        let welcome = try await join(joiner: &joiner, serializer: jsonSerializer)
         XCTAssertTrue(welcome is Welcome)
     }
 
     func testTicket() async throws {
         let cborSerializer = CBORSerializer()
-        let joiner = Joiner(realm: "realm1", serializer: cborSerializer,
+        var joiner = Joiner(realm: "realm1", serializer: cborSerializer,
                             authenticator: TicketAuthenticator(authID: "ticket-user", ticket: "ticket-pass"))
-        let welcome = try await join(joiner: joiner, serializer: cborSerializer)
+        let welcome = try await join(joiner: &joiner, serializer: cborSerializer)
         XCTAssertTrue(welcome is Welcome)
     }
 
     func testCRA() async throws {
         let msgPackSerializer = MsgPackSerializer()
-        let joiner = Joiner(realm: "realm1", serializer: msgPackSerializer,
+        var joiner = Joiner(realm: "realm1", serializer: msgPackSerializer,
                             authenticator: CRAAuthenticator(authID: "wamp-cra-user", secret: "cra-secret"))
-        let welcome = try await join(joiner: joiner, serializer: msgPackSerializer)
+        let welcome = try await join(joiner: &joiner, serializer: msgPackSerializer)
         XCTAssertTrue(welcome is Welcome)
     }
 
@@ -186,8 +186,8 @@ class JoinerTest: XCTestCase {
             authID: "cryptosign-user",
             privateKey: "150085398329d255ad69e82bf47ced397bcec5b8fbeecd28a80edbbd85b49081"
         )
-        let joiner = Joiner(realm: "realm1", serializer: jsonSerializer, authenticator: cryptosignAuthenticator)
-        let welcome = try await join(joiner: joiner, serializer: jsonSerializer)
+        var joiner = Joiner(realm: "realm1", serializer: jsonSerializer, authenticator: cryptosignAuthenticator)
+        let welcome = try await join(joiner: &joiner, serializer: jsonSerializer)
         XCTAssertTrue(welcome is Welcome)
     }
 }

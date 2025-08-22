@@ -1,27 +1,35 @@
 import Foundation
 
-protocol IErrorFields: BinaryPayload {
+public protocol IErrorFields: BinaryPayload, Sendable {
     var messageType: Int64 { get }
     var requestID: Int64 { get }
     var uri: String { get }
-    var args: [Any]? { get }
-    var kwargs: [String: Any]? { get }
-    var details: [String: Any] { get }
+    var args: [any Sendable]? { get }
+    var kwargs: [String: any Sendable]? { get }
+    var details: [String: any Sendable] { get }
 }
 
-class ErrorFields: IErrorFields {
-    let messageType: Int64
-    let requestID: Int64
-    let uri: String
-    let args: [Any]?
-    let kwargs: [String: Any]?
-    let details: [String: Any]
-    let payload: Data?
-    let payloadSerializer: Int
-    let payloadIsBinary: Bool
+public struct ErrorFields: IErrorFields {
+    public let messageType: Int64
+    public let requestID: Int64
+    public let uri: String
+    public let args: [any Sendable]?
+    public let kwargs: [String: any Sendable]?
+    public let details: [String: any Sendable]
+    public let payload: Data?
+    public let payloadSerializer: Int
+    public let payloadIsBinary: Bool
 
-    init(messageType: Int64, requestID: Int64, uri: String, args: [Any]? = nil, kwargs: [String: Any]? = nil,
-         details: [String: Any] = [:], payload: Data? = nil, payloadSerializer: Int = 0) {
+    public init(
+        messageType: Int64,
+        requestID: Int64,
+        uri: String,
+        args: [any Sendable]? = nil,
+        kwargs: [String: any Sendable]? = nil,
+        details: [String: Any] = [:],
+        payload: Data? = nil,
+        payloadSerializer: Int = 0
+    ) {
         self.messageType = messageType
         self.requestID = requestID
         self.uri = uri
@@ -34,7 +42,7 @@ class ErrorFields: IErrorFields {
     }
 }
 
-class Error: Message {
+public struct Error: Message {
     private var errorFields: IErrorFields
 
     static let id: Int64 = 8
@@ -54,35 +62,41 @@ class Error: Message {
         ]
     )
 
-    init(messageType: Int64, requestID: Int64, uri: String, args: [Any]? = nil, kwargs: [String: Any]? = nil,
-         details: [String: Any] = [:]) {
+    public init(
+        messageType: Int64,
+        requestID: Int64,
+        uri: String,
+        args: [any Sendable]? = nil,
+        kwargs: [String: any Sendable]? = nil,
+        details: [String: any Sendable] = [:]
+    ) {
         errorFields = ErrorFields(messageType: messageType, requestID: requestID, uri: uri,
                                   args: args, kwargs: kwargs, details: details)
     }
 
-    init(withFields errorFields: IErrorFields) {
+    public init(withFields errorFields: IErrorFields) {
         self.errorFields = errorFields
     }
 
     var messageType: Int64 { errorFields.messageType }
     var requestID: Int64 { errorFields.requestID }
     var uri: String { errorFields.uri }
-    var args: [Any]? { errorFields.args }
-    var kwargs: [String: Any]? { errorFields.kwargs }
-    var details: [String: Any] { errorFields.details }
+    var args: [any Sendable]? { errorFields.args }
+    var kwargs: [String: any Sendable]? { errorFields.kwargs }
+    var details: [String: any Sendable] { errorFields.details }
     var payload: Data? { errorFields.payload }
     var payloadSerializer: Int { errorFields.payloadSerializer }
     var payloadIsBinary: Bool { errorFields.payloadIsBinary }
 
-    static func parse(message: [Any]) throws -> Message {
+    public static func parse(message: [any Sendable]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
 
         return Error(messageType: fields.messageType!, requestID: fields.requestID!, uri: fields.uri!,
                      args: fields.args, kwargs: fields.kwArgs, details: fields.details ?? [:])
     }
 
-    func marshal() -> [Any] {
-        var message: [Any] = [Error.id, messageType, requestID, details, uri]
+    public func marshal() -> [any Sendable] {
+        var message: [any Sendable] = [Error.id, messageType, requestID, details, uri]
 
         if let args {
             message.append(args)
@@ -98,7 +112,7 @@ class Error: Message {
         return message
     }
 
-    var type: Int64 {
+    public var type: Int64 {
         Error.id
     }
 }

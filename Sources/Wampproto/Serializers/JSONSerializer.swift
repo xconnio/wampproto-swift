@@ -1,6 +1,6 @@
 import Foundation
 
-public class JSONSerializer: Serializer {
+public struct JSONSerializer: Serializer {
     public init() {}
     public func serialize(message: Message) throws -> SerializedMessage {
         do {

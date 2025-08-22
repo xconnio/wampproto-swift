@@ -8,20 +8,20 @@ public enum CRAAuthenticatorError: Swift.Error {
     case invalidSalt
 }
 
-public class CRAAuthenticator: ClientAuthenticator {
+public struct CRAAuthenticator: ClientAuthenticator {
     static let type = "wampcra"
     static let defaultIteration = 1000
     static let defaultKeyLen = 256
 
     public let authID: String
-    public let authExtra: [String: Any]
+    public let authExtra: [String: any Sendable]
     private let secret: String
 
     public var authMethod: String {
         CRAAuthenticator.type
     }
 
-    init(authID: String, authExtra: [String: Any] = [:], secret: String) {
+    public init(authID: String, authExtra: [String: Any] = [:], secret: String) {
         self.authID = authID
         self.authExtra = authExtra
         self.secret = secret

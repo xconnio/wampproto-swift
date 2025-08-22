@@ -1,6 +1,6 @@
 import Foundation
 
-class Session {
+public struct Session {
     private let serializer: Serializer
     // data structures for RPC
     private var callRequests = [Int64: Int64]()
@@ -15,11 +15,11 @@ class Session {
     private var subscriptions = [Int64: Int64]()
     private var unsubscribeRequests = [Int64: Int64]()
 
-    init(serializer: Serializer = JSONSerializer()) {
+    public init(serializer: Serializer = JSONSerializer()) {
         self.serializer = serializer
     }
 
-    func sendMessage(msg: Message) throws -> SerializedMessage {
+    public mutating func sendMessage(msg: Message) throws -> SerializedMessage {
         switch msg {
         case let msg as Call:
             callRequests[msg.requestID] = msg.requestID
@@ -72,12 +72,12 @@ class Session {
         }
     }
 
-    func receive(data: SerializedMessage) throws -> Message {
+    public mutating func receive(data: SerializedMessage) throws -> Message {
         let msg = try serializer.deserialize(data: data)
         return try receiveMessage(msg: msg)
     }
 
-    private func receiveMessage(msg: Message) throws -> Message {
+    private mutating func receiveMessage(msg: Message) throws -> Message {
         switch msg {
         case let msg as Result:
             guard callRequests.keys.contains(msg.requestID) else {

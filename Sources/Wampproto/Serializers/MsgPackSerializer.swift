@@ -1,7 +1,7 @@
 import Foundation
 import SwiftMsgPack
 
-public class MsgPackSerializer: Serializer {
+public struct MsgPackSerializer: Serializer {
     public init() {}
     public func serialize(message: Message) throws -> SerializedMessage {
         var data = Data()

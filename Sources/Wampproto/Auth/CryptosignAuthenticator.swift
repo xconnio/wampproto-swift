@@ -1,18 +1,18 @@
 import Foundation
 import Sodium
 
-public class CryptoSignAuthenticator: ClientAuthenticator {
+public struct CryptoSignAuthenticator: ClientAuthenticator {
     static let type = "cryptosign"
 
     public let authID: String
     private let privateKey: String
-    public var authExtra: [String: Any]
+    public var authExtra: [String: any Sendable]
 
     public var authMethod: String {
         CryptoSignAuthenticator.type
     }
 
-    init(authID: String, privateKey: String, authExtra: [String: Any] = [:]) throws {
+    public init(authID: String, privateKey: String, authExtra: [String: Any] = [:]) throws {
         self.authID = authID
         self.privateKey = privateKey
         var extra = authExtra

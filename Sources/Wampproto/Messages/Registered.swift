@@ -1,21 +1,21 @@
 import Foundation
 
-protocol IRegisteredFields {
+public protocol IRegisteredFields: Sendable {
     var requestID: Int64 { get }
     var registrationID: Int64 { get }
 }
 
-class RegisteredFields: IRegisteredFields {
-    let requestID: Int64
-    let registrationID: Int64
+public struct RegisteredFields: IRegisteredFields {
+    public let requestID: Int64
+    public let registrationID: Int64
 
-    init(requestID: Int64, registrationID: Int64) {
+    public init(requestID: Int64, registrationID: Int64) {
         self.requestID = requestID
         self.registrationID = registrationID
     }
 }
 
-class Registered: Message {
+public struct Registered: Message {
     private var registeredFields: IRegisteredFields
 
     static let id: Int64 = 65
@@ -31,28 +31,28 @@ class Registered: Message {
         ]
     )
 
-    init(requestID: Int64, registrationID: Int64) {
+    public init(requestID: Int64, registrationID: Int64) {
         registeredFields = RegisteredFields(requestID: requestID, registrationID: registrationID)
     }
 
-    init(withFields registeredFields: IRegisteredFields) {
+    public init(withFields registeredFields: IRegisteredFields) {
         self.registeredFields = registeredFields
     }
 
-    var requestID: Int64 { registeredFields.requestID }
-    var registrationID: Int64 { registeredFields.registrationID }
+    public var requestID: Int64 { registeredFields.requestID }
+    public var registrationID: Int64 { registeredFields.registrationID }
 
-    static func parse(message: [Any]) throws -> Message {
+    public static func parse(message: [any Sendable]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
 
         return Registered(requestID: fields.requestID!, registrationID: fields.registrationID!)
     }
 
-    func marshal() -> [Any] {
+    public func marshal() -> [any Sendable] {
         [Registered.id, requestID, registrationID]
     }
 
-    var type: Int64 {
+    public var type: Int64 {
         Registered.id
     }
 }

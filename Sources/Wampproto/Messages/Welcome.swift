@@ -1,24 +1,24 @@
 import Foundation
 
-protocol IWelcomeFields {
+public protocol IWelcomeFields: Sendable {
     var sessionID: Int64 { get }
-    var roles: [String: Any] { get }
+    var roles: [String: any Sendable] { get }
     var authID: String { get }
     var authRole: String { get }
     var authMethod: String { get }
-    var authExtra: [String: Any] { get }
+    var authExtra: [String: any Sendable] { get }
 }
 
-class WelcomeFields: IWelcomeFields {
-    let sessionID: Int64
-    let roles: [String: Any]
-    let authID: String
-    let authRole: String
-    let authMethod: String
-    let authExtra: [String: Any]
+public struct WelcomeFields: IWelcomeFields {
+    public let sessionID: Int64
+    public let roles: [String: any Sendable]
+    public let authID: String
+    public let authRole: String
+    public let authMethod: String
+    public let authExtra: [String: any Sendable]
 
-    init(sessionID: Int64, roles: [String: Any], authID: String, authRole: String, authMethod: String,
-         authExtra: [String: Any] = [:]) {
+    public init(sessionID: Int64, roles: [String: any Sendable], authID: String, authRole: String, authMethod: String,
+                authExtra: [String: any Sendable] = [:]) {
         self.sessionID = sessionID
         self.roles = roles
         self.authID = authID
@@ -28,7 +28,7 @@ class WelcomeFields: IWelcomeFields {
     }
 }
 
-class Welcome: Message {
+public struct Welcome: Message {
     private var welcomeFields: IWelcomeFields
 
     static let id: Int64 = 2
@@ -44,29 +44,29 @@ class Welcome: Message {
         ]
     )
 
-    init(sessionID: Int64, roles: [String: Any], authID: String, authRole: String, authMethod: String,
-         authExtra: [String: Any]? = nil) {
+    public init(sessionID: Int64, roles: [String: any Sendable], authID: String, authRole: String, authMethod: String,
+                authExtra: [String: any Sendable]? = nil) {
         welcomeFields = WelcomeFields(sessionID: sessionID, roles: roles, authID: authID, authRole: authRole,
                                       authMethod: authMethod, authExtra: authExtra ?? [:])
     }
 
-    init(withFields fields: IWelcomeFields) {
+    public init(withFields fields: IWelcomeFields) {
         welcomeFields = fields
     }
 
-    var sessionID: Int64 { welcomeFields.sessionID }
-    var roles: [String: Any] { welcomeFields.roles }
-    var authID: String { welcomeFields.authID }
-    var authRole: String { welcomeFields.authRole }
-    var authMethod: String { welcomeFields.authMethod }
-    var authExtra: [String: Any] { welcomeFields.authExtra }
+    public var sessionID: Int64 { welcomeFields.sessionID }
+    public var roles: [String: any Sendable] { welcomeFields.roles }
+    public var authID: String { welcomeFields.authID }
+    public var authRole: String { welcomeFields.authRole }
+    public var authMethod: String { welcomeFields.authMethod }
+    public var authExtra: [String: any Sendable] { welcomeFields.authExtra }
 
-    static func parse(message: [Any]) throws -> Message {
+    public static func parse(message: [any Sendable]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
 
         let details = fields.details!
 
-        guard let roles = details["roles"] as? [String: Any] else {
+        guard let roles = details["roles"] as? [String: any Sendable] else {
             throw ValidationError.missingField("roles")
         }
 
@@ -82,14 +82,14 @@ class Welcome: Message {
             throw ValidationError.missingField("authmethod")
         }
 
-        let authExtra = details["authextra"] as? [String: Any] ?? [:]
+        let authExtra = details["authextra"] as? [String: any Sendable] ?? [:]
 
         return Welcome(sessionID: fields.sessionID!, roles: roles, authID: authID,
                        authRole: authRole, authMethod: authMethod, authExtra: authExtra)
     }
 
-    func marshal() -> [Any] {
-        var details: [String: Any] = [:]
+    public func marshal() -> [any Sendable] {
+        var details: [String: any Sendable] = [:]
         details["roles"] = roles
         details["authid"] = authID
         details["authrole"] = authRole
@@ -99,7 +99,7 @@ class Welcome: Message {
         return [Welcome.id, sessionID, details]
     }
 
-    var type: Int64 {
+    public var type: Int64 {
         Welcome.id
     }
 }

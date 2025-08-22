@@ -1,21 +1,16 @@
 import Foundation
 
-protocol IPublishedFields {
+public protocol IPublishedFields: Sendable {
     var requestID: Int64 { get }
     var publicationID: Int64 { get }
 }
 
-class PublishedFields: IPublishedFields {
-    let requestID: Int64
-    let publicationID: Int64
-
-    init(requestID: Int64, publicationID: Int64) {
-        self.requestID = requestID
-        self.publicationID = publicationID
-    }
+public struct PublishedFields: IPublishedFields {
+    public let requestID: Int64
+    public let publicationID: Int64
 }
 
-class Published: Message {
+public struct Published: Message {
     private var publishedFields: IPublishedFields
 
     static let id: Int64 = 17
@@ -31,28 +26,28 @@ class Published: Message {
         ]
     )
 
-    init(requestID: Int64, publicationID: Int64) {
+    public init(requestID: Int64, publicationID: Int64) {
         publishedFields = PublishedFields(requestID: requestID, publicationID: publicationID)
     }
 
-    init(withFields publishedFields: IPublishedFields) {
+    public init(withFields publishedFields: IPublishedFields) {
         self.publishedFields = publishedFields
     }
 
-    var requestID: Int64 { publishedFields.requestID }
-    var publicationID: Int64 { publishedFields.publicationID }
+    public var requestID: Int64 { publishedFields.requestID }
+    public var publicationID: Int64 { publishedFields.publicationID }
 
-    static func parse(message: [Any]) throws -> Message {
+    public static func parse(message: [any Sendable]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
 
         return Published(requestID: fields.requestID!, publicationID: fields.publicationID!)
     }
 
-    func marshal() -> [Any] {
+    public func marshal() -> [any Sendable] {
         [Published.id, requestID, publicationID]
     }
 
-    var type: Int64 {
+    public var type: Int64 {
         Published.id
     }
 }

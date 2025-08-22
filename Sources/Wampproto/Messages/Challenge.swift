@@ -1,13 +1,13 @@
 import Foundation
 
-public protocol IChallengeFields {
+public protocol IChallengeFields: Sendable {
     var authMethod: String { get }
-    var extra: [String: Any] { get }
+    var extra: [String: any Sendable] { get }
 }
 
-public class ChallengeFields: IChallengeFields {
+public struct ChallengeFields: IChallengeFields {
     public let authMethod: String
-    public let extra: [String: Any]
+    public let extra: [String: any Sendable]
 
     public init(authMethod: String, extra: [String: Any]) {
         self.authMethod = authMethod
@@ -15,7 +15,7 @@ public class ChallengeFields: IChallengeFields {
     }
 }
 
-public class Challenge: Message {
+public struct Challenge: Message {
     private var challengeFields: IChallengeFields
 
     static let id: Int64 = 4
@@ -31,7 +31,7 @@ public class Challenge: Message {
         ]
     )
 
-    public init(authMethod: String, extra: [String: Any]) {
+    public init(authMethod: String, extra: [String: any Sendable]) {
         challengeFields = ChallengeFields(authMethod: authMethod, extra: extra)
     }
 
@@ -40,14 +40,14 @@ public class Challenge: Message {
     }
 
     var authMethod: String { challengeFields.authMethod }
-    var extra: [String: Any] { challengeFields.extra }
+    var extra: [String: any Sendable] { challengeFields.extra }
 
-    public static func parse(message: [Any]) throws -> Message {
+    public static func parse(message: [any Sendable]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
         return Challenge(authMethod: fields.authMethod!, extra: fields.extra!)
     }
 
-    public func marshal() -> [Any] {
+    public func marshal() -> [any Sendable] {
         [Challenge.id, authMethod, extra]
     }
 
