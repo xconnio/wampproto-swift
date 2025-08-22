@@ -1,9 +1,9 @@
 import Foundation
 
-public protocol Message {
+public protocol Message: Sendable {
     var type: Int64 { get }
-    static func parse(message: [Any]) throws -> Message
-    func marshal() -> [Any]
+    static func parse(message: [any Sendable]) throws -> Message
+    func marshal() -> [any Sendable]
 }
 
 public protocol BinaryPayload {

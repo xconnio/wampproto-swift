@@ -1,29 +1,29 @@
 import Foundation
 
-protocol IPublishFields: BinaryPayload {
+public protocol IPublishFields: BinaryPayload, Sendable {
     var requestID: Int64 { get }
     var uri: String { get }
-    var args: [Any]? { get }
-    var kwargs: [String: Any]? { get }
-    var options: [String: Any] { get }
+    var args: [any Sendable]? { get }
+    var kwargs: [String: any Sendable]? { get }
+    var options: [String: any Sendable] { get }
 }
 
-class PublishFields: IPublishFields {
-    let requestID: Int64
-    let uri: String
-    let args: [Any]?
-    let kwargs: [String: Any]?
-    let options: [String: Any]
-    let payload: Data?
-    let payloadSerializer: Int
-    let payloadIsBinary: Bool
+public struct PublishFields: IPublishFields {
+    public let requestID: Int64
+    public let uri: String
+    public let args: [any Sendable]?
+    public let kwargs: [String: any Sendable]?
+    public let options: [String: any Sendable]
+    public let payload: Data?
+    public let payloadSerializer: Int
+    public let payloadIsBinary: Bool
 
-    init(
+    public init(
         requestID: Int64,
         uri: String,
-        args: [Any]? = nil,
-        kwargs: [String: Any]? = nil,
-        options: [String: Any] = [:],
+        args: [any Sendable]? = nil,
+        kwargs: [String: any Sendable]? = nil,
+        options: [String: any Sendable] = [:],
         payload: Data? = nil,
         payloadSerializer: Int = 0
     ) {
@@ -38,7 +38,7 @@ class PublishFields: IPublishFields {
     }
 }
 
-class Publish: Message {
+public struct Publish: Message {
     private var publishFields: IPublishFields
 
     static let id: Int64 = 16
@@ -57,12 +57,12 @@ class Publish: Message {
         ]
     )
 
-    init(
+    public init(
         requestID: Int64,
         uri: String,
-        args: [Any]? = nil,
-        kwargs: [String: Any]? = nil,
-        options: [String: Any] = [:]
+        args: [any Sendable]? = nil,
+        kwargs: [String: any Sendable]? = nil,
+        options: [String: any Sendable] = [:]
     ) {
         publishFields = PublishFields(
             requestID: requestID,
@@ -73,28 +73,28 @@ class Publish: Message {
         )
     }
 
-    init(withFields publishFields: IPublishFields) {
+    public init(withFields publishFields: IPublishFields) {
         self.publishFields = publishFields
     }
 
-    var requestID: Int64 { publishFields.requestID }
-    var uri: String { publishFields.uri }
-    var args: [Any]? { publishFields.args }
-    var kwargs: [String: Any]? { publishFields.kwargs }
-    var options: [String: Any] { publishFields.options }
-    var payload: Data? { publishFields.payload }
-    var payloadSerializer: Int { publishFields.payloadSerializer }
-    var payloadIsBinary: Bool { publishFields.payloadIsBinary }
+    public var requestID: Int64 { publishFields.requestID }
+    public var uri: String { publishFields.uri }
+    public var args: [any Sendable]? { publishFields.args }
+    public var kwargs: [String: any Sendable]? { publishFields.kwargs }
+    public var options: [String: any Sendable] { publishFields.options }
+    public var payload: Data? { publishFields.payload }
+    public var payloadSerializer: Int { publishFields.payloadSerializer }
+    public var payloadIsBinary: Bool { publishFields.payloadIsBinary }
 
-    static func parse(message: [Any]) throws -> Message {
+    public static func parse(message: [any Sendable]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
 
         return Publish(requestID: fields.requestID!, uri: fields.uri!, args: fields.args,
                        kwargs: fields.kwArgs, options: fields.options ?? [:])
     }
 
-    func marshal() -> [Any] {
-        var message: [Any] = [Publish.id, requestID, options, uri]
+    public func marshal() -> [any Sendable] {
+        var message: [any Sendable] = [Publish.id, requestID, options, uri]
 
         if let args {
             message.append(args)
@@ -109,7 +109,7 @@ class Publish: Message {
         return message
     }
 
-    var type: Int64 {
+    public var type: Int64 {
         Publish.id
     }
 }

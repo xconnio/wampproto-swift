@@ -21,7 +21,7 @@ let clientRoles: [String: [String: [String: Any]]] = [
     "subscriber": ["features": [:]]
 ]
 
-public class Joiner {
+public struct Joiner {
     private let realm: String
     private let serializer: Serializer
     private let authenticator: ClientAuthenticator
@@ -40,14 +40,14 @@ public class Joiner {
         self.authenticator = authenticator
     }
 
-    public func sendHello() throws -> SerializedMessage {
+    public mutating func sendHello() throws -> SerializedMessage {
         let hello = Hello(realm: realm, roles: clientRoles, authID: authenticator.authID,
                           authMethods: [authenticator.authMethod], authExtra: authenticator.authExtra)
         state = .helloSent
         return try serializer.serialize(message: hello)
     }
 
-    public func receive(data: SerializedMessage) throws -> SerializedMessage? {
+    public mutating func receive(data: SerializedMessage) throws -> SerializedMessage? {
         let receivedMessage = try serializer.deserialize(data: data)
         if let toSend = try receiveMessage(msg: receivedMessage) {
             if let authenticate = toSend as? Authenticate {
@@ -57,7 +57,7 @@ public class Joiner {
         return nil
     }
 
-    private func receiveMessage(msg: Message) throws -> Message? {
+    private mutating func receiveMessage(msg: Message) throws -> Message? {
         if let welcome = msg as? Welcome {
             if state != .helloSent, state != .authenticateSent {
                 throw ProtocolError(message: "received welcome when it was not expected")

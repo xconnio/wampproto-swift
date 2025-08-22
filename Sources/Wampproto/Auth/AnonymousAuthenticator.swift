@@ -1,10 +1,10 @@
 import Foundation
 
-public class AnonymousAuthenticator: ClientAuthenticator {
+public struct AnonymousAuthenticator: ClientAuthenticator {
     static let type = "anonymous"
 
     public let authID: String
-    public let authExtra: [String: Any]
+    public let authExtra: [String: any Sendable]
     public let authMethod: String = AnonymousAuthenticator.type
 
     public init(authID: String, authExtra: [String: Any] = [:]) {

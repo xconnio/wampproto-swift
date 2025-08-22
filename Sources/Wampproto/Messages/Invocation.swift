@@ -1,29 +1,29 @@
 import Foundation
 
-protocol IInvocationFields: BinaryPayload {
+public protocol IInvocationFields: BinaryPayload, Sendable {
     var requestID: Int64 { get }
     var registrationID: Int64 { get }
-    var args: [Any]? { get }
-    var kwargs: [String: Any]? { get }
-    var details: [String: Any] { get }
+    var args: [any Sendable]? { get }
+    var kwargs: [String: any Sendable]? { get }
+    var details: [String: any Sendable] { get }
 }
 
-class InvocationFields: IInvocationFields {
-    let requestID: Int64
-    let registrationID: Int64
-    let args: [Any]?
-    let kwargs: [String: Any]?
-    let details: [String: Any]
-    let payload: Data?
-    let payloadSerializer: Int
-    let payloadIsBinary: Bool
+public struct InvocationFields: IInvocationFields {
+    public let requestID: Int64
+    public let registrationID: Int64
+    public let args: [any Sendable]?
+    public let kwargs: [String: any Sendable]?
+    public let details: [String: any Sendable]
+    public let payload: Data?
+    public let payloadSerializer: Int
+    public let payloadIsBinary: Bool
 
-    init(
+    public init(
         requestID: Int64,
         registrationID: Int64,
-        args: [Any]? = nil,
-        kwargs: [String: Any]? = nil,
-        details: [String: Any] = [:],
+        args: [any Sendable]? = nil,
+        kwargs: [String: any Sendable]? = nil,
+        details: [String: any Sendable] = [:],
         payload: Data? = nil,
         payloadSerializer: Int = 0
     ) {
@@ -38,7 +38,7 @@ class InvocationFields: IInvocationFields {
     }
 }
 
-class Invocation: Message {
+public struct Invocation: Message {
     private var invocationFields: IInvocationFields
 
     static let id: Int64 = 68
@@ -57,12 +57,12 @@ class Invocation: Message {
         ]
     )
 
-    init(
+    public init(
         requestID: Int64,
         registrationID: Int64,
-        args: [Any]? = nil,
-        kwargs: [String: Any]? = nil,
-        details: [String: Any] = [:]
+        args: [any Sendable]? = nil,
+        kwargs: [String: any Sendable]? = nil,
+        details: [String: any Sendable] = [:]
     ) {
         invocationFields = InvocationFields(
             requestID: requestID,
@@ -73,28 +73,28 @@ class Invocation: Message {
         )
     }
 
-    init(withFields invocationFields: IInvocationFields) {
+    public init(withFields invocationFields: IInvocationFields) {
         self.invocationFields = invocationFields
     }
 
-    var requestID: Int64 { invocationFields.requestID }
-    var registrationID: Int64 { invocationFields.registrationID }
-    var args: [Any]? { invocationFields.args }
-    var kwargs: [String: Any]? { invocationFields.kwargs }
-    var details: [String: Any] { invocationFields.details }
-    var payload: Data? { invocationFields.payload }
-    var payloadSerializer: Int { invocationFields.payloadSerializer }
-    var payloadIsBinary: Bool { invocationFields.payloadIsBinary }
+    public var requestID: Int64 { invocationFields.requestID }
+    public var registrationID: Int64 { invocationFields.registrationID }
+    public var args: [any Sendable]? { invocationFields.args }
+    public var kwargs: [String: any Sendable]? { invocationFields.kwargs }
+    public var details: [String: any Sendable] { invocationFields.details }
+    public var payload: Data? { invocationFields.payload }
+    public var payloadSerializer: Int { invocationFields.payloadSerializer }
+    public var payloadIsBinary: Bool { invocationFields.payloadIsBinary }
 
-    static func parse(message: [Any]) throws -> Message {
+    public static func parse(message: [any Sendable]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
 
         return Invocation(requestID: fields.requestID!, registrationID: fields.registrationID!,
                           args: fields.args, kwargs: fields.kwArgs, details: fields.details ?? [:])
     }
 
-    func marshal() -> [Any] {
-        var message: [Any] = [Invocation.id, requestID, registrationID, details]
+    public func marshal() -> [any Sendable] {
+        var message: [any Sendable] = [Invocation.id, requestID, registrationID, details]
 
         if let args {
             message.append(args)
@@ -110,7 +110,7 @@ class Invocation: Message {
         return message
     }
 
-    var type: Int64 {
+    public var type: Int64 {
         Invocation.id
     }
 }

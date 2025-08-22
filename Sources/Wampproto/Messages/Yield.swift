@@ -1,26 +1,26 @@
 import Foundation
 
-protocol IYieldFields: BinaryPayload {
+public protocol IYieldFields: BinaryPayload, Sendable {
     var requestID: Int64 { get }
-    var args: [Any]? { get }
-    var kwargs: [String: Any]? { get }
-    var options: [String: Any] { get }
+    var args: [any Sendable]? { get }
+    var kwargs: [String: any Sendable]? { get }
+    var options: [String: any Sendable] { get }
 }
 
-class YieldFields: IYieldFields {
-    let requestID: Int64
-    let args: [Any]?
-    let kwargs: [String: Any]?
-    let options: [String: Any]
-    let payload: Data?
-    let payloadSerializer: Int
-    let payloadIsBinary: Bool
+public struct YieldFields: IYieldFields {
+    public let requestID: Int64
+    public let args: [any Sendable]?
+    public let kwargs: [String: any Sendable]?
+    public let options: [String: any Sendable]
+    public let payload: Data?
+    public let payloadSerializer: Int
+    public let payloadIsBinary: Bool
 
-    init(
+    public init(
         requestID: Int64,
-        args: [Any]? = nil,
-        kwargs: [String: Any]? = nil,
-        options: [String: Any] = [:],
+        args: [any Sendable]? = nil,
+        kwargs: [String: any Sendable]? = nil,
+        options: [String: any Sendable] = [:],
         payload: Data? = nil,
         payloadSerializer: Int = 0
     ) {
@@ -34,7 +34,7 @@ class YieldFields: IYieldFields {
     }
 }
 
-class Yield: Message {
+public struct Yield: Message {
     private var yieldFields: IYieldFields
 
     static let id: Int64 = 70
@@ -52,11 +52,11 @@ class Yield: Message {
         ]
     )
 
-    init(
+    public init(
         requestID: Int64,
-        args: [Any]? = nil,
-        kwargs: [String: Any]? = nil,
-        options: [String: Any] = [:]
+        args: [any Sendable]? = nil,
+        kwargs: [String: any Sendable]? = nil,
+        options: [String: any Sendable] = [:]
     ) {
         yieldFields = YieldFields(
             requestID: requestID,
@@ -66,27 +66,27 @@ class Yield: Message {
         )
     }
 
-    init(withFields yieldFields: IYieldFields) {
+    public init(withFields yieldFields: IYieldFields) {
         self.yieldFields = yieldFields
     }
 
-    var requestID: Int64 { yieldFields.requestID }
-    var args: [Any]? { yieldFields.args }
-    var kwargs: [String: Any]? { yieldFields.kwargs }
-    var options: [String: Any] { yieldFields.options }
-    var payload: Data? { yieldFields.payload }
-    var payloadSerializer: Int { yieldFields.payloadSerializer }
-    var payloadIsBinary: Bool { yieldFields.payloadIsBinary }
+    public var requestID: Int64 { yieldFields.requestID }
+    public var args: [any Sendable]? { yieldFields.args }
+    public var kwargs: [String: any Sendable]? { yieldFields.kwargs }
+    public var options: [String: any Sendable] { yieldFields.options }
+    public var payload: Data? { yieldFields.payload }
+    public var payloadSerializer: Int { yieldFields.payloadSerializer }
+    public var payloadIsBinary: Bool { yieldFields.payloadIsBinary }
 
-    static func parse(message: [Any]) throws -> Message {
+    public static func parse(message: [any Sendable]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
 
         return Yield(requestID: fields.requestID!, args: fields.args, kwargs: fields.kwArgs,
                      options: fields.options ?? [:])
     }
 
-    func marshal() -> [Any] {
-        var message: [Any] = [Yield.id, requestID, options]
+    public func marshal() -> [any Sendable] {
+        var message: [any Sendable] = [Yield.id, requestID, options]
 
         if let args {
             message.append(args)
@@ -102,7 +102,7 @@ class Yield: Message {
         return message
     }
 
-    var type: Int64 {
+    public var type: Int64 {
         Yield.id
     }
 }

@@ -1,23 +1,29 @@
 import Foundation
 
-protocol IAbortFields: BinaryPayload {
-    var details: [String: Any] { get }
+public protocol IAbortFields: BinaryPayload, Sendable {
+    var details: [String: any Sendable] { get }
     var reason: String { get }
-    var args: [Any]? { get }
-    var kwargs: [String: Any]? { get }
+    var args: [any Sendable]? { get }
+    var kwargs: [String: any Sendable]? { get }
 }
 
-class AbortFields: IAbortFields {
-    let details: [String: Any]
-    let reason: String
-    let args: [Any]?
-    let kwargs: [String: Any]?
-    let payload: Data?
-    let payloadSerializer: Int
-    let payloadIsBinary: Bool
+public struct AbortFields: IAbortFields {
+    public var details: [String: any Sendable]
+    public let reason: String
+    public let args: [any Sendable]?
+    public let kwargs: [String: any Sendable]?
+    public let payload: Data?
+    public let payloadSerializer: Int
+    public let payloadIsBinary: Bool
 
-    init(details: [String: Any], reason: String, args: [Any]? = nil, kwargs: [String: Any]? = nil,
-         payload: Data? = nil, payloadSerializer: Int = 0) {
+    public init(
+        details: [String: any Sendable],
+        reason: String,
+        args: [any Sendable]? = nil,
+        kwargs: [String: any Sendable]? = nil,
+        payload: Data? = nil,
+        payloadSerializer: Int = 0
+    ) {
         self.details = details
         self.reason = reason
         self.args = args
@@ -28,7 +34,7 @@ class AbortFields: IAbortFields {
     }
 }
 
-class Abort: Message {
+public struct Abort: Message {
     private var abortFields: IAbortFields
 
     static let id: Int64 = 3
@@ -46,30 +52,35 @@ class Abort: Message {
         ]
     )
 
-    init(details: [String: Any], reason: String, args: [Any]? = nil, kwargs: [String: Any]? = nil) {
+    public init(
+        details: [String: any Sendable],
+        reason: String,
+        args: [any Sendable]? = nil,
+        kwargs: [String: any Sendable]? = nil
+    ) {
         abortFields = AbortFields(details: details, reason: reason, args: args, kwargs: kwargs)
     }
 
-    init(withFields abortFields: IAbortFields) {
+    public init(withFields abortFields: IAbortFields) {
         self.abortFields = abortFields
     }
 
-    var details: [String: Any] { abortFields.details }
-    var reason: String { abortFields.reason }
-    var args: [Any]? { abortFields.args }
-    var kwargs: [String: Any]? { abortFields.kwargs }
-    var payload: Data? { abortFields.payload }
+    public var details: [String: any Sendable] { abortFields.details }
+    public var reason: String { abortFields.reason }
+    public var args: [any Sendable]? { abortFields.args }
+    public var kwargs: [String: any Sendable]? { abortFields.kwargs }
+    public var payload: Data? { abortFields.payload }
     var payloadSerializer: Int { abortFields.payloadSerializer }
     var payloadIsBinary: Bool { abortFields.payloadIsBinary }
 
-    static func parse(message: [Any]) throws -> Message {
+    public static func parse(message: [any Sendable]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
 
         return Abort(details: fields.details!, reason: fields.reason!, args: fields.args, kwargs: fields.kwArgs)
     }
 
-    func marshal() -> [Any] {
-        var message: [Any] = [Abort.id, details, reason]
+    public func marshal() -> [any Sendable] {
+        var message: [any Sendable] = [Abort.id, details, reason]
 
         if let args {
             message.append(args)
@@ -85,7 +96,7 @@ class Abort: Message {
         return message
     }
 
-    var type: Int64 {
+    public var type: Int64 {
         Abort.id
     }
 }

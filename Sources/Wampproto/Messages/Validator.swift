@@ -35,22 +35,22 @@ struct ValidationSpec {
 class Fields {
     var requestID: Int64?
     var uri: String?
-    var args: [Any]?
-    var kwArgs: [String: Any]?
+    var args: [any Sendable]?
+    var kwArgs: [String: any Sendable]?
     var sessionID: Int64?
     var realm: String?
     var authID: String?
     var authRole: String?
     var authMethod: String?
     var authMethods: [String]?
-    var authExtra: [String: Any]?
-    var roles: [String: Any]?
+    var authExtra: [String: any Sendable]?
+    var roles: [String: any Sendable]?
     var messageType: Int64?
     var signature: String?
     var reason: String?
-    var extra: [String: Any]?
-    var options: [String: Any]?
-    var details: [String: Any]?
+    var extra: [String: any Sendable]?
+    var options: [String: any Sendable]?
+    var details: [String: any Sendable]?
     var subscriptionID: Int64?
     var publicationID: Int64?
     var registrationID: Int64?

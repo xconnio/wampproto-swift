@@ -9,7 +9,7 @@ class SessionScopeIDGeneratorTests: XCTestCase {
     }
 
     func testSessionScopeIDGeneratorIncrementsCorrectly() {
-        let generator = SessionScopeIDGenerator()
+        var generator = SessionScopeIDGenerator()
 
         let firstID = generator.next()
         let secondID = generator.next()
@@ -20,7 +20,7 @@ class SessionScopeIDGeneratorTests: XCTestCase {
     }
 
     func testSessionScopeIDGeneratorResetsAfterMaxScope() {
-        let generator = SessionScopeIDGenerator()
+        var generator = SessionScopeIDGenerator()
 
         generator.id = maxID - 1
 

@@ -1,9 +1,9 @@
 import Foundation
 
-public protocol ClientAuthenticator {
+public protocol ClientAuthenticator: Sendable {
     var authMethod: String { get }
     var authID: String { get }
-    var authExtra: [String: Any] { get }
+    var authExtra: [String: any Sendable] { get }
 
     func authenticate(challenge: Challenge) throws -> Authenticate
 }

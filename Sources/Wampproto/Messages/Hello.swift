@@ -1,21 +1,27 @@
 import Foundation
 
-protocol IHelloFields {
+public protocol IHelloFields: Sendable {
     var realm: String { get }
-    var roles: [String: Any] { get }
+    var roles: [String: any Sendable] { get }
     var authID: String { get }
     var authMethods: [String] { get }
-    var authExtra: [String: Any] { get }
+    var authExtra: [String: any Sendable] { get }
 }
 
-class HelloFields: IHelloFields {
-    let realm: String
-    let roles: [String: Any]
-    let authID: String
-    let authMethods: [String]
-    let authExtra: [String: Any]
+public struct HelloFields: IHelloFields {
+    public let realm: String
+    public let roles: [String: any Sendable]
+    public let authID: String
+    public let authMethods: [String]
+    public let authExtra: [String: any Sendable]
 
-    init(realm: String, roles: [String: Any], authID: String, authMethods: [String], authExtra: [String: Any] = [:]) {
+    public init(
+        realm: String,
+        roles: [String: any Sendable],
+        authID: String,
+        authMethods: [String],
+        authExtra: [String: any Sendable] = [:]
+    ) {
         self.realm = realm
         self.roles = roles
         self.authID = authID
@@ -24,7 +30,7 @@ class HelloFields: IHelloFields {
     }
 }
 
-class Hello: Message {
+public struct Hello: Message {
     private var helloFields: IHelloFields
 
     static let id: Int64 = 1
@@ -40,35 +46,41 @@ class Hello: Message {
         ]
     )
 
-    init(realm: String, roles: [String: Any], authID: String, authMethods: [String], authExtra: [String: Any]? = nil) {
+    public init(
+        realm: String,
+        roles: [String: any Sendable],
+        authID: String,
+        authMethods: [String],
+        authExtra: [String: any Sendable]? = nil
+    ) {
         helloFields = HelloFields(realm: realm, roles: roles, authID: authID, authMethods: authMethods,
                                   authExtra: authExtra ?? [:])
     }
 
-    init(withFields helloFields: IHelloFields) {
+    public init(withFields helloFields: IHelloFields) {
         self.helloFields = helloFields
     }
 
-    var realm: String { helloFields.realm }
-    var roles: [String: Any] { helloFields.roles }
-    var authID: String { helloFields.authID }
-    var authMethods: [String] { helloFields.authMethods }
-    var authExtra: [String: Any] { helloFields.authExtra }
+    public var realm: String { helloFields.realm }
+    public var roles: [String: any Sendable] { helloFields.roles }
+    public var authID: String { helloFields.authID }
+    public var authMethods: [String] { helloFields.authMethods }
+    public var authExtra: [String: any Sendable] { helloFields.authExtra }
 
-    static func parse(message: [Any]) throws -> Message {
+    public static func parse(message: [any Sendable]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
 
-        let roles = fields.details?["roles"] as? [String: Any] ?? [:]
+        let roles = fields.details?["roles"] as? [String: any Sendable] ?? [:]
 
         let authID = fields.details?["authid"] as? String ?? ""
         let authMethods = fields.details?["authmethods"] as? [String] ?? []
-        let authExtra = fields.details?["authextra"] as? [String: Any] ?? [:]
+        let authExtra = fields.details?["authextra"] as? [String: any Sendable] ?? [:]
 
         return Hello(realm: fields.realm!, roles: roles, authID: authID, authMethods: authMethods, authExtra: authExtra)
     }
 
-    func marshal() -> [Any] {
-        var details: [String: Any] = [:]
+    public func marshal() -> [any Sendable] {
+        var details: [String: any Sendable] = [:]
         details["roles"] = roles
         details["authid"] = authID
         details["authmethods"] = authMethods
@@ -77,7 +89,7 @@ class Hello: Message {
         return [Hello.id, realm, details]
     }
 
-    var type: Int64 {
+    public var type: Int64 {
         Hello.id
     }
 }

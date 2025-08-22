@@ -1,24 +1,24 @@
 import Foundation
 
-protocol IRegisterFields {
+public protocol IRegisterFields: Sendable {
     var requestID: Int64 { get }
     var uri: String { get }
-    var options: [String: Any] { get }
+    var options: [String: any Sendable] { get }
 }
 
-class RegisterFields: IRegisterFields {
-    let requestID: Int64
-    let uri: String
-    let options: [String: Any]
+public struct RegisterFields: IRegisterFields {
+    public let requestID: Int64
+    public let uri: String
+    public let options: [String: any Sendable]
 
-    init(requestID: Int64, uri: String, options: [String: Any] = [:]) {
+    public init(requestID: Int64, uri: String, options: [String: any Sendable] = [:]) {
         self.requestID = requestID
         self.uri = uri
         self.options = options
     }
 }
 
-class Register: Message {
+public struct Register: Message {
     private var registerFields: IRegisterFields
 
     static let id: Int64 = 64
@@ -35,29 +35,29 @@ class Register: Message {
         ]
     )
 
-    init(requestID: Int64, uri: String, options: [String: Any] = [:]) {
+    public init(requestID: Int64, uri: String, options: [String: any Sendable] = [:]) {
         registerFields = RegisterFields(requestID: requestID, uri: uri, options: options)
     }
 
-    init(withFields registerFields: IRegisterFields) {
+    public init(withFields registerFields: IRegisterFields) {
         self.registerFields = registerFields
     }
 
-    var requestID: Int64 { registerFields.requestID }
-    var uri: String { registerFields.uri }
-    var options: [String: Any] { registerFields.options }
+    public var requestID: Int64 { registerFields.requestID }
+    public var uri: String { registerFields.uri }
+    public var options: [String: any Sendable] { registerFields.options }
 
-    static func parse(message: [Any]) throws -> Message {
+    public static func parse(message: [any Sendable]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
 
         return Register(requestID: fields.requestID!, uri: fields.uri!, options: fields.options ?? [:])
     }
 
-    func marshal() -> [Any] {
+    public func marshal() -> [any Sendable] {
         [Register.id, requestID, options, uri]
     }
 
-    var type: Int64 {
+    public var type: Int64 {
         Register.id
     }
 }

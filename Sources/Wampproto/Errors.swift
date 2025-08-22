@@ -1,9 +1,9 @@
 import Foundation
 
-class ApplicationError: Swift.Error, CustomStringConvertible {
+public struct ApplicationError: Swift.Error, CustomStringConvertible {
     let message: String
-    let args: [Any]?
-    let kwargs: [String: Any]?
+    let args: [any Sendable]?
+    let kwargs: [String: any Sendable]?
 
     init(message: String, args: [Any]? = nil, kwargs: [String: Any]? = nil) {
         self.message = message
@@ -11,7 +11,7 @@ class ApplicationError: Swift.Error, CustomStringConvertible {
         self.kwargs = kwargs
     }
 
-    var description: String {
+    public var description: String {
         var errStr = message
         if let args, !args.isEmpty {
             let argsStr = args.map { "\($0)" }.joined(separator: ", ")
@@ -25,18 +25,10 @@ class ApplicationError: Swift.Error, CustomStringConvertible {
     }
 }
 
-class ProtocolError: Swift.Error {
+struct ProtocolError: Swift.Error {
     let message: String
-
-    init(message: String) {
-        self.message = message
-    }
 }
 
-class SessionNotReady: Swift.Error {
+struct SessionNotReady: Swift.Error {
     let message: String
-
-    init(message: String) {
-        self.message = message
-    }
 }

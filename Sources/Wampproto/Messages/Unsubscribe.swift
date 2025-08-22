@@ -1,21 +1,21 @@
 import Foundation
 
-protocol IUnsubscribeFields {
+public protocol IUnsubscribeFields: Sendable {
     var requestID: Int64 { get }
     var subscriptionID: Int64 { get }
 }
 
-class UnsubscribeFields: IUnsubscribeFields {
-    let requestID: Int64
-    let subscriptionID: Int64
+public struct UnsubscribeFields: IUnsubscribeFields {
+    public let requestID: Int64
+    public let subscriptionID: Int64
 
-    init(requestID: Int64, subscriptionID: Int64) {
+    public init(requestID: Int64, subscriptionID: Int64) {
         self.requestID = requestID
         self.subscriptionID = subscriptionID
     }
 }
 
-class Unsubscribe: Message {
+public struct Unsubscribe: Message {
     private var unsubscribeFields: IUnsubscribeFields
 
     static let id: Int64 = 34
@@ -31,31 +31,31 @@ class Unsubscribe: Message {
         ]
     )
 
-    init(requestID: Int64, subscriptionID: Int64) {
+    public init(requestID: Int64, subscriptionID: Int64) {
         unsubscribeFields = UnsubscribeFields(
             requestID: requestID,
             subscriptionID: subscriptionID
         )
     }
 
-    init(withFields unsubscribeFields: IUnsubscribeFields) {
+    public init(withFields unsubscribeFields: IUnsubscribeFields) {
         self.unsubscribeFields = unsubscribeFields
     }
 
-    var requestID: Int64 { unsubscribeFields.requestID }
-    var subscriptionID: Int64 { unsubscribeFields.subscriptionID }
+    public var requestID: Int64 { unsubscribeFields.requestID }
+    public var subscriptionID: Int64 { unsubscribeFields.subscriptionID }
 
-    static func parse(message: [Any]) throws -> Message {
+    public static func parse(message: [any Sendable]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
 
         return Unsubscribe(requestID: fields.requestID!, subscriptionID: fields.subscriptionID!)
     }
 
-    func marshal() -> [Any] {
+    public func marshal() -> [any Sendable] {
         [Unsubscribe.id, requestID, subscriptionID]
     }
 
-    var type: Int64 {
+    public var type: Int64 {
         Unsubscribe.id
     }
 }

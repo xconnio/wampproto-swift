@@ -1,18 +1,18 @@
 import Foundation
 
-protocol IUnregisteredFields {
+public protocol IUnregisteredFields: Sendable {
     var requestID: Int64 { get }
 }
 
-class UnregisteredFields: IUnregisteredFields {
-    let requestID: Int64
+public struct UnregisteredFields: IUnregisteredFields {
+    public let requestID: Int64
 
-    init(requestID: Int64) {
+    public init(requestID: Int64) {
         self.requestID = requestID
     }
 }
 
-class Unregistered: Message {
+public struct Unregistered: Message {
     private var unregisteredFields: IUnregisteredFields
 
     static let id: Int64 = 67
@@ -27,27 +27,27 @@ class Unregistered: Message {
         ]
     )
 
-    init(requestID: Int64) {
+    public init(requestID: Int64) {
         unregisteredFields = UnregisteredFields(requestID: requestID)
     }
 
-    init(withFields unregisteredFields: IUnregisteredFields) {
+    public init(withFields unregisteredFields: IUnregisteredFields) {
         self.unregisteredFields = unregisteredFields
     }
 
-    var requestID: Int64 { unregisteredFields.requestID }
+    public var requestID: Int64 { unregisteredFields.requestID }
 
-    static func parse(message: [Any]) throws -> Message {
+    public static func parse(message: [any Sendable]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
 
         return Unregistered(requestID: fields.requestID!)
     }
 
-    func marshal() -> [Any] {
+    public func marshal() -> [any Sendable] {
         [Unregistered.id, requestID]
     }
 
-    var type: Int64 {
+    public var type: Int64 {
         Unregistered.id
     }
 }

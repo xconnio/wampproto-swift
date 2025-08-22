@@ -13,7 +13,7 @@ public enum SerializedMessage: Sendable {
     }
 }
 
-public protocol Serializer {
+public protocol Serializer: Sendable {
     func serialize(message: Message) throws -> SerializedMessage
     func deserialize(data: SerializedMessage) throws -> Message
 }
@@ -29,7 +29,7 @@ enum MessageParsingError: Swift.Error {
     case parseFailure(String)
 }
 
-func toMessage(data: [Any]) throws -> Message {
+func toMessage(data: [any Sendable]) throws -> Message {
     guard let type = data.first as? Int64 else {
         throw MessageParsingError.parseFailure("Data is not in the expected format")
     }

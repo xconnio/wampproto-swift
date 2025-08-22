@@ -1,21 +1,21 @@
 import Foundation
 
-protocol ICancelFields {
+public protocol ICancelFields: Sendable {
     var requestID: Int64 { get }
-    var options: [String: Any] { get }
+    var options: [String: any Sendable] { get }
 }
 
-class CancelFields: ICancelFields {
-    let requestID: Int64
-    let options: [String: Any]
+public struct CancelFields: ICancelFields {
+    public var requestID: Int64
+    public var options: [String: any Sendable]
 
-    init(requestID: Int64, options: [String: Any] = [:]) {
+    public init(requestID: Int64, options: [String: any Sendable] = [:]) {
         self.requestID = requestID
         self.options = options
     }
 }
 
-class Cancel: Message {
+public struct Cancel: Message {
     private var cancelFields: ICancelFields
 
     static let id: Int64 = 49
@@ -31,7 +31,7 @@ class Cancel: Message {
         ]
     )
 
-    init(requestID: Int64, options: [String: Any] = [:]) {
+    init(requestID: Int64, options: [String: any Sendable] = [:]) {
         cancelFields = CancelFields(requestID: requestID, options: options)
     }
 
@@ -40,19 +40,19 @@ class Cancel: Message {
     }
 
     var requestID: Int64 { cancelFields.requestID }
-    var options: [String: Any] { cancelFields.options }
+    var options: [String: any Sendable] { cancelFields.options }
 
-    static func parse(message: [Any]) throws -> Message {
+    public static func parse(message: [any Sendable]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
 
         return Cancel(requestID: fields.requestID!, options: fields.options ?? [:])
     }
 
-    func marshal() -> [Any] {
+    public func marshal() -> [any Sendable] {
         [Cancel.id, requestID, options]
     }
 
-    var type: Int64 {
+    public var type: Int64 {
         Cancel.id
     }
 }

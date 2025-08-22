@@ -1,26 +1,26 @@
 import Foundation
 
-protocol IResultFields: BinaryPayload {
+public protocol IResultFields: BinaryPayload, Sendable {
     var requestID: Int64 { get }
-    var args: [Any]? { get }
-    var kwargs: [String: Any]? { get }
-    var details: [String: Any] { get }
+    var args: [any Sendable]? { get }
+    var kwargs: [String: any Sendable]? { get }
+    var details: [String: any Sendable] { get }
 }
 
-class ResultFields: IResultFields {
-    let requestID: Int64
-    let args: [Any]?
-    let kwargs: [String: Any]?
-    let details: [String: Any]
-    let payload: Data?
-    let payloadSerializer: Int
-    let payloadIsBinary: Bool
+public struct ResultFields: IResultFields {
+    public let requestID: Int64
+    public let args: [any Sendable]?
+    public let kwargs: [String: any Sendable]?
+    public let details: [String: any Sendable]
+    public let payload: Data?
+    public let payloadSerializer: Int
+    public let payloadIsBinary: Bool
 
-    init(
+    public init(
         requestID: Int64,
-        args: [Any]? = nil,
-        kwargs: [String: Any]? = nil,
-        details: [String: Any] = [:],
+        args: [any Sendable]? = nil,
+        kwargs: [String: any Sendable]? = nil,
+        details: [String: any Sendable] = [:],
         payload: Data? = nil,
         payloadSerializer: Int = 0
     ) {
@@ -34,7 +34,7 @@ class ResultFields: IResultFields {
     }
 }
 
-class Result: Message {
+public struct Result: Message {
     private var resultFields: IResultFields
 
     static let id: Int64 = 50
@@ -52,11 +52,11 @@ class Result: Message {
         ]
     )
 
-    init(
+    public init(
         requestID: Int64,
-        args: [Any]? = nil,
-        kwargs: [String: Any]? = nil,
-        details: [String: Any] = [:]
+        args: [any Sendable]? = nil,
+        kwargs: [String: any Sendable]? = nil,
+        details: [String: any Sendable] = [:]
     ) {
         resultFields = ResultFields(
             requestID: requestID,
@@ -66,27 +66,27 @@ class Result: Message {
         )
     }
 
-    init(withFields resultFields: IResultFields) {
+    public init(withFields resultFields: IResultFields) {
         self.resultFields = resultFields
     }
 
-    var requestID: Int64 { resultFields.requestID }
-    var args: [Any]? { resultFields.args }
-    var kwargs: [String: Any]? { resultFields.kwargs }
-    var details: [String: Any] { resultFields.details }
-    var payload: Data? { resultFields.payload }
-    var payloadSerializer: Int { resultFields.payloadSerializer }
-    var payloadIsBinary: Bool { resultFields.payloadIsBinary }
+    public var requestID: Int64 { resultFields.requestID }
+    public var args: [any Sendable]? { resultFields.args }
+    public var kwargs: [String: any Sendable]? { resultFields.kwargs }
+    public var details: [String: any Sendable] { resultFields.details }
+    public var payload: Data? { resultFields.payload }
+    public var payloadSerializer: Int { resultFields.payloadSerializer }
+    public var payloadIsBinary: Bool { resultFields.payloadIsBinary }
 
-    static func parse(message: [Any]) throws -> Message {
+    public static func parse(message: [any Sendable]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
 
         return Result(requestID: fields.requestID!, args: fields.args,
                       kwargs: fields.kwArgs, details: fields.details ?? [:])
     }
 
-    func marshal() -> [Any] {
-        var message: [Any] = [Result.id, requestID, details]
+    public func marshal() -> [any Sendable] {
+        var message: [any Sendable] = [Result.id, requestID, details]
 
         if let args {
             message.append(args)
@@ -102,7 +102,7 @@ class Result: Message {
         return message
     }
 
-    var type: Int64 {
+    public var type: Int64 {
         Result.id
     }
 }

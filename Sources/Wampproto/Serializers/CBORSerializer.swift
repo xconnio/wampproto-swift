@@ -1,7 +1,7 @@
 import Foundation
 import SwiftCBOR
 
-public class CBORSerializer: Serializer {
+public struct CBORSerializer: Serializer {
     public init() {}
     public func serialize(message: Message) throws -> SerializedMessage {
         let cborData = CBOR.encode(toCBORArray(message.marshal()))
@@ -59,23 +59,25 @@ private func toCBORValue(_ value: Any) -> CBOR? {
         return nil
     }
 }
-
 private func convertToUnsignedInt(_ value: Any) -> CBOR? {
-    switch value {
+    return switch value {
     case let int as Int:
-        return int >= 0 ? CBOR.unsignedInt(UInt64(int)) : CBOR.negativeInt(~UInt64(int))
+        // swiftlint:disable:next void_function_in_ternary
+        int >= 0 ? CBOR.unsignedInt(UInt64(int)) : CBOR.negativeInt(~UInt64(int))
     case let int32 as Int32:
-        return int32 >= 0 ? CBOR.unsignedInt(UInt64(int32)) : CBOR.negativeInt(~UInt64(int32))
+        // swiftlint:disable:next void_function_in_ternary
+        int32 >= 0 ? CBOR.unsignedInt(UInt64(int32)) : CBOR.negativeInt(~UInt64(int32))
     case let int64 as Int64:
-        return int64 >= 0 ? CBOR.unsignedInt(UInt64(int64)) : CBOR.negativeInt(~UInt64(int64))
+        // swiftlint:disable:next void_function_in_ternary
+        int64 >= 0 ? CBOR.unsignedInt(UInt64(int64)) : CBOR.negativeInt(~UInt64(int64))
     case let uint as UInt:
-        return CBOR.unsignedInt(UInt64(uint))
+        CBOR.unsignedInt(UInt64(uint))
     case let uint32 as UInt32:
-        return CBOR.unsignedInt(UInt64(uint32))
+        CBOR.unsignedInt(UInt64(uint32))
     case let uint64 as UInt64:
-        return CBOR.unsignedInt(uint64)
+        CBOR.unsignedInt(uint64)
     default:
-        return nil
+        nil
     }
 }
 

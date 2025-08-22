@@ -1,21 +1,21 @@
 import Foundation
 
-protocol IInterruptFields {
+public protocol IInterruptFields: Sendable {
     var requestID: Int64 { get }
-    var options: [String: Any] { get }
+    var options: [String: any Sendable] { get }
 }
 
-class InterruptFields: IInterruptFields {
-    let requestID: Int64
-    let options: [String: Any]
+public struct InterruptFields: IInterruptFields {
+    public let requestID: Int64
+    public let options: [String: any Sendable]
 
-    init(requestID: Int64, options: [String: Any] = [:]) {
+    init(requestID: Int64, options: [String: any Sendable] = [:]) {
         self.requestID = requestID
         self.options = options
     }
 }
 
-class Interrupt: Message {
+public struct Interrupt: Message {
     private var interruptFields: IInterruptFields
 
     static let id: Int64 = 69
@@ -31,28 +31,28 @@ class Interrupt: Message {
         ]
     )
 
-    init(requestID: Int64, options: [String: Any] = [:]) {
+    public init(requestID: Int64, options: [String: any Sendable] = [:]) {
         interruptFields = InterruptFields(requestID: requestID, options: options)
     }
 
-    init(withFields interruptFields: IInterruptFields) {
+    public init(withFields interruptFields: IInterruptFields) {
         self.interruptFields = interruptFields
     }
 
-    var requestID: Int64 { interruptFields.requestID }
-    var options: [String: Any] { interruptFields.options }
+    public var requestID: Int64 { interruptFields.requestID }
+    public var options: [String: any Sendable] { interruptFields.options }
 
-    static func parse(message: [Any]) throws -> Message {
+    public static func parse(message: [any Sendable]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
 
         return Interrupt(requestID: fields.requestID!, options: fields.options ?? [:])
     }
 
-    func marshal() -> [Any] {
+    public func marshal() -> [any Sendable] {
         [Interrupt.id, requestID, options]
     }
 
-    var type: Int64 {
+    public var type: Int64 {
         Interrupt.id
     }
 }
