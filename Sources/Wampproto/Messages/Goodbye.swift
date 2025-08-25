@@ -18,8 +18,8 @@ public struct GoodbyeFields: IGoodbyeFields {
 public struct Goodbye: Message {
     private var goodbyeFields: IGoodbyeFields
 
-    static let id: Int64 = 6
-    static let text = "GOODBYE"
+    public static let id: Int64 = 6
+    public static let text = "GOODBYE"
 
     static let validationSpec = ValidationSpec(
         minLength: 3,

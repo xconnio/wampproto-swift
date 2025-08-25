@@ -18,8 +18,8 @@ public struct AuthenticateFields: IAuthenticateFields {
 public struct Authenticate: Message {
     private var authenticateFields: IAuthenticateFields
 
-    static let id: Int64 = 5
-    static let text = "AUTHENTICATE"
+    public static let id: Int64 = 5
+    public static let text = "AUTHENTICATE"
 
     static let validationSpec = ValidationSpec(
         minLength: 3,

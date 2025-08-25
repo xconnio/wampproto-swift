@@ -31,8 +31,8 @@ public struct WelcomeFields: IWelcomeFields {
 public struct Welcome: Message {
     private var welcomeFields: IWelcomeFields
 
-    static let id: Int64 = 2
-    static let text = "WELCOME"
+    public static let id: Int64 = 2
+    public static let text = "WELCOME"
 
     static let validationSpec = ValidationSpec(
         minLength: 3,

@@ -1,11 +1,11 @@
 import Foundation
 
 public struct ApplicationError: Swift.Error, CustomStringConvertible {
-    let message: String
-    let args: [any Sendable]?
-    let kwargs: [String: any Sendable]?
+    public let message: String
+    public let args: [any Sendable]?
+    public let kwargs: [String: any Sendable]?
 
-    init(message: String, args: [Any]? = nil, kwargs: [String: Any]? = nil) {
+    public init(message: String, args: [any Sendable]? = nil, kwargs: [String: any Sendable]? = nil) {
         self.message = message
         self.args = args
         self.kwargs = kwargs
@@ -25,10 +25,16 @@ public struct ApplicationError: Swift.Error, CustomStringConvertible {
     }
 }
 
-struct ProtocolError: Swift.Error {
+public struct ProtocolError: Swift.Error {
     let message: String
+    public init(message: String) {
+        self.message = message
+    }
 }
 
-struct SessionNotReady: Swift.Error {
+public struct SessionNotReady: Swift.Error {
     let message: String
+    public init(message: String) {
+        self.message = message
+    }
 }

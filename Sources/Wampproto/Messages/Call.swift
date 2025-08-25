@@ -41,8 +41,8 @@ public struct CallFields: ICallFields {
 public struct Call: Message {
     private var callFields: ICallFields
 
-    static let id: Int64 = 48
-    static let text = "CALL"
+    public static let id: Int64 = 48
+    public static let text = "CALL"
 
     static let validationSpec = ValidationSpec(
         minLength: 4,

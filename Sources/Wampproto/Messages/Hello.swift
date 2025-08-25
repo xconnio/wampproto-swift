@@ -33,8 +33,8 @@ public struct HelloFields: IHelloFields {
 public struct Hello: Message {
     private var helloFields: IHelloFields
 
-    static let id: Int64 = 1
-    static let text = "HELLO"
+    public static let id: Int64 = 1
+    public static let text = "HELLO"
 
     static let validationSpec = ValidationSpec(
         minLength: 3,

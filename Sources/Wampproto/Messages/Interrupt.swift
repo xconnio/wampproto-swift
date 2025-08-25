@@ -18,8 +18,8 @@ public struct InterruptFields: IInterruptFields {
 public struct Interrupt: Message {
     private var interruptFields: IInterruptFields
 
-    static let id: Int64 = 69
-    static let text = "INTERRUPT"
+    public static let id: Int64 = 69
+    public static let text = "INTERRUPT"
 
     static let validationSpec = ValidationSpec(
         minLength: 3,

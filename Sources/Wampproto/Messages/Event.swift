@@ -41,8 +41,8 @@ public struct EventFields: IEventFields {
 public struct Event: Message {
     private var eventFields: IEventFields
 
-    static let id: Int64 = 36
-    static let text = "EVENT"
+    public static let id: Int64 = 36
+    public static let text = "EVENT"
 
     static let validationSpec = ValidationSpec(
         minLength: 4,

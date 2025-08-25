@@ -15,8 +15,8 @@ public struct UnregisteredFields: IUnregisteredFields {
 public struct Unregistered: Message {
     private var unregisteredFields: IUnregisteredFields
 
-    static let id: Int64 = 67
-    static let text = "UNREGISTERED"
+    public static let id: Int64 = 67
+    public static let text = "UNREGISTERED"
 
     static let validationSpec = ValidationSpec(
         minLength: 2,

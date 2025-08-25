@@ -41,8 +41,8 @@ public struct PublishFields: IPublishFields {
 public struct Publish: Message {
     private var publishFields: IPublishFields
 
-    static let id: Int64 = 16
-    static let text = "PUBLISH"
+    public static let id: Int64 = 16
+    public static let text = "PUBLISH"
 
     static let validationSpec = ValidationSpec(
         minLength: 4,

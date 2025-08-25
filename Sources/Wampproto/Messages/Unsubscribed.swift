@@ -11,8 +11,8 @@ public struct UnsubscribedFields: IUnsubscribedFields {
 public struct Unsubscribed: Message {
     private var unsubscribedFields: IUnsubscribedFields
 
-    static let id: Int64 = 35
-    static let text = "UNSUBSCRIBED"
+    public static let id: Int64 = 35
+    public static let text = "UNSUBSCRIBED"
 
     static let validationSpec = ValidationSpec(
         minLength: 2,

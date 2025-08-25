@@ -25,8 +25,8 @@ public struct SubscribeFields: ISubscribeFields {
 public struct Subscribe: Message {
     private var subscribeFields: ISubscribeFields
 
-    static let id: Int64 = 32
-    static let text = "SUBSCRIBE"
+    public static let id: Int64 = 32
+    public static let text = "SUBSCRIBE"
 
     static let validationSpec = ValidationSpec(
         minLength: 4,
