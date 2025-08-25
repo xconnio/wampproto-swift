@@ -13,8 +13,8 @@ public struct PublishedFields: IPublishedFields {
 public struct Published: Message {
     private var publishedFields: IPublishedFields
 
-    static let id: Int64 = 17
-    static let text = "PUBLISHED"
+    public static let id: Int64 = 17
+    public static let text = "PUBLISHED"
 
     static let validationSpec = ValidationSpec(
         minLength: 3,

@@ -37,8 +37,8 @@ public struct AbortFields: IAbortFields {
 public struct Abort: Message {
     private var abortFields: IAbortFields
 
-    static let id: Int64 = 3
-    static let text = "ABORT"
+    public static let id: Int64 = 3
+    public static let text = "ABORT"
 
     static let validationSpec = ValidationSpec(
         minLength: 3,

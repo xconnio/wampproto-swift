@@ -18,8 +18,8 @@ public struct ChallengeFields: IChallengeFields {
 public struct Challenge: Message {
     private var challengeFields: IChallengeFields
 
-    static let id: Int64 = 4
-    static let text = "CHALLENGE"
+    public static let id: Int64 = 4
+    public static let text = "CHALLENGE"
 
     static let validationSpec = ValidationSpec(
         minLength: 3,
@@ -39,8 +39,8 @@ public struct Challenge: Message {
         self.challengeFields = challengeFields
     }
 
-    var authMethod: String { challengeFields.authMethod }
-    var extra: [String: any Sendable] { challengeFields.extra }
+    public var authMethod: String { challengeFields.authMethod }
+    public var extra: [String: any Sendable] { challengeFields.extra }
 
     public static func parse(message: [any Sendable]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)

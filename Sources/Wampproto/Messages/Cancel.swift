@@ -18,8 +18,8 @@ public struct CancelFields: ICancelFields {
 public struct Cancel: Message {
     private var cancelFields: ICancelFields
 
-    static let id: Int64 = 49
-    static let text = "CANCEL"
+    public static let id: Int64 = 49
+    public static let text = "CANCEL"
 
     static let validationSpec = ValidationSpec(
         minLength: 3,
@@ -31,16 +31,16 @@ public struct Cancel: Message {
         ]
     )
 
-    init(requestID: Int64, options: [String: any Sendable] = [:]) {
+    public init(requestID: Int64, options: [String: any Sendable] = [:]) {
         cancelFields = CancelFields(requestID: requestID, options: options)
     }
 
-    init(withFields cancelFields: ICancelFields) {
+    public init(withFields cancelFields: ICancelFields) {
         self.cancelFields = cancelFields
     }
 
-    var requestID: Int64 { cancelFields.requestID }
-    var options: [String: any Sendable] { cancelFields.options }
+    public var requestID: Int64 { cancelFields.requestID }
+    public var options: [String: any Sendable] { cancelFields.options }
 
     public static func parse(message: [any Sendable]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)

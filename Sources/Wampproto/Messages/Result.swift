@@ -37,8 +37,8 @@ public struct ResultFields: IResultFields {
 public struct Result: Message {
     private var resultFields: IResultFields
 
-    static let id: Int64 = 50
-    static let text = "RESULT"
+    public static let id: Int64 = 50
+    public static let text = "RESULT"
 
     static let validationSpec = ValidationSpec(
         minLength: 3,

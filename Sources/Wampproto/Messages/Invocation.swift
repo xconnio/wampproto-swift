@@ -41,8 +41,8 @@ public struct InvocationFields: IInvocationFields {
 public struct Invocation: Message {
     private var invocationFields: IInvocationFields
 
-    static let id: Int64 = 68
-    static let text = "INVOCATION"
+    public static let id: Int64 = 68
+    public static let text = "INVOCATION"
 
     static let validationSpec = ValidationSpec(
         minLength: 4,

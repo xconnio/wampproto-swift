@@ -18,8 +18,8 @@ public struct RegisteredFields: IRegisteredFields {
 public struct Registered: Message {
     private var registeredFields: IRegisteredFields
 
-    static let id: Int64 = 65
-    static let text = "REGISTERED"
+    public static let id: Int64 = 65
+    public static let text = "REGISTERED"
 
     static let validationSpec = ValidationSpec(
         minLength: 3,

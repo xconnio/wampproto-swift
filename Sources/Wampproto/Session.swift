@@ -187,6 +187,8 @@ public struct Session {
             }
             return msg
 
+        case let msg as Abort:
+            return msg
         case let msg as Goodbye:
             return msg
 

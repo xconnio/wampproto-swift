@@ -45,8 +45,8 @@ public struct ErrorFields: IErrorFields {
 public struct Error: Message {
     private var errorFields: IErrorFields
 
-    static let id: Int64 = 8
-    static let text = "ERROR"
+    public static let id: Int64 = 8
+    public static let text = "ERROR"
 
     static let validationSpec = ValidationSpec(
         minLength: 5,
@@ -78,15 +78,15 @@ public struct Error: Message {
         self.errorFields = errorFields
     }
 
-    var messageType: Int64 { errorFields.messageType }
-    var requestID: Int64 { errorFields.requestID }
-    var uri: String { errorFields.uri }
-    var args: [any Sendable]? { errorFields.args }
-    var kwargs: [String: any Sendable]? { errorFields.kwargs }
-    var details: [String: any Sendable] { errorFields.details }
-    var payload: Data? { errorFields.payload }
-    var payloadSerializer: Int { errorFields.payloadSerializer }
-    var payloadIsBinary: Bool { errorFields.payloadIsBinary }
+    public var messageType: Int64 { errorFields.messageType }
+    public var requestID: Int64 { errorFields.requestID }
+    public var uri: String { errorFields.uri }
+    public var args: [any Sendable]? { errorFields.args }
+    public var kwargs: [String: any Sendable]? { errorFields.kwargs }
+    public var details: [String: any Sendable] { errorFields.details }
+    public var payload: Data? { errorFields.payload }
+    public var payloadSerializer: Int { errorFields.payloadSerializer }
+    public var payloadIsBinary: Bool { errorFields.payloadIsBinary }
 
     public static func parse(message: [any Sendable]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)

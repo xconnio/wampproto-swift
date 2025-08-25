@@ -21,8 +21,8 @@ public struct RegisterFields: IRegisterFields {
 public struct Register: Message {
     private var registerFields: IRegisterFields
 
-    static let id: Int64 = 64
-    static let text = "REGISTER"
+    public static let id: Int64 = 64
+    public static let text = "REGISTER"
 
     static let validationSpec = ValidationSpec(
         minLength: 4,

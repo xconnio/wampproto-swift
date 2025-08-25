@@ -37,8 +37,8 @@ public struct YieldFields: IYieldFields {
 public struct Yield: Message {
     private var yieldFields: IYieldFields
 
-    static let id: Int64 = 70
-    static let text = "YIELD"
+    public static let id: Int64 = 70
+    public static let text = "YIELD"
 
     static let validationSpec = ValidationSpec(
         minLength: 3,

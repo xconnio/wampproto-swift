@@ -18,8 +18,8 @@ public struct UnregisterFields: IUnregisterFields {
 public struct Unregister: Message {
     private var unregisterFields: IUnregisterFields
 
-    static let id: Int64 = 66
-    static let text = "UNREGISTER"
+    public static let id: Int64 = 66
+    public static let text = "UNREGISTER"
 
     static let validationSpec = ValidationSpec(
         minLength: 3,
