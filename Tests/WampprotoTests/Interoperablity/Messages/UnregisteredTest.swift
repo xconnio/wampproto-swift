@@ -6,7 +6,7 @@ func isEqual(msg1: Unregistered, msg2: Unregistered) -> Bool {
 }
 
 func testUnregisteredMessage(serializerStr: String, serializer: Serializer) throws {
-    let requestID: Int64 = 12345
+    let requestID: UInt64 = 12345
 
     let message = Unregistered(requestID: requestID)
 

@@ -44,7 +44,7 @@ private func unwrapValue(_ value: Any?) -> Any {
         if CFNumberIsFloatType(number) {
             number.doubleValue
         } else {
-            number.int64Value // Converts all integer types to Int64
+            number.intValue
         }
 
     case let unwrapped as String:

@@ -10,8 +10,8 @@ func isEqual(msg1: Event, msg2: Event) -> Bool {
 }
 
 func testEventMessage(serializerStr: String, serializer: Serializer) throws {
-    let subscriptionID: Int64 = 12345
-    let publicationID: Int64 = 67890
+    let subscriptionID: UInt64 = 12345
+    let publicationID: UInt64 = 67890
     let args: [Any] = ["value1", 42]
     let kwargs: [String: Any] = ["key1": "value1", "key2": 42]
     let details: [String: Any] = ["detailKey": "detailValue"]

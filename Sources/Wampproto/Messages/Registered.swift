@@ -1,15 +1,15 @@
 import Foundation
 
 public protocol IRegisteredFields: Sendable {
-    var requestID: Int64 { get }
-    var registrationID: Int64 { get }
+    var requestID: UInt64 { get }
+    var registrationID: UInt64 { get }
 }
 
 public struct RegisteredFields: IRegisteredFields {
-    public let requestID: Int64
-    public let registrationID: Int64
+    public let requestID: UInt64
+    public let registrationID: UInt64
 
-    public init(requestID: Int64, registrationID: Int64) {
+    public init(requestID: UInt64, registrationID: UInt64) {
         self.requestID = requestID
         self.registrationID = registrationID
     }
@@ -18,7 +18,7 @@ public struct RegisteredFields: IRegisteredFields {
 public struct Registered: Message {
     private var registeredFields: IRegisteredFields
 
-    public static let id: Int64 = 65
+    public static let id: UInt64 = 65
     public static let text = "REGISTERED"
 
     static let validationSpec = ValidationSpec(
@@ -31,7 +31,7 @@ public struct Registered: Message {
         ]
     )
 
-    public init(requestID: Int64, registrationID: Int64) {
+    public init(requestID: UInt64, registrationID: UInt64) {
         registeredFields = RegisteredFields(requestID: requestID, registrationID: registrationID)
     }
 
@@ -39,8 +39,8 @@ public struct Registered: Message {
         self.registeredFields = registeredFields
     }
 
-    public var requestID: Int64 { registeredFields.requestID }
-    public var registrationID: Int64 { registeredFields.registrationID }
+    public var requestID: UInt64 { registeredFields.requestID }
+    public var registrationID: UInt64 { registeredFields.registrationID }
 
     public static func parse(message: [any Sendable]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
@@ -52,7 +52,7 @@ public struct Registered: Message {
         [Registered.id, requestID, registrationID]
     }
 
-    public var type: Int64 {
+    public var type: UInt64 {
         Registered.id
     }
 }

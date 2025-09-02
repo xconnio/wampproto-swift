@@ -11,7 +11,7 @@ func isEqual(msg1: Welcome, msg2: Welcome) -> Bool {
 }
 
 func testWelcomeMessage(serializerStr: String, serializer: Serializer) throws {
-    let sessionID: Int64 = 12345
+    let sessionID: UInt64 = 12345
     let roles: [String: Any] = ["callee": true]
     let authID = "user123"
     let authRole = "admin"

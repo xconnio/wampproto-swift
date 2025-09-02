@@ -9,7 +9,7 @@ public struct ChallengeFields: IChallengeFields {
     public let authMethod: String
     public let extra: [String: any Sendable]
 
-    public init(authMethod: String, extra: [String: Any]) {
+    public init(authMethod: String, extra: [String: any Sendable]) {
         self.authMethod = authMethod
         self.extra = extra
     }
@@ -18,7 +18,7 @@ public struct ChallengeFields: IChallengeFields {
 public struct Challenge: Message {
     private var challengeFields: IChallengeFields
 
-    public static let id: Int64 = 4
+    public static let id: UInt64 = 4
     public static let text = "CHALLENGE"
 
     static let validationSpec = ValidationSpec(
@@ -51,7 +51,7 @@ public struct Challenge: Message {
         [Challenge.id, authMethod, extra]
     }
 
-    public var type: Int64 {
+    public var type: UInt64 {
         Challenge.id
     }
 }

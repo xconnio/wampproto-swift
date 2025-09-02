@@ -7,7 +7,7 @@ func isEqual(msg1: Cancel, msg2: Cancel) -> Bool {
 }
 
 func testCancelMessage(serializerStr: String, serializer: Serializer) throws {
-    let requestID: Int64 = 987_654_321
+    let requestID: UInt64 = 987_654_321
     let options: [String: Any] = ["mode": "kill"]
 
     let message = Cancel(requestID: requestID, options: options)

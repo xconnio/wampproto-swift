@@ -7,8 +7,8 @@ func isEqual(msg1: Wampproto.Published, msg2: Wampproto.Published) -> Bool {
 }
 
 func testPublishedMessage(serializerStr: String, serializer: Serializer) throws {
-    let requestID: Int64 = 67890
-    let publicationID: Int64 = 98765
+    let requestID: UInt64 = 67890
+    let publicationID: UInt64 = 98765
 
     let message = Published(requestID: requestID, publicationID: publicationID)
 

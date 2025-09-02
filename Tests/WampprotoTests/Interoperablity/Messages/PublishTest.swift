@@ -10,7 +10,7 @@ func isEqual(msg1: Publish, msg2: Publish) -> Bool {
 }
 
 func testPublishMessage(serializerStr: String, serializer: Serializer) throws {
-    let requestID: Int64 = 12345
+    let requestID: UInt64 = 12345
     let uri = "com.example.topic"
     let args: [Any] = [42, "Hello"]
     let kwargs: [String: Any] = ["key": "value"]

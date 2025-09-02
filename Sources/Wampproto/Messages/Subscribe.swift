@@ -1,18 +1,18 @@
 import Foundation
 
 public protocol ISubscribeFields: Sendable {
-    var requestID: Int64 { get }
+    var requestID: UInt64 { get }
     var topic: String { get }
     var options: [String: any Sendable] { get }
 }
 
 public struct SubscribeFields: ISubscribeFields {
-    public let requestID: Int64
+    public let requestID: UInt64
     public let topic: String
     public let options: [String: any Sendable]
 
     public init(
-        requestID: Int64,
+        requestID: UInt64,
         topic: String,
         options: [String: any Sendable] = [:]
     ) {
@@ -25,7 +25,7 @@ public struct SubscribeFields: ISubscribeFields {
 public struct Subscribe: Message {
     private var subscribeFields: ISubscribeFields
 
-    public static let id: Int64 = 32
+    public static let id: UInt64 = 32
     public static let text = "SUBSCRIBE"
 
     static let validationSpec = ValidationSpec(
@@ -40,7 +40,7 @@ public struct Subscribe: Message {
     )
 
     public init(
-        requestID: Int64,
+        requestID: UInt64,
         topic: String,
         options: [String: any Sendable] = [:]
     ) {
@@ -55,7 +55,7 @@ public struct Subscribe: Message {
         self.subscribeFields = subscribeFields
     }
 
-    public var requestID: Int64 { subscribeFields.requestID }
+    public var requestID: UInt64 { subscribeFields.requestID }
     public var topic: String { subscribeFields.topic }
     public var options: [String: any Sendable] { subscribeFields.options }
 
@@ -69,7 +69,7 @@ public struct Subscribe: Message {
         [Subscribe.id, requestID, options, topic]
     }
 
-    public var type: Int64 {
+    public var type: UInt64 {
         Subscribe.id
     }
 }

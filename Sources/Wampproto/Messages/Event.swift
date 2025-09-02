@@ -1,31 +1,31 @@
 import Foundation
 
 public protocol IEventFields: BinaryPayload, Sendable {
-    var subscriptionID: Int64 { get }
-    var publicationID: Int64 { get }
+    var subscriptionID: UInt64 { get }
+    var publicationID: UInt64 { get }
     var args: [any Sendable]? { get }
     var kwargs: [String: any Sendable]? { get }
     var details: [String: any Sendable] { get }
 }
 
 public struct EventFields: IEventFields {
-    public let subscriptionID: Int64
-    public let publicationID: Int64
+    public let subscriptionID: UInt64
+    public let publicationID: UInt64
     public let args: [any Sendable]?
     public let kwargs: [String: any Sendable]?
     public let details: [String: any Sendable]
     public let payload: Data?
-    public let payloadSerializer: Int
+    public let payloadSerializer: UInt64
     public let payloadIsBinary: Bool
 
     public init(
-        subscriptionID: Int64,
-        publicationID: Int64,
+        subscriptionID: UInt64,
+        publicationID: UInt64,
         args: [any Sendable]? = nil,
         kwargs: [String: any Sendable]? = nil,
         details: [String: any Sendable] = [:],
         payload: Data? = nil,
-        payloadSerializer: Int = 0
+        payloadSerializer: UInt64 = 0
     ) {
         self.subscriptionID = subscriptionID
         self.publicationID = publicationID
@@ -41,7 +41,7 @@ public struct EventFields: IEventFields {
 public struct Event: Message {
     private var eventFields: IEventFields
 
-    public static let id: Int64 = 36
+    public static let id: UInt64 = 36
     public static let text = "EVENT"
 
     static let validationSpec = ValidationSpec(
@@ -58,8 +58,8 @@ public struct Event: Message {
     )
 
     public init(
-        subscriptionID: Int64,
-        publicationID: Int64,
+        subscriptionID: UInt64,
+        publicationID: UInt64,
         args: [any Sendable]? = nil,
         kwargs: [String: any Sendable]? = nil,
         details: [String: any Sendable] = [:]
@@ -77,13 +77,13 @@ public struct Event: Message {
         self.eventFields = eventFields
     }
 
-    public var subscriptionID: Int64 { eventFields.subscriptionID }
-    public var publicationID: Int64 { eventFields.publicationID }
+    public var subscriptionID: UInt64 { eventFields.subscriptionID }
+    public var publicationID: UInt64 { eventFields.publicationID }
     public var args: [any Sendable]? { eventFields.args }
     public var kwargs: [String: any Sendable]? { eventFields.kwargs }
     public var details: [String: any Sendable] { eventFields.details }
     public var payload: Data? { eventFields.payload }
-    public var payloadSerializer: Int { eventFields.payloadSerializer }
+    public var payloadSerializer: UInt64 { eventFields.payloadSerializer }
     public var payloadIsBinary: Bool { eventFields.payloadIsBinary }
 
     public static func parse(message: [any Sendable]) throws -> Message {
@@ -110,7 +110,7 @@ public struct Event: Message {
         return message
     }
 
-    public var type: Int64 {
+    public var type: UInt64 {
         Event.id
     }
 }

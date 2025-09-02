@@ -9,7 +9,7 @@ func isEqual(msg1: Yield, msg2: Yield) -> Bool {
 }
 
 func testYieldMessage(serializerStr: String, serializer: Serializer) throws {
-    let requestID: Int64 = 12345
+    let requestID: UInt64 = 12345
     let args: [Any] = [200, "response"]
     let kwargs: [String: Any] = ["status": "success"]
     let options: [String: Any] = ["cache": false]

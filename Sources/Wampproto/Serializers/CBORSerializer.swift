@@ -59,8 +59,9 @@ private func toCBORValue(_ value: Any) -> CBOR? {
         return nil
     }
 }
+
 private func convertToUnsignedInt(_ value: Any) -> CBOR? {
-    return switch value {
+    switch value {
     case let int as Int:
         // swiftlint:disable:next void_function_in_ternary
         int >= 0 ? CBOR.unsignedInt(UInt64(int)) : CBOR.negativeInt(~UInt64(int))

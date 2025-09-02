@@ -8,7 +8,7 @@ func isEqual(msg1: Subscribe, msg2: Subscribe) -> Bool {
 }
 
 func testSubscribeMessage(serializerStr: String, serializer: Serializer) throws {
-    let requestID: Int64 = 98765
+    let requestID: UInt64 = 98765
     let topic = "com.example.topic"
     let options: [String: Any] = ["option1": true, "option2": 42]
 

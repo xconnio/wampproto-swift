@@ -1,7 +1,7 @@
 import Foundation
 
 public protocol IPublishFields: BinaryPayload, Sendable {
-    var requestID: Int64 { get }
+    var requestID: UInt64 { get }
     var uri: String { get }
     var args: [any Sendable]? { get }
     var kwargs: [String: any Sendable]? { get }
@@ -9,23 +9,23 @@ public protocol IPublishFields: BinaryPayload, Sendable {
 }
 
 public struct PublishFields: IPublishFields {
-    public let requestID: Int64
+    public let requestID: UInt64
     public let uri: String
     public let args: [any Sendable]?
     public let kwargs: [String: any Sendable]?
     public let options: [String: any Sendable]
     public let payload: Data?
-    public let payloadSerializer: Int
+    public let payloadSerializer: UInt64
     public let payloadIsBinary: Bool
 
     public init(
-        requestID: Int64,
+        requestID: UInt64,
         uri: String,
         args: [any Sendable]? = nil,
         kwargs: [String: any Sendable]? = nil,
         options: [String: any Sendable] = [:],
         payload: Data? = nil,
-        payloadSerializer: Int = 0
+        payloadSerializer: UInt64 = 0
     ) {
         self.requestID = requestID
         self.uri = uri
@@ -41,7 +41,7 @@ public struct PublishFields: IPublishFields {
 public struct Publish: Message {
     private var publishFields: IPublishFields
 
-    public static let id: Int64 = 16
+    public static let id: UInt64 = 16
     public static let text = "PUBLISH"
 
     static let validationSpec = ValidationSpec(
@@ -58,7 +58,7 @@ public struct Publish: Message {
     )
 
     public init(
-        requestID: Int64,
+        requestID: UInt64,
         uri: String,
         args: [any Sendable]? = nil,
         kwargs: [String: any Sendable]? = nil,
@@ -77,13 +77,13 @@ public struct Publish: Message {
         self.publishFields = publishFields
     }
 
-    public var requestID: Int64 { publishFields.requestID }
+    public var requestID: UInt64 { publishFields.requestID }
     public var uri: String { publishFields.uri }
     public var args: [any Sendable]? { publishFields.args }
     public var kwargs: [String: any Sendable]? { publishFields.kwargs }
     public var options: [String: any Sendable] { publishFields.options }
     public var payload: Data? { publishFields.payload }
-    public var payloadSerializer: Int { publishFields.payloadSerializer }
+    public var payloadSerializer: UInt64 { publishFields.payloadSerializer }
     public var payloadIsBinary: Bool { publishFields.payloadIsBinary }
 
     public static func parse(message: [any Sendable]) throws -> Message {
@@ -109,7 +109,7 @@ public struct Publish: Message {
         return message
     }
 
-    public var type: Int64 {
+    public var type: UInt64 {
         Publish.id
     }
 }

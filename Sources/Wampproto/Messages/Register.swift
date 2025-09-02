@@ -1,17 +1,17 @@
 import Foundation
 
 public protocol IRegisterFields: Sendable {
-    var requestID: Int64 { get }
+    var requestID: UInt64 { get }
     var uri: String { get }
     var options: [String: any Sendable] { get }
 }
 
 public struct RegisterFields: IRegisterFields {
-    public let requestID: Int64
+    public let requestID: UInt64
     public let uri: String
     public let options: [String: any Sendable]
 
-    public init(requestID: Int64, uri: String, options: [String: any Sendable] = [:]) {
+    public init(requestID: UInt64, uri: String, options: [String: any Sendable] = [:]) {
         self.requestID = requestID
         self.uri = uri
         self.options = options
@@ -21,7 +21,7 @@ public struct RegisterFields: IRegisterFields {
 public struct Register: Message {
     private var registerFields: IRegisterFields
 
-    public static let id: Int64 = 64
+    public static let id: UInt64 = 64
     public static let text = "REGISTER"
 
     static let validationSpec = ValidationSpec(
@@ -35,7 +35,7 @@ public struct Register: Message {
         ]
     )
 
-    public init(requestID: Int64, uri: String, options: [String: any Sendable] = [:]) {
+    public init(requestID: UInt64, uri: String, options: [String: any Sendable] = [:]) {
         registerFields = RegisterFields(requestID: requestID, uri: uri, options: options)
     }
 
@@ -43,7 +43,7 @@ public struct Register: Message {
         self.registerFields = registerFields
     }
 
-    public var requestID: Int64 { registerFields.requestID }
+    public var requestID: UInt64 { registerFields.requestID }
     public var uri: String { registerFields.uri }
     public var options: [String: any Sendable] { registerFields.options }
 
@@ -57,7 +57,7 @@ public struct Register: Message {
         [Register.id, requestID, options, uri]
     }
 
-    public var type: Int64 {
+    public var type: UInt64 {
         Register.id
     }
 }

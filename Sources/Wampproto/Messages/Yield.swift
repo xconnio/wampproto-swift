@@ -1,28 +1,28 @@
 import Foundation
 
 public protocol IYieldFields: BinaryPayload, Sendable {
-    var requestID: Int64 { get }
+    var requestID: UInt64 { get }
     var args: [any Sendable]? { get }
     var kwargs: [String: any Sendable]? { get }
     var options: [String: any Sendable] { get }
 }
 
 public struct YieldFields: IYieldFields {
-    public let requestID: Int64
+    public let requestID: UInt64
     public let args: [any Sendable]?
     public let kwargs: [String: any Sendable]?
     public let options: [String: any Sendable]
     public let payload: Data?
-    public let payloadSerializer: Int
+    public let payloadSerializer: UInt64
     public let payloadIsBinary: Bool
 
     public init(
-        requestID: Int64,
+        requestID: UInt64,
         args: [any Sendable]? = nil,
         kwargs: [String: any Sendable]? = nil,
         options: [String: any Sendable] = [:],
         payload: Data? = nil,
-        payloadSerializer: Int = 0
+        payloadSerializer: UInt64 = 0
     ) {
         self.requestID = requestID
         self.args = args
@@ -37,7 +37,7 @@ public struct YieldFields: IYieldFields {
 public struct Yield: Message {
     private var yieldFields: IYieldFields
 
-    public static let id: Int64 = 70
+    public static let id: UInt64 = 70
     public static let text = "YIELD"
 
     static let validationSpec = ValidationSpec(
@@ -53,7 +53,7 @@ public struct Yield: Message {
     )
 
     public init(
-        requestID: Int64,
+        requestID: UInt64,
         args: [any Sendable]? = nil,
         kwargs: [String: any Sendable]? = nil,
         options: [String: any Sendable] = [:]
@@ -70,12 +70,12 @@ public struct Yield: Message {
         self.yieldFields = yieldFields
     }
 
-    public var requestID: Int64 { yieldFields.requestID }
+    public var requestID: UInt64 { yieldFields.requestID }
     public var args: [any Sendable]? { yieldFields.args }
     public var kwargs: [String: any Sendable]? { yieldFields.kwargs }
     public var options: [String: any Sendable] { yieldFields.options }
     public var payload: Data? { yieldFields.payload }
-    public var payloadSerializer: Int { yieldFields.payloadSerializer }
+    public var payloadSerializer: UInt64 { yieldFields.payloadSerializer }
     public var payloadIsBinary: Bool { yieldFields.payloadIsBinary }
 
     public static func parse(message: [any Sendable]) throws -> Message {
@@ -102,7 +102,7 @@ public struct Yield: Message {
         return message
     }
 
-    public var type: Int64 {
+    public var type: UInt64 {
         Yield.id
     }
 }

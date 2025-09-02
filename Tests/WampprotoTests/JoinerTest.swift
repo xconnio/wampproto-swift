@@ -27,7 +27,7 @@ extension URLSessionWebSocketTask.Message {
 
 class JoinerTest: XCTestCase {
     private let testRealm = "test.realm"
-    private let testSessionID: Int64 = 12345
+    private let testSessionID: UInt64 = 12345
     private let testAuthID = "test_authid"
     private let testAuthRole = "test_role"
     private let testAuthMethod = "anonymous"

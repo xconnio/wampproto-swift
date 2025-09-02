@@ -33,11 +33,11 @@ struct ValidationSpec {
 }
 
 class Fields {
-    var requestID: Int64?
+    var requestID: UInt64?
     var uri: String?
     var args: [any Sendable]?
     var kwArgs: [String: any Sendable]?
-    var sessionID: Int64?
+    var sessionID: UInt64?
     var realm: String?
     var authID: String?
     var authRole: String?
@@ -45,15 +45,15 @@ class Fields {
     var authMethods: [String]?
     var authExtra: [String: any Sendable]?
     var roles: [String: any Sendable]?
-    var messageType: Int64?
+    var messageType: UInt64?
     var signature: String?
     var reason: String?
     var extra: [String: any Sendable]?
     var options: [String: any Sendable]?
     var details: [String: any Sendable]?
-    var subscriptionID: Int64?
-    var publicationID: Int64?
-    var registrationID: Int64?
+    var subscriptionID: UInt64?
+    var publicationID: UInt64?
+    var registrationID: UInt64?
 }
 
 func sanityCheck(wampMsg: [Any], minLength: Int, maxLength: Int) throws {
@@ -63,9 +63,9 @@ func sanityCheck(wampMsg: [Any], minLength: Int, maxLength: Int) throws {
     }
 }
 
-func validateID(wampMsg: [Any], index: Int) throws -> Int64 {
-    guard let value = wampMsg[index] as? Int64 else {
-        throw ValidationError.invalidType(index: index, expected: "Int64", actual: "\(type(of: wampMsg[index]))")
+func validateID(wampMsg: [Any], index: Int) throws -> UInt64 {
+    guard let value = toUInt64Strict(wampMsg[index]) else {
+        throw ValidationError.invalidType(index: index, expected: "UInt64", actual: "\(type(of: wampMsg[index]))")
     }
     return value
 }

@@ -3,17 +3,17 @@ import Foundation
 public struct Session {
     private let serializer: Serializer
     // data structures for RPC
-    private var callRequests = [Int64: Int64]()
-    private var registerRequests = [Int64: Int64]()
-    private var registrations = [Int64: Int64]()
-    private var invocationRequests = [Int64: Int64]()
-    private var unregisterRequests = [Int64: Int64]()
+    private var callRequests = [UInt64: UInt64]()
+    private var registerRequests = [UInt64: UInt64]()
+    private var registrations = [UInt64: UInt64]()
+    private var invocationRequests = [UInt64: UInt64]()
+    private var unregisterRequests = [UInt64: UInt64]()
 
     // data structures for PubSub
-    private var publishRequests = [Int64: Int64]()
-    private var subscribeRequests = [Int64: Int64]()
-    private var subscriptions = [Int64: Int64]()
-    private var unsubscribeRequests = [Int64: Int64]()
+    private var publishRequests = [UInt64: UInt64]()
+    private var subscribeRequests = [UInt64: UInt64]()
+    private var subscriptions = [UInt64: UInt64]()
+    private var unsubscribeRequests = [UInt64: UInt64]()
 
     public init(serializer: Serializer = JSONSerializer()) {
         self.serializer = serializer
@@ -189,6 +189,7 @@ public struct Session {
 
         case let msg as Abort:
             return msg
+
         case let msg as Goodbye:
             return msg
 

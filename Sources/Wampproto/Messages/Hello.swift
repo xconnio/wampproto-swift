@@ -33,7 +33,7 @@ public struct HelloFields: IHelloFields {
 public struct Hello: Message {
     private var helloFields: IHelloFields
 
-    public static let id: Int64 = 1
+    public static let id: UInt64 = 1
     public static let text = "HELLO"
 
     static let validationSpec = ValidationSpec(
@@ -89,7 +89,7 @@ public struct Hello: Message {
         return [Hello.id, realm, details]
     }
 
-    public var type: Int64 {
+    public var type: UInt64 {
         Hello.id
     }
 }

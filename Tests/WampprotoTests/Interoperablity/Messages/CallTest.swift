@@ -10,7 +10,7 @@ func isEqual(msg1: Call, msg2: Call) -> Bool {
 }
 
 func testCallMessage(serializerStr: String, serializer: Serializer) throws {
-    let requestID: Int64 = 12345
+    let requestID: UInt64 = 12345
     let uri = "com.example.method"
     let args: [Any] = [42, "hello"]
     let kwargs: [String: Any] = ["key": "value"]
