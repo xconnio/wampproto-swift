@@ -13,8 +13,8 @@ func isEqual(msg1: Error, msg2: Error) -> Bool {
 }
 
 func testErrorMessage(serializerStr: String, serializer: Serializer) throws {
-    let messageType: Int64 = 48
-    let requestID: Int64 = 1_234_567_890
+    let messageType: UInt64 = 48
+    let requestID: UInt64 = 1_234_567_890
     let uri = "wamp.error.invalid_uri"
     let args: [Any] = ["arg1", "arg2"]
     let kwargs: [String: Any] = ["key1": "value1"]

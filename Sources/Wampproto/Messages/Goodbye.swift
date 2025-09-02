@@ -18,7 +18,7 @@ public struct GoodbyeFields: IGoodbyeFields {
 public struct Goodbye: Message {
     private var goodbyeFields: IGoodbyeFields
 
-    public static let id: Int64 = 6
+    public static let id: UInt64 = 6
     public static let text = "GOODBYE"
 
     static let validationSpec = ValidationSpec(
@@ -52,7 +52,7 @@ public struct Goodbye: Message {
         [Goodbye.id, details, reason]
     }
 
-    public var type: Int64 {
+    public var type: UInt64 {
         Goodbye.id
     }
 }

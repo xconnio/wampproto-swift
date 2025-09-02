@@ -1,17 +1,17 @@
 import Foundation
 
-let maxID: Int64 = 1 << 53
+let maxID: UInt64 = 1 << 53
 
-public func generateSessionID() -> Int64 {
-    Int64.random(in: 0 ..< maxID)
+public func generateSessionID() -> UInt64 {
+    UInt64.random(in: 0 ..< maxID)
 }
 
 public struct SessionScopeIDGenerator: Sendable {
-    var id: Int64 = 0
+    var id: UInt64 = 0
 
     public init() {}
 
-    public mutating func next() -> Int64 {
+    public mutating func next() -> UInt64 {
         if id == maxID {
             id = 0
         }

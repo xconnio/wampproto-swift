@@ -1,8 +1,8 @@
 import Foundation
 
 public protocol IErrorFields: BinaryPayload, Sendable {
-    var messageType: Int64 { get }
-    var requestID: Int64 { get }
+    var messageType: UInt64 { get }
+    var requestID: UInt64 { get }
     var uri: String { get }
     var args: [any Sendable]? { get }
     var kwargs: [String: any Sendable]? { get }
@@ -10,25 +10,25 @@ public protocol IErrorFields: BinaryPayload, Sendable {
 }
 
 public struct ErrorFields: IErrorFields {
-    public let messageType: Int64
-    public let requestID: Int64
+    public let messageType: UInt64
+    public let requestID: UInt64
     public let uri: String
     public let args: [any Sendable]?
     public let kwargs: [String: any Sendable]?
     public let details: [String: any Sendable]
     public let payload: Data?
-    public let payloadSerializer: Int
+    public let payloadSerializer: UInt64
     public let payloadIsBinary: Bool
 
     public init(
-        messageType: Int64,
-        requestID: Int64,
+        messageType: UInt64,
+        requestID: UInt64,
         uri: String,
         args: [any Sendable]? = nil,
         kwargs: [String: any Sendable]? = nil,
         details: [String: Any] = [:],
         payload: Data? = nil,
-        payloadSerializer: Int = 0
+        payloadSerializer: UInt64 = 0
     ) {
         self.messageType = messageType
         self.requestID = requestID
@@ -45,7 +45,7 @@ public struct ErrorFields: IErrorFields {
 public struct Error: Message {
     private var errorFields: IErrorFields
 
-    public static let id: Int64 = 8
+    public static let id: UInt64 = 8
     public static let text = "ERROR"
 
     static let validationSpec = ValidationSpec(
@@ -63,8 +63,8 @@ public struct Error: Message {
     )
 
     public init(
-        messageType: Int64,
-        requestID: Int64,
+        messageType: UInt64,
+        requestID: UInt64,
         uri: String,
         args: [any Sendable]? = nil,
         kwargs: [String: any Sendable]? = nil,
@@ -78,14 +78,14 @@ public struct Error: Message {
         self.errorFields = errorFields
     }
 
-    public var messageType: Int64 { errorFields.messageType }
-    public var requestID: Int64 { errorFields.requestID }
+    public var messageType: UInt64 { errorFields.messageType }
+    public var requestID: UInt64 { errorFields.requestID }
     public var uri: String { errorFields.uri }
     public var args: [any Sendable]? { errorFields.args }
     public var kwargs: [String: any Sendable]? { errorFields.kwargs }
     public var details: [String: any Sendable] { errorFields.details }
     public var payload: Data? { errorFields.payload }
-    public var payloadSerializer: Int { errorFields.payloadSerializer }
+    public var payloadSerializer: UInt64 { errorFields.payloadSerializer }
     public var payloadIsBinary: Bool { errorFields.payloadIsBinary }
 
     public static func parse(message: [any Sendable]) throws -> Message {
@@ -112,7 +112,7 @@ public struct Error: Message {
         return message
     }
 
-    public var type: Int64 {
+    public var type: UInt64 {
         Error.id
     }
 }

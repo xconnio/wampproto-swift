@@ -10,8 +10,8 @@ func isEqual(msg1: Invocation, msg2: Invocation) -> Bool {
 }
 
 func testInvocationMessage(serializerStr: String, serializer: Serializer) throws {
-    let requestID: Int64 = 56789
-    let registrationID: Int64 = 98765
+    let requestID: UInt64 = 56789
+    let registrationID: UInt64 = 98765
     let args: [Any] = [100, "test"]
     let kwargs: [String: Any] = ["param": "value"]
     let details: [String: Any] = ["info": true]

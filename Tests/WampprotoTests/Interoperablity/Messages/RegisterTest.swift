@@ -8,7 +8,7 @@ func isEqual(msg1: Register, msg2: Register) -> Bool {
 }
 
 func testRegisterMessage(serializerStr: String, serializer: Serializer) throws {
-    let requestID: Int64 = 12345
+    let requestID: UInt64 = 12345
     let uri = "com.example.procedure"
     let options: [String: Any] = ["invoke": "roundrobin"]
 

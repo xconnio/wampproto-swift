@@ -7,7 +7,7 @@ func isEqual(msg1: Interrupt, msg2: Interrupt) -> Bool {
 }
 
 func testInterruptMessage(serializerStr: String, serializer: Serializer) throws {
-    let requestID: Int64 = 123_456_789
+    let requestID: UInt64 = 123_456_789
     let options: [String: Any] = ["mode": "abort"]
 
     let message = Interrupt(requestID: requestID, options: options)

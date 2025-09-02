@@ -25,12 +25,12 @@ public enum SerializerError: Swift.Error {
 }
 
 enum MessageParsingError: Swift.Error {
-    case unsupportedType(Int64)
+    case unsupportedType(UInt64)
     case parseFailure(String)
 }
 
 func toMessage(data: [any Sendable]) throws -> Message {
-    guard let type = data.first as? Int64 else {
+    guard let type = toUInt64Strict(data[0]) else {
         throw MessageParsingError.parseFailure("Data is not in the expected format")
     }
 

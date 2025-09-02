@@ -1,15 +1,15 @@
 import Foundation
 
 public protocol IInterruptFields: Sendable {
-    var requestID: Int64 { get }
+    var requestID: UInt64 { get }
     var options: [String: any Sendable] { get }
 }
 
 public struct InterruptFields: IInterruptFields {
-    public let requestID: Int64
+    public let requestID: UInt64
     public let options: [String: any Sendable]
 
-    init(requestID: Int64, options: [String: any Sendable] = [:]) {
+    init(requestID: UInt64, options: [String: any Sendable] = [:]) {
         self.requestID = requestID
         self.options = options
     }
@@ -18,7 +18,7 @@ public struct InterruptFields: IInterruptFields {
 public struct Interrupt: Message {
     private var interruptFields: IInterruptFields
 
-    public static let id: Int64 = 69
+    public static let id: UInt64 = 69
     public static let text = "INTERRUPT"
 
     static let validationSpec = ValidationSpec(
@@ -31,7 +31,7 @@ public struct Interrupt: Message {
         ]
     )
 
-    public init(requestID: Int64, options: [String: any Sendable] = [:]) {
+    public init(requestID: UInt64, options: [String: any Sendable] = [:]) {
         interruptFields = InterruptFields(requestID: requestID, options: options)
     }
 
@@ -39,7 +39,7 @@ public struct Interrupt: Message {
         self.interruptFields = interruptFields
     }
 
-    public var requestID: Int64 { interruptFields.requestID }
+    public var requestID: UInt64 { interruptFields.requestID }
     public var options: [String: any Sendable] { interruptFields.options }
 
     public static func parse(message: [any Sendable]) throws -> Message {
@@ -52,7 +52,7 @@ public struct Interrupt: Message {
         [Interrupt.id, requestID, options]
     }
 
-    public var type: Int64 {
+    public var type: UInt64 {
         Interrupt.id
     }
 }

@@ -7,8 +7,8 @@ func isEqual(msg1: Registered, msg2: Registered) -> Bool {
 }
 
 func testRegisteredMessage(serializerStr: String, serializer: Serializer) throws {
-    let requestID: Int64 = 12345
-    let registrationID: Int64 = 67890
+    let requestID: UInt64 = 12345
+    let registrationID: UInt64 = 67890
 
     let message = Registered(requestID: requestID, registrationID: registrationID)
 

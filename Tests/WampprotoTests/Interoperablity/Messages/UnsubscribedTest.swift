@@ -6,7 +6,7 @@ func isEqual(msg1: Unsubscribed, msg2: Unsubscribed) -> Bool {
 }
 
 func testUnsubscribedMessage(serializerStr: String, serializer: Serializer) throws {
-    let requestID: Int64 = 12345
+    let requestID: UInt64 = 12345
 
     let message = Unsubscribed(requestID: requestID)
 

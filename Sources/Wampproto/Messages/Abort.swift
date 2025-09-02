@@ -13,7 +13,7 @@ public struct AbortFields: IAbortFields {
     public let args: [any Sendable]?
     public let kwargs: [String: any Sendable]?
     public let payload: Data?
-    public let payloadSerializer: Int
+    public let payloadSerializer: UInt64
     public let payloadIsBinary: Bool
 
     public init(
@@ -22,7 +22,7 @@ public struct AbortFields: IAbortFields {
         args: [any Sendable]? = nil,
         kwargs: [String: any Sendable]? = nil,
         payload: Data? = nil,
-        payloadSerializer: Int = 0
+        payloadSerializer: UInt64 = 0
     ) {
         self.details = details
         self.reason = reason
@@ -37,7 +37,7 @@ public struct AbortFields: IAbortFields {
 public struct Abort: Message {
     private var abortFields: IAbortFields
 
-    public static let id: Int64 = 3
+    public static let id: UInt64 = 3
     public static let text = "ABORT"
 
     static let validationSpec = ValidationSpec(
@@ -70,7 +70,7 @@ public struct Abort: Message {
     public var args: [any Sendable]? { abortFields.args }
     public var kwargs: [String: any Sendable]? { abortFields.kwargs }
     public var payload: Data? { abortFields.payload }
-    var payloadSerializer: Int { abortFields.payloadSerializer }
+    var payloadSerializer: UInt64 { abortFields.payloadSerializer }
     var payloadIsBinary: Bool { abortFields.payloadIsBinary }
 
     public static func parse(message: [any Sendable]) throws -> Message {
@@ -96,7 +96,7 @@ public struct Abort: Message {
         return message
     }
 
-    public var type: Int64 {
+    public var type: UInt64 {
         Abort.id
     }
 }

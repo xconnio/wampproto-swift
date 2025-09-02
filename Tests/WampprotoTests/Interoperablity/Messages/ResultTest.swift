@@ -9,7 +9,7 @@ func isEqual(msg1: Result, msg2: Result) -> Bool {
 }
 
 func testResultMessage(serializerStr: String, serializer: Serializer) throws {
-    let requestID: Int64 = 12345
+    let requestID: UInt64 = 12345
     let args: [Any] = [100, "data"]
     let kwargs: [String: Any] = ["status": "ok"]
     let details: [String: Any] = ["cache": true]

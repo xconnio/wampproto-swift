@@ -1,15 +1,15 @@
 import Foundation
 
 public protocol ISubscribedFields: Sendable {
-    var requestID: Int64 { get }
-    var subscriptionID: Int64 { get }
+    var requestID: UInt64 { get }
+    var subscriptionID: UInt64 { get }
 }
 
 public struct SubscribedFields: ISubscribedFields {
-    public let requestID: Int64
-    public let subscriptionID: Int64
+    public let requestID: UInt64
+    public let subscriptionID: UInt64
 
-    public init(requestID: Int64, subscriptionID: Int64) {
+    public init(requestID: UInt64, subscriptionID: UInt64) {
         self.requestID = requestID
         self.subscriptionID = subscriptionID
     }
@@ -18,7 +18,7 @@ public struct SubscribedFields: ISubscribedFields {
 public struct Subscribed: Message {
     private var subscribedFields: ISubscribedFields
 
-    public static let id: Int64 = 33
+    public static let id: UInt64 = 33
     public static let text = "SUBSCRIBED"
 
     static let validationSpec = ValidationSpec(
@@ -31,7 +31,7 @@ public struct Subscribed: Message {
         ]
     )
 
-    public init(requestID: Int64, subscriptionID: Int64) {
+    public init(requestID: UInt64, subscriptionID: UInt64) {
         subscribedFields = SubscribedFields(
             requestID: requestID,
             subscriptionID: subscriptionID
@@ -42,8 +42,8 @@ public struct Subscribed: Message {
         self.subscribedFields = subscribedFields
     }
 
-    public var requestID: Int64 { subscribedFields.requestID }
-    public var subscriptionID: Int64 { subscribedFields.subscriptionID }
+    public var requestID: UInt64 { subscribedFields.requestID }
+    public var subscriptionID: UInt64 { subscribedFields.subscriptionID }
 
     public static func parse(message: [any Sendable]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
@@ -55,7 +55,7 @@ public struct Subscribed: Message {
         [Subscribed.id, requestID, subscriptionID]
     }
 
-    public var type: Int64 {
+    public var type: UInt64 {
         Subscribed.id
     }
 }

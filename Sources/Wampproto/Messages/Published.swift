@@ -1,19 +1,19 @@
 import Foundation
 
 public protocol IPublishedFields: Sendable {
-    var requestID: Int64 { get }
-    var publicationID: Int64 { get }
+    var requestID: UInt64 { get }
+    var publicationID: UInt64 { get }
 }
 
 public struct PublishedFields: IPublishedFields {
-    public let requestID: Int64
-    public let publicationID: Int64
+    public let requestID: UInt64
+    public let publicationID: UInt64
 }
 
 public struct Published: Message {
     private var publishedFields: IPublishedFields
 
-    public static let id: Int64 = 17
+    public static let id: UInt64 = 17
     public static let text = "PUBLISHED"
 
     static let validationSpec = ValidationSpec(
@@ -26,7 +26,7 @@ public struct Published: Message {
         ]
     )
 
-    public init(requestID: Int64, publicationID: Int64) {
+    public init(requestID: UInt64, publicationID: UInt64) {
         publishedFields = PublishedFields(requestID: requestID, publicationID: publicationID)
     }
 
@@ -34,8 +34,8 @@ public struct Published: Message {
         self.publishedFields = publishedFields
     }
 
-    public var requestID: Int64 { publishedFields.requestID }
-    public var publicationID: Int64 { publishedFields.publicationID }
+    public var requestID: UInt64 { publishedFields.requestID }
+    public var publicationID: UInt64 { publishedFields.publicationID }
 
     public static func parse(message: [any Sendable]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
@@ -47,7 +47,7 @@ public struct Published: Message {
         [Published.id, requestID, publicationID]
     }
 
-    public var type: Int64 {
+    public var type: UInt64 {
         Published.id
     }
 }

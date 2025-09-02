@@ -1,12 +1,12 @@
 import Foundation
 
 public struct SessionDetails: Sendable {
-    public let sessionID: Int64
+    public let sessionID: UInt64
     public let realm: String
     public let authID: String
     public let authRole: String
 
-    public init(sessionID: Int64, realm: String, authID: String, authRole: String) {
+    public init(sessionID: UInt64, realm: String, authID: String, authRole: String) {
         self.sessionID = sessionID
         self.realm = realm
         self.authID = authID

@@ -1,7 +1,7 @@
 import Foundation
 
 public protocol ICallFields: BinaryPayload, Sendable {
-    var requestID: Int64 { get }
+    var requestID: UInt64 { get }
     var uri: String { get }
     var args: [any Sendable]? { get }
     var kwargs: [String: any Sendable]? { get }
@@ -9,23 +9,23 @@ public protocol ICallFields: BinaryPayload, Sendable {
 }
 
 public struct CallFields: ICallFields {
-    public let requestID: Int64
+    public let requestID: UInt64
     public let uri: String
     public let args: [any Sendable]?
     public let kwargs: [String: any Sendable]?
     public let options: [String: any Sendable]
     public let payload: Data?
-    public let payloadSerializer: Int
+    public let payloadSerializer: UInt64
     public let payloadIsBinary: Bool
 
     public init(
-        requestID: Int64,
+        requestID: UInt64,
         uri: String,
         args: [any Sendable]? = nil,
         kwargs: [String: any Sendable]? = nil,
         options: [String: any Sendable] = [:],
         payload: Data? = nil,
-        payloadSerializer: Int = 0
+        payloadSerializer: UInt64 = 0
     ) {
         self.requestID = requestID
         self.uri = uri
@@ -41,7 +41,7 @@ public struct CallFields: ICallFields {
 public struct Call: Message {
     private var callFields: ICallFields
 
-    public static let id: Int64 = 48
+    public static let id: UInt64 = 48
     public static let text = "CALL"
 
     static let validationSpec = ValidationSpec(
@@ -58,7 +58,7 @@ public struct Call: Message {
     )
 
     public init(
-        requestID: Int64,
+        requestID: UInt64,
         uri: String,
         args: [any Sendable]? = nil,
         kwargs: [String: any Sendable]? = nil,
@@ -77,13 +77,13 @@ public struct Call: Message {
         self.callFields = callFields
     }
 
-    public var requestID: Int64 { callFields.requestID }
+    public var requestID: UInt64 { callFields.requestID }
     public var uri: String { callFields.uri }
     public var args: [any Sendable]? { callFields.args }
     public var kwargs: [String: any Sendable]? { callFields.kwargs }
     public var options: [String: any Sendable] { callFields.options }
     public var payload: Data? { callFields.payload }
-    public var payloadSerializer: Int { callFields.payloadSerializer }
+    public var payloadSerializer: UInt64 { callFields.payloadSerializer }
     public var payloadIsBinary: Bool { callFields.payloadIsBinary }
 
     public static func parse(message: [any Sendable]) throws -> Message {
@@ -110,7 +110,7 @@ public struct Call: Message {
         return message
     }
 
-    public var type: Int64 {
+    public var type: UInt64 {
         Call.id
     }
 }

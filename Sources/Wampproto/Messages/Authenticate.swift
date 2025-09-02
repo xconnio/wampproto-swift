@@ -18,7 +18,7 @@ public struct AuthenticateFields: IAuthenticateFields {
 public struct Authenticate: Message {
     private var authenticateFields: IAuthenticateFields
 
-    public static let id: Int64 = 5
+    public static let id: UInt64 = 5
     public static let text = "AUTHENTICATE"
 
     static let validationSpec = ValidationSpec(
@@ -52,7 +52,7 @@ public struct Authenticate: Message {
         [Authenticate.id, signature, extra]
     }
 
-    public var type: Int64 {
+    public var type: UInt64 {
         Authenticate.id
     }
 }

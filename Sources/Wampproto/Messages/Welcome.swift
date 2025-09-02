@@ -1,7 +1,7 @@
 import Foundation
 
 public protocol IWelcomeFields: Sendable {
-    var sessionID: Int64 { get }
+    var sessionID: UInt64 { get }
     var roles: [String: any Sendable] { get }
     var authID: String { get }
     var authRole: String { get }
@@ -10,14 +10,14 @@ public protocol IWelcomeFields: Sendable {
 }
 
 public struct WelcomeFields: IWelcomeFields {
-    public let sessionID: Int64
+    public let sessionID: UInt64
     public let roles: [String: any Sendable]
     public let authID: String
     public let authRole: String
     public let authMethod: String
     public let authExtra: [String: any Sendable]
 
-    public init(sessionID: Int64, roles: [String: any Sendable], authID: String, authRole: String, authMethod: String,
+    public init(sessionID: UInt64, roles: [String: any Sendable], authID: String, authRole: String, authMethod: String,
                 authExtra: [String: any Sendable] = [:]) {
         self.sessionID = sessionID
         self.roles = roles
@@ -31,7 +31,7 @@ public struct WelcomeFields: IWelcomeFields {
 public struct Welcome: Message {
     private var welcomeFields: IWelcomeFields
 
-    public static let id: Int64 = 2
+    public static let id: UInt64 = 2
     public static let text = "WELCOME"
 
     static let validationSpec = ValidationSpec(
@@ -44,7 +44,7 @@ public struct Welcome: Message {
         ]
     )
 
-    public init(sessionID: Int64, roles: [String: any Sendable], authID: String, authRole: String, authMethod: String,
+    public init(sessionID: UInt64, roles: [String: any Sendable], authID: String, authRole: String, authMethod: String,
                 authExtra: [String: any Sendable]? = nil) {
         welcomeFields = WelcomeFields(sessionID: sessionID, roles: roles, authID: authID, authRole: authRole,
                                       authMethod: authMethod, authExtra: authExtra ?? [:])
@@ -54,7 +54,7 @@ public struct Welcome: Message {
         welcomeFields = fields
     }
 
-    public var sessionID: Int64 { welcomeFields.sessionID }
+    public var sessionID: UInt64 { welcomeFields.sessionID }
     public var roles: [String: any Sendable] { welcomeFields.roles }
     public var authID: String { welcomeFields.authID }
     public var authRole: String { welcomeFields.authRole }
@@ -99,7 +99,7 @@ public struct Welcome: Message {
         return [Welcome.id, sessionID, details]
     }
 
-    public var type: Int64 {
+    public var type: UInt64 {
         Welcome.id
     }
 }

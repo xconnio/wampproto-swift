@@ -22,7 +22,7 @@ class ValidationTests: XCTestCase {
     }
 
     func testValidateID_valid() throws {
-        let message: [Any] = [12345 as Int64]
+        let message: [Any] = [12345 as UInt64]
         let result = try validateID(wampMsg: message, index: 0)
         XCTAssertEqual(result, 12345)
     }
@@ -30,7 +30,7 @@ class ValidationTests: XCTestCase {
     func testValidateID_invalid() {
         let message: [Any] = ["NotAnInt"]
         XCTAssertThrowsError(try validateID(wampMsg: message, index: 0)) { error in
-            XCTAssertEqual((error as? ValidationError)?.error, "Item at index 0 must be of type Int64 but was String")
+            XCTAssertEqual((error as? ValidationError)?.error, "Item at index 0 must be of type UInt64 but was String")
         }
     }
 
@@ -223,7 +223,7 @@ class ValidationTests: XCTestCase {
 
         XCTAssertThrowsError(try validateMessage(wampMsg: message, spec: spec)) { error in
             XCTAssertEqual((error as? ValidationError)?.error,
-                           "Validation failed: \nItem at index 0 must be of type Int64 but was String")
+                           "Validation failed: \nItem at index 0 must be of type UInt64 but was String")
         }
     }
 }

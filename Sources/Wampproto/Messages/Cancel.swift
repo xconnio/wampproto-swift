@@ -1,15 +1,15 @@
 import Foundation
 
 public protocol ICancelFields: Sendable {
-    var requestID: Int64 { get }
+    var requestID: UInt64 { get }
     var options: [String: any Sendable] { get }
 }
 
 public struct CancelFields: ICancelFields {
-    public var requestID: Int64
+    public var requestID: UInt64
     public var options: [String: any Sendable]
 
-    public init(requestID: Int64, options: [String: any Sendable] = [:]) {
+    public init(requestID: UInt64, options: [String: any Sendable] = [:]) {
         self.requestID = requestID
         self.options = options
     }
@@ -18,7 +18,7 @@ public struct CancelFields: ICancelFields {
 public struct Cancel: Message {
     private var cancelFields: ICancelFields
 
-    public static let id: Int64 = 49
+    public static let id: UInt64 = 49
     public static let text = "CANCEL"
 
     static let validationSpec = ValidationSpec(
@@ -31,7 +31,7 @@ public struct Cancel: Message {
         ]
     )
 
-    public init(requestID: Int64, options: [String: any Sendable] = [:]) {
+    public init(requestID: UInt64, options: [String: any Sendable] = [:]) {
         cancelFields = CancelFields(requestID: requestID, options: options)
     }
 
@@ -39,7 +39,7 @@ public struct Cancel: Message {
         self.cancelFields = cancelFields
     }
 
-    public var requestID: Int64 { cancelFields.requestID }
+    public var requestID: UInt64 { cancelFields.requestID }
     public var options: [String: any Sendable] { cancelFields.options }
 
     public static func parse(message: [any Sendable]) throws -> Message {
@@ -52,7 +52,7 @@ public struct Cancel: Message {
         [Cancel.id, requestID, options]
     }
 
-    public var type: Int64 {
+    public var type: UInt64 {
         Cancel.id
     }
 }

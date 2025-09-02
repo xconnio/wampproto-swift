@@ -1,17 +1,17 @@
 import Foundation
 
 public protocol IUnsubscribedFields: Sendable {
-    var requestID: Int64 { get }
+    var requestID: UInt64 { get }
 }
 
 public struct UnsubscribedFields: IUnsubscribedFields {
-    public let requestID: Int64
+    public let requestID: UInt64
 }
 
 public struct Unsubscribed: Message {
     private var unsubscribedFields: IUnsubscribedFields
 
-    public static let id: Int64 = 35
+    public static let id: UInt64 = 35
     public static let text = "UNSUBSCRIBED"
 
     static let validationSpec = ValidationSpec(
@@ -23,7 +23,7 @@ public struct Unsubscribed: Message {
         ]
     )
 
-    public init(requestID: Int64) {
+    public init(requestID: UInt64) {
         unsubscribedFields = UnsubscribedFields(requestID: requestID)
     }
 
@@ -31,7 +31,7 @@ public struct Unsubscribed: Message {
         self.unsubscribedFields = unsubscribedFields
     }
 
-    public var requestID: Int64 { unsubscribedFields.requestID }
+    public var requestID: UInt64 { unsubscribedFields.requestID }
 
     public static func parse(message: [any Sendable]) throws -> Message {
         let fields = try validateMessage(wampMsg: message, spec: validationSpec)
@@ -43,7 +43,7 @@ public struct Unsubscribed: Message {
         [Unsubscribed.id, requestID]
     }
 
-    public var type: Int64 {
+    public var type: UInt64 {
         Unsubscribed.id
     }
 }

@@ -1,28 +1,28 @@
 import Foundation
 
 public protocol IResultFields: BinaryPayload, Sendable {
-    var requestID: Int64 { get }
+    var requestID: UInt64 { get }
     var args: [any Sendable]? { get }
     var kwargs: [String: any Sendable]? { get }
     var details: [String: any Sendable] { get }
 }
 
 public struct ResultFields: IResultFields {
-    public let requestID: Int64
+    public let requestID: UInt64
     public let args: [any Sendable]?
     public let kwargs: [String: any Sendable]?
     public let details: [String: any Sendable]
     public let payload: Data?
-    public let payloadSerializer: Int
+    public let payloadSerializer: UInt64
     public let payloadIsBinary: Bool
 
     public init(
-        requestID: Int64,
+        requestID: UInt64,
         args: [any Sendable]? = nil,
         kwargs: [String: any Sendable]? = nil,
         details: [String: any Sendable] = [:],
         payload: Data? = nil,
-        payloadSerializer: Int = 0
+        payloadSerializer: UInt64 = 0
     ) {
         self.requestID = requestID
         self.args = args
@@ -37,7 +37,7 @@ public struct ResultFields: IResultFields {
 public struct Result: Message {
     private var resultFields: IResultFields
 
-    public static let id: Int64 = 50
+    public static let id: UInt64 = 50
     public static let text = "RESULT"
 
     static let validationSpec = ValidationSpec(
@@ -53,7 +53,7 @@ public struct Result: Message {
     )
 
     public init(
-        requestID: Int64,
+        requestID: UInt64,
         args: [any Sendable]? = nil,
         kwargs: [String: any Sendable]? = nil,
         details: [String: any Sendable] = [:]
@@ -70,12 +70,12 @@ public struct Result: Message {
         self.resultFields = resultFields
     }
 
-    public var requestID: Int64 { resultFields.requestID }
+    public var requestID: UInt64 { resultFields.requestID }
     public var args: [any Sendable]? { resultFields.args }
     public var kwargs: [String: any Sendable]? { resultFields.kwargs }
     public var details: [String: any Sendable] { resultFields.details }
     public var payload: Data? { resultFields.payload }
-    public var payloadSerializer: Int { resultFields.payloadSerializer }
+    public var payloadSerializer: UInt64 { resultFields.payloadSerializer }
     public var payloadIsBinary: Bool { resultFields.payloadIsBinary }
 
     public static func parse(message: [any Sendable]) throws -> Message {
@@ -102,7 +102,7 @@ public struct Result: Message {
         return message
     }
 
-    public var type: Int64 {
+    public var type: UInt64 {
         Result.id
     }
 }

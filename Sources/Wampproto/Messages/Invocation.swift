@@ -1,31 +1,31 @@
 import Foundation
 
 public protocol IInvocationFields: BinaryPayload, Sendable {
-    var requestID: Int64 { get }
-    var registrationID: Int64 { get }
+    var requestID: UInt64 { get }
+    var registrationID: UInt64 { get }
     var args: [any Sendable]? { get }
     var kwargs: [String: any Sendable]? { get }
     var details: [String: any Sendable] { get }
 }
 
 public struct InvocationFields: IInvocationFields {
-    public let requestID: Int64
-    public let registrationID: Int64
+    public let requestID: UInt64
+    public let registrationID: UInt64
     public let args: [any Sendable]?
     public let kwargs: [String: any Sendable]?
     public let details: [String: any Sendable]
     public let payload: Data?
-    public let payloadSerializer: Int
+    public let payloadSerializer: UInt64
     public let payloadIsBinary: Bool
 
     public init(
-        requestID: Int64,
-        registrationID: Int64,
+        requestID: UInt64,
+        registrationID: UInt64,
         args: [any Sendable]? = nil,
         kwargs: [String: any Sendable]? = nil,
         details: [String: any Sendable] = [:],
         payload: Data? = nil,
-        payloadSerializer: Int = 0
+        payloadSerializer: UInt64 = 0
     ) {
         self.requestID = requestID
         self.registrationID = registrationID
@@ -41,7 +41,7 @@ public struct InvocationFields: IInvocationFields {
 public struct Invocation: Message {
     private var invocationFields: IInvocationFields
 
-    public static let id: Int64 = 68
+    public static let id: UInt64 = 68
     public static let text = "INVOCATION"
 
     static let validationSpec = ValidationSpec(
@@ -58,8 +58,8 @@ public struct Invocation: Message {
     )
 
     public init(
-        requestID: Int64,
-        registrationID: Int64,
+        requestID: UInt64,
+        registrationID: UInt64,
         args: [any Sendable]? = nil,
         kwargs: [String: any Sendable]? = nil,
         details: [String: any Sendable] = [:]
@@ -77,13 +77,13 @@ public struct Invocation: Message {
         self.invocationFields = invocationFields
     }
 
-    public var requestID: Int64 { invocationFields.requestID }
-    public var registrationID: Int64 { invocationFields.registrationID }
+    public var requestID: UInt64 { invocationFields.requestID }
+    public var registrationID: UInt64 { invocationFields.registrationID }
     public var args: [any Sendable]? { invocationFields.args }
     public var kwargs: [String: any Sendable]? { invocationFields.kwargs }
     public var details: [String: any Sendable] { invocationFields.details }
     public var payload: Data? { invocationFields.payload }
-    public var payloadSerializer: Int { invocationFields.payloadSerializer }
+    public var payloadSerializer: UInt64 { invocationFields.payloadSerializer }
     public var payloadIsBinary: Bool { invocationFields.payloadIsBinary }
 
     public static func parse(message: [any Sendable]) throws -> Message {
@@ -110,7 +110,7 @@ public struct Invocation: Message {
         return message
     }
 
-    public var type: Int64 {
+    public var type: UInt64 {
         Invocation.id
     }
 }
