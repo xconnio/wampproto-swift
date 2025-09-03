@@ -101,9 +101,9 @@ private func fromCBORValue(_ value: CBOR) -> Any {
     case let .utf8String(str):
         str
     case let .unsignedInt(int):
-        Int64(int)
+        Int(int)
     case let .negativeInt(int):
-        Int64(int)
+        Int(int)
     case let .boolean(bool):
         bool
     case let .double(double):
