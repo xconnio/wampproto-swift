@@ -1,11 +1,11 @@
 import Foundation
-import SwiftMsgPack
+import MessagePack
 
 public struct MsgPackSerializer: Serializer {
+    private let handler: MessagePackHandler = .init()
     public init() {}
     public func serialize(message: Message) throws -> SerializedMessage {
-        var data = Data()
-        let encodedMessage = try data.pack(message.marshal())
+        let encodedMessage = try handler.encode(message.marshal())
         return .data(encodedMessage)
     }
 
@@ -14,13 +14,8 @@ public struct MsgPackSerializer: Serializer {
             throw SerializerError.invalidMessageFormat
         }
 
-        guard let unpacked = try msg.unpack() as? [Any?] else {
-            throw SerializerError.invalidMessageFormat
-        }
-
-        let deserializedArray = unpacked.compactMap(unwrapValue)
-
         do {
+            let deserializedArray = try handler.decodeArray(msg)
             return try toMessage(data: deserializedArray)
         } catch {
             throw SerializerError.deserializationError("Error decoding MsgPack: \(error)")
@@ -28,32 +23,52 @@ public struct MsgPackSerializer: Serializer {
     }
 }
 
-private func unwrapValue(_ value: Any?) -> Any {
-    switch value {
-    case let array as [Any?]:
-        array.compactMap(unwrapValue)
+class MessagePackHandler: @unchecked Sendable {
+    private let encoder: MessagePackEncoder
+    private let decoder: MessagePackDecoder
 
-    case let dict as [AnyHashable: Any?]:
-        dict.reduce(into: [String: Any]()) { result, element in
-            if let key = element.key as? String {
-                result[key] = unwrapValue(element.value)
-            }
+    init() {
+        encoder = MessagePackEncoder()
+        decoder = MessagePackDecoder()
+    }
+
+    func encode(_ value: (any Sendable)?) throws -> Data {
+        let wrappedValue = CodableValue(from: value)
+        return try encoder.encode(wrappedValue)
+    }
+
+    func encode(_ values: [(any Sendable)?]) throws -> Data {
+        let wrappedValues = values.map { CodableValue(from: $0) }
+        return try encoder.encode(wrappedValues)
+    }
+
+    func encode(_ dictionary: [String: (any Sendable)?]) throws -> Data {
+        let wrappedDict = dictionary.mapValues { CodableValue(from: $0) }
+        return try encoder.encode(wrappedDict)
+    }
+
+    func decode(_ data: Data) throws -> any Sendable {
+        let wrappedValue = try decoder.decode(CodableValue.self, from: data)
+        return wrappedValue.extractedValue
+    }
+
+    func decodeArray(_ data: Data) throws -> [any Sendable] {
+        let wrappedValues = try decoder.decode([CodableValue].self, from: data)
+        return wrappedValues.map(\.extractedValue)
+    }
+
+    func decodeDictionary(_ data: Data) throws -> [String: any Sendable] {
+        let wrappedDict = try decoder.decode([String: CodableValue].self, from: data)
+        return wrappedDict.mapValues { $0.extractedValue }
+    }
+
+    func decodeAuto(_ data: Data) throws -> any Sendable {
+        if let array = try? decodeArray(data) {
+            return array
         }
-
-    case let number as NSNumber:
-        if CFNumberIsFloatType(number) {
-            number.doubleValue
-        } else {
-            number.intValue
+        if let dict = try? decodeDictionary(data) {
+            return dict
         }
-
-    case let unwrapped as String:
-        unwrapped
-
-    case let unwrapped as Bool:
-        unwrapped
-
-    default:
-        value ?? NSNull()
+        return try decode(data)
     }
 }
