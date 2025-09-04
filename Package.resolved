@@ -1,6 +1,15 @@
 {
-  "originHash" : "8241b11f1b641689f8d034a601c591800b6d6363b9ba757d262b7b08f8e6cead",
+  "originHash" : "11dcf37ac6f33945764125c63c96ec25fa6de5d215f93a7b8ef0eba87709b91e",
   "pins" : [
+    {
+      "identity" : "msgpack-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/fumoboy007/msgpack-swift.git",
+      "state" : {
+        "revision" : "fe3101819f4f82b086da5279a9df81f6754798e9",
+        "version" : "2.0.6"
+      }
+    },
     {
       "identity" : "swift-sodium",
       "kind" : "remoteSourceControl",
@@ -17,15 +26,6 @@
       "state" : {
         "revision" : "04ccff117f6549121d5721ec84fdf0162122b90e",
         "version" : "0.5.0"
-      }
-    },
-    {
-      "identity" : "swiftmsgpack",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/malcommac/SwiftMsgPack.git",
-      "state" : {
-        "revision" : "6a9b7d73f78cd0f7e5ad280fde39a347f15baaf7",
-        "version" : "1.2.0"
       }
     }
   ],

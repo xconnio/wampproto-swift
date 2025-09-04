@@ -74,4 +74,5 @@ public func toIntStrict(_ value: any Sendable) -> Int? {
         return nil
     }
 }
+
 // swiftlint:enable identifier_name
